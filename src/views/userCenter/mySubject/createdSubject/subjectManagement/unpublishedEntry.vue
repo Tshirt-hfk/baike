@@ -123,9 +123,6 @@
 
 
 <script>
-
-import subjectIndexVue from "../../../../subject/subjectIndex.vue";
-import { log } from "util";
 import entryReview from "../../../../../components/entryReview"
 
 export default {
@@ -788,7 +785,6 @@ export default {
       }
     },
     getAssignmentContent(id){
-      if(!this.form.entryName){
         this.$axios
           .post("/api/subjectMaker/getAssignmentContent", {
               assignmentId: new Number(id)
@@ -798,9 +794,11 @@ export default {
               this.form.entryName = res.data.data.entryName;
               this.form.imageUrl = res.data.data.imageUrl;
               this.form.intro = res.data.data.intro;
+              this.form.field.splice(0,this.form.field.length)
               for (var field of res.data.data.field) {
                 this.form.field.push(field);
               }
+              this.form.infoBox.splice(0,this.form.infoBox.length)
               for (var info of res.data.data.infoBox) {
                 this.form.infoBox.push(info);
               }
@@ -821,8 +819,6 @@ export default {
               });
             }
           });
-      }else
-        this.drawerFlag = true;
     },
     deleteAssignment(id, index){
       this.$confirm('此操作将删除该任务, 是否继续?', '提示', {
