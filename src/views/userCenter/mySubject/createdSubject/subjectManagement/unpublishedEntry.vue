@@ -26,12 +26,10 @@
     </el-table>
     <div class="unpub-page">
       <el-pagination
-        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[10, 20, 50]"
         :page-size="pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="total, prev, pager, next, jumper"
         :total="tableData.length"
         style="width: 540px;margin: 0 auto"
       ></el-pagination>
@@ -123,6 +121,9 @@
 
 
 <script>
+
+import subjectIndexVue from "../../../../subject/subjectIndex.vue";
+import { log } from "util";
 import entryReview from "../../../../../components/entryReview"
 
 export default {
@@ -238,7 +239,7 @@ export default {
       searchValue: '',
       timeout: null,
       currentPage: 1,
-      pagesize: 10,
+      pagesize: 5,
       entries: [],
       tableData: [],
       displayData: [],
@@ -664,7 +665,7 @@ export default {
           if (res.data.data) {
             this.entries = res.data.data.assignments;
             this.tableData = res.data.data.assignments;
-            this.displayData = res.data.data.assignments.slice(0, 10);
+            this.displayData = res.data.data.assignments.slice(0, 5);
           } else {
             //this.$message({
             //message: res.data.msg
@@ -762,11 +763,6 @@ export default {
     handleTagClose(tag) {
       this.dynamicReasons.splice(this.dynamicReasons.indexOf(tag), 1);
     },
-    handleSizeChange(val) {
-      this.pagesize = val;
-      let index = this.currentPage - 1;
-      this.displayData = this.tableData.slice(index * val, (index + 1) * val);
-    },
     handleCurrentChange(val) {
       this.currentPage = val;
       let indexleft = val - 1;
@@ -785,6 +781,7 @@ export default {
       }
     },
     getAssignmentContent(id){
+      if(!this.form.entryName){
         this.$axios
           .post("/api/subjectMaker/getAssignmentContent", {
               assignmentId: new Number(id)
@@ -794,11 +791,9 @@ export default {
               this.form.entryName = res.data.data.entryName;
               this.form.imageUrl = res.data.data.imageUrl;
               this.form.intro = res.data.data.intro;
-              this.form.field.splice(0,this.form.field.length)
               for (var field of res.data.data.field) {
                 this.form.field.push(field);
               }
-              this.form.infoBox.splice(0,this.form.infoBox.length)
               for (var info of res.data.data.infoBox) {
                 this.form.infoBox.push(info);
               }
@@ -819,6 +814,8 @@ export default {
               });
             }
           });
+      }else
+        this.drawerFlag = true;
     },
     deleteAssignment(id, index){
       this.$confirm('此操作将删除该任务, 是否继续?', '提示', {

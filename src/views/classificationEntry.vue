@@ -35,22 +35,22 @@ export default {
                 id: '1',
                 name: '李鹏',
                 intro: '李鹏同志遗体在北京被火化，习近平总书记亲自到场送别',
-                img_url: '/static/image/李鹏.jpg'
+                img_url: '/static/image/lipeng.jpg'
             },{
                 id: '2',
                 name: '蔡徐坤',
                 intro: 'UCAA艺术公益大使蔡徐坤帮助孩子走进艺术展',
-                img_url: '/static/image/蔡徐坤.jpg'
+                img_url: '/static/image/caixukun.jpg'
             },{
                 id: '3',
-                name: '马思纯',
-                intro: '马思纯笑对发胖，自侃是心灵美',
-                img_url: '/static/image/马思纯.jpg'
+                name: '贝索斯',
+                intro: '贝索斯过去3天狂抛18亿美元亚马逊股票 创历史纪录',
+                img_url: '/static/image/beisuosi.png'
             },{
                 id: '4',
-                name: '石原里美',
-                intro: '石原里美的女神蜕变记，靠自己闯出一条爆红路',
-                img_url: '/static/image/石原里美.jpg'
+                name: '马化腾',
+                intro: '国资委主任会见马化腾，鼓励中央企业与互联网企业深化合作',
+                img_url: '/static/image/mahuateng.jpg'
             }         
         ],
     };
@@ -59,20 +59,127 @@ export default {
     this.init();
   },
   methods: {
-    init() {
-      // 初始化数据
-      this.$axios
-        .post("/user/getClassificationEntry",{
-            field: this.fieldName
-        })
-        .then(res => {
-          if (res.data.data) 
-            this.entrys = res.data.data.entrys.splice(0, 4);
-        })
-        .catch(error => {
-          if (error.response) {
-          }
-        });
+    // init() {
+    //   // 初始化数据
+    //   this.$axios
+    //     .post("/user/getClassificationEntry",{
+    //         field: this.fieldName
+    //     })
+    //     .then(res => {
+    //       if (res.data.data) 
+    //         this.entrys = res.data.data.entrys.splice(0, 4);
+    //     })
+    //     .catch(error => {
+    //       if (error.response) {
+    //       }
+    //     });
+    // },
+    init(){
+      if(this.fieldName === '科技'){
+        this.entrys.splice(0, this.entrys.length);
+        this.entrys.push({
+                id: '1',
+                name: '5G',
+                intro: '5G时代，万物互联网背后的机遇和隐患',
+                img_url: '/static/image/5G.png'
+            });
+        this.entrys.push({
+                id: '2',
+                name: '自动驾驶',
+                intro: '自动驾驶标准争夺激烈，驶入大结盟时代',
+                img_url: '/static/image/zidongjiashi.jpg'
+            });
+        this.entrys.push({
+                id: '3',
+                name: '区块链',
+                intro: 'aelf先后上架亚马逊AWS和微软Azure，构建区块链+云计算蓝图',
+                img_url: '/static/image/qukuailian.jpg'
+            });
+        this.entrys.push({
+                id: '4',
+                name: '神经网络',
+                intro: '超大规模图神经网络系统将赋予机器常识',
+                img_url: '/static/image/shenjingwangluo.png'
+            });
+      }else if(this.fieldName === '自然'){
+        this.entrys.splice(0, this.entrys.length);
+        this.entrys.push({
+                id: '1',
+                name: '垃圾分类',
+                intro: '上海实施垃圾分类“满月”:绿色消费理念推广普及游客',
+                img_url: '/static/image/lajifenlei.jpg'
+            });
+        this.entrys.push({
+                id: '2',
+                name: '宇宙',
+                intro: '宇宙星系之间区域并不空旷:气体物质与流浪恒星',
+                img_url: '/static/image/yuzhou.jpg'
+            });
+        this.entrys.push({
+                id: '3',
+                name: '虫洞',
+                intro: '科学家研究发现,虫洞或许真实存在,但它可能不是时空隧道',
+                img_url: '/static/image/chongdong.jpg'
+            });
+        this.entrys.push({
+                id: '4',
+                name: '开普勒望远镜',
+                intro: '开普勒望远镜又一发现!环双星系统“塔图因”发现第三颗行星',
+                img_url: '/static/image/kaipulewangyuanjing.jpg'
+            });
+      }else if(this.fieldName === '文化'){
+        this.entrys.splice(0, this.entrys.length);
+        this.entrys.push({
+                id: '1',
+                name: '中华文化',
+                intro: '推动数字文化高质量发展 共同打造中国文化符号',
+                img_url: '/static/image/zhonghuawenhua.jpg'
+            });
+        this.entrys.push({
+                id: '2',
+                name: '奥运会',
+                intro: '2008年8月8日至 24日，29届奥林匹克运动会在中国首都北京举行',
+                img_url: '/static/image/aoyunhui.jpg'
+            });
+        this.entrys.push({
+                id: '3',
+                name: '博物馆',
+                intro: '“庆八一,迎大庆”军地联欢会在中国国家博物馆举行',
+                img_url: '/static/image/bowuguan.jpg'
+            });
+        this.entrys.push({
+                id: '4',
+                name: '建军节',
+                intro: '建军节,首艘国产航母再出海',
+                img_url: '/static/image/bayijianjunjie.jpg'
+            });
+      }else{
+        this.entrys.splice(0, this.entrys.length);
+        this.entrys.push({
+                id: '1',
+                name: '李鹏',
+                intro: '李鹏同志遗体在北京被火化，习近平总书记亲自到场送别',
+                img_url: '/static/image/lipeng.jpg'
+            });
+        this.entrys.push({
+                id: '2',
+                name: '蔡徐坤',
+                intro: 'UCAA艺术公益大使蔡徐坤帮助孩子走进艺术展',
+                img_url: '/static/image/caixukun.jpg'
+            });
+        this.entrys.push({
+                id: '3',
+                name: '贝索斯',
+                intro: '贝索斯过去3天狂抛18亿美元亚马逊股票 创历史纪录',
+                img_url: '/static/image/beisuosi.png'
+            });
+        this.entrys.push({
+                id: '4',
+                name: '马化腾',
+                intro: '国资委主任会见马化腾，鼓励中央企业与互联网企业深化合作',
+                img_url: '/static/image/mahuateng.jpg'
+            });   
+      }
     },
     toEntryExhibition(entryName){
       this.$emit('toEntryExhibition', entryName);

@@ -17,9 +17,9 @@
       </el-table-column>
     </el-table>
     <div class="passed-page">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :current-page="currentPage" :page-sizes="[10, 20, 50]" :page-size="pagesize"
-        layout="total, sizes, prev, pager, next, jumper" :total="tableData.length" 
+      <el-pagination @current-change="handleCurrentChange"
+        :current-page="currentPage" :page-size="pagesize"
+        layout="total, prev, pager, next, jumper" :total="tableData.length" 
         style="width: 540px;margin: 0 auto"> </el-pagination>
     </div>
   </div>
@@ -46,7 +46,7 @@ export default {
       searchValue: '',
       timeout: null,
       currentPage: 1,
-      pagesize: 10,
+      pagesize: 5,
       entries: [],
       tableData: [],
       displayData: [],
@@ -70,7 +70,7 @@ export default {
           if (res.data.data) {
             this.entries = res.data.data.assignments;
             this.tableData = res.data.data.assignments;
-            this.displayData = res.data.data.assignments.slice(0, 10);
+            this.displayData = res.data.data.assignments.slice(0, 5);
           } else {
             //this.$message({
               //message: res.data.msg
@@ -91,11 +91,6 @@ export default {
     },
     stateChange(state){
       this.$emit('stateChange', state)
-    },
-    handleSizeChange(val) {
-      this.pagesize = val;
-      let index = this.currentPage - 1;
-      this.displayData = this.tableData.slice(index*val, (index + 1)*val);
     },
     handleCurrentChange(val) {
       this.currentPage = val;

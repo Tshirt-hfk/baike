@@ -109,7 +109,7 @@
             <div class="slogan">集大家智慧认识世界</div>
             <div class="number">
               共收录
-              <span style="font-size: 27px">638,352</span>
+              <span style="font-size: 27px">4,135,935</span>
               个词条
             </div>
           </div>
@@ -164,34 +164,34 @@ export default {
           name: "建军节",
           intro: "八一建军节致敬中国军人，中国军人二十四小时展露英雄本色",
           src:
-            "/static/image/建军节.jpg"
+            "/static/image/jianjunjie.jpg"
         },
         {
           id: "2",
           name: "小红书",
           intro: "种草神器出事了，小红书被下架，启动整改全面排查",
           src:
-            "/static/image/小红书.jpg"
+            "/static/image/xiaohongshu.jpg"
         },
         {
           id: "3",
-          name: "扎里夫",
-          intro: "伊朗外长遭美国政府制裁，其回应：谢谢将我视为如此大的威胁",
+          name: "迪斯尼",
+          intro: "迪士尼影业年度票房创纪录，全年有望突破100亿美元",
           src:
-            "/static/image/伊朗.jpg"
+            "/static/image/disini.jpg"
         },
         {
           id: "4",
           name: "小行星",
           intro: "险！一颗小行星擦过地球，科学家只提前1天发现",
           src:
-            "/static/image/小行星.jpg"
+            "/static/image/xiaoxingxing.jpg"
         },
         {
-          name: "哪吒",
-          intro: "魔童降世，你还在等什么，不一样的小哪吒",
+          name: "垃圾分类",
+          intro: "上海实施垃圾分类“满月”:绿色消费理念推广普及游客",
           src:
-            "/static/image/哪吒.jpg"
+            "/static/image/laji.jpg"
         }
       ],
       recommendSubject: []
