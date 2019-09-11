@@ -119,29 +119,89 @@ export default {
       selectValue: '',
       selectVisible: false,
       reasonOptions: [
-        {
-            value: "休闲",
-            label: "休闲",
+          {
+            value: "词条新建",
+            label: "词条新建",
+          },
+          {
+            value: "目录",
+            label: "目录",
             children: [
               {
-                value: "活动",
-                label: "活动",
-                children: [
-                  { value: "旅游", label: "旅游" },
-                ]
+                value: "目录缺失",
+                label: "目录缺失",
               },
               {
-                value: "娱乐",
-                label: "娱乐",
-                children: [
-                  { value: "电影", label: "电影" },
-                  { value: "电视剧", label: "电视剧" },
-                ]
+                value: "目录结构不合理",
+                label: "目录结构不合理",
+              }
+            ]
+          },
+          {
+            value: "基本信息栏",
+            label: "基本信息栏",
+            children: [
+              {
+                value: "基本信息缺失",
+                label: "基本信息缺失",
               },
               {
-                value: "制品",
-                label: "制品",
-                children: [{ value: "玩具", label: "玩具" }]
+                value: "基本信息不合理",
+                label: "基本信息不合理",
+              }
+            ]
+          },
+          {
+            value: "概述",
+            label: "概述",
+            children: [
+              {
+                value: "概述图缺失",
+                label: "概述图缺失",
+              },
+              {
+                value: "概述图不清晰",
+                label: "概述图不清晰",
+              },
+              {
+                value: "概述缺失",
+                label: "概述缺失",
+              },
+              {
+                value: "概述过短",
+                label: "概述过短",
+              }
+            ]
+          },
+          {
+            value: "正文",
+            label: "正文",
+            children: [
+              {
+                value: "正文缺少图片",
+                label: "正文缺少图片",
+              },
+              {
+                value: "存在重复内容",
+                label: "存在重复内容",
+              },
+              {
+                value: "描述不准确",
+                label: "描述不准确",
+              }
+            ]
+          },
+          {
+            value: "参考资料",
+            label: "参考资料",
+            children: [
+              {
+                value: "参考资料缺失",
+                label: "参考资料缺失",
+              },
+              {
+                value: "参考资料错误",
+                label: "参考资料错误",
               }
             ]
           },
@@ -269,8 +329,6 @@ export default {
       this.dynamicReasons.splice(this.dynamicReasons.indexOf(tag), 1);
     },
     getAssignmentContent(id){
-      window.console.log(id)
-      if(!this.form.entryName){
         this.$axios
           .post("/api/subjectMaker/getAssignmentContent", {
               assignmentId: new Number(id)
@@ -280,9 +338,11 @@ export default {
               this.form.entryName = res.data.data.entryName;
               this.form.imageUrl = res.data.data.imageUrl;
               this.form.intro = res.data.data.intro;
+              this.form.field.splice(0, this.form.field.length);
               for (var field of res.data.data.field) {
                 this.form.field.push(field);
               }
+              this.form.infoBox.splice(0, this.form.infoBox.length);
               for (var info of res.data.data.infoBox) {
                 this.form.infoBox.push(info);
               }
@@ -303,8 +363,6 @@ export default {
               });
             }
           });
-      }else
-        this.drawerFlag = true;
     },
     handleClose(done) {
       this.drawerFlag = false;

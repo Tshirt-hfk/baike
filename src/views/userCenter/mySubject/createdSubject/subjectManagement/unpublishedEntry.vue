@@ -790,11 +790,11 @@ export default {
               this.form.entryName = res.data.data.entryName;
               this.form.imageUrl = res.data.data.imageUrl;
               this.form.intro = res.data.data.intro;
-              this.form.field.splice(this.form.field.length);
+              this.form.field.splice(0,this.form.field.length);
               for (var field of res.data.data.field) {
                 this.form.field.push(field);
               }
-              this.form.infoBox.splice(this.form.infoBox.length);
+              this.form.infoBox.splice(0,this.form.infoBox.length);
               for (var info of res.data.data.infoBox) {
                 this.form.infoBox.push(info);
               }
