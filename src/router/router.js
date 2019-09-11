@@ -75,7 +75,7 @@ export default new Router({
             {
               path: 'createdsubject',
               name: 'createdSubject',
-              component: () => import('../views/userCenter/mySubject/createdSubject/myCreatedSUbject')
+              component: () => import('../views/userCenter/mySubject/createdSubject/myCreatedSubject')
             },
             {
               path: 'subjectmanagement',
