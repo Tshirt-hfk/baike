@@ -316,10 +316,6 @@
 <script>
 import mySearch from "../../components/mySearch";
 import entryReview from "../../components/entryReview";
-
-import "quill/dist/quill.core.css";
-import "quill/dist/quill.snow.css";
-import "quill/dist/quill.Bubble.css";
 import Quill from "quill";
 import Delta from "quill-delta";
 import katex from "katex";
@@ -1118,6 +1114,10 @@ export default {
 </script>
 
 <style>
+
+@import "quill/dist/quill.core.css";
+@import "quill/dist/quill.snow.css";
+@import "quill/dist/quill.Bubble.css";
 .myEditor {
   position: absolute;
   left: 0px;
