@@ -1118,7 +1118,7 @@ export default {
 
 @import "quill/dist/quill.core.css";
 @import "quill/dist/quill.snow.css";
-@import "quill/dist/quill.Bubble.css";
+@import "quill/dist/quill.bubble.css";
 .myEditor {
   position: absolute;
   left: 0px;
