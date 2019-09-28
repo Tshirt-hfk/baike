@@ -9,7 +9,6 @@ import router from './router/router.js'
 import axios from 'axios'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
-
 Vue.use(Vuex)
 Vue.use(ElementUI)
 Vue.use( CKEditor );
