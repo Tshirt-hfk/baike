@@ -1,61 +1,21 @@
 <template>
   <div class="myEditor">
     <!-- 工具栏 -->
-    <div class="editor-toolbar">
-      <div ref="toolbar" id="toolbar">
-        <span class="ql-formats">
-          <button
-            ref="catalogButton"
-            class="custom-buttom"
-            style="width:45px;color:#06c"
-            @click="catalogHanlder"
-          >目录</button>
-          <button class="custom-buttom" style="width:45px" @click="save">保存</button>
-          <button class="custom-buttom" style="width:45px" @click="drawerFlag = true">预览</button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-clean"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <select class="ql-color">
-            <option selected></option>
-            <option value="red"></option>
-            <option value="orange"></option>
-            <option value="yellow"></option>
-            <option value="green"></option>
-            <option value="blue"></option>
-            <option value="purple"></option>
-          </select>
-          <select class="ql-background">
-            <option selected></option>
-            <option value="red"></option>
-            <option value="orange"></option>
-            <option value="yellow"></option>
-            <option value="green"></option>
-            <option value="blue"></option>
-            <option value="purple"></option>
-          </select>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-header" value="1"></button>
-          <button class="ql-header" value="2"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-          <!-- <button class="ql-table"></button> -->
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-image"></button>
-          <button class="ql-formula"></button>
-        </span>
+    <div class="editor-op">
+      <div class="editor-toolbar">
+        <div ref="toolbar"></div>
       </div>
+      <div class="editor-toolbar-op">
+        <button
+          ref="catalogButton"
+          class="custom-buttom"
+          style="width:45px;color:#06c"
+          @click="catalogHanlder"
+        >目录</button>
+        <button class="custom-buttom" style="width:45px" @click="save">保存</button>
+        <button class="custom-buttom" style="width:45px" @click="drawerFlag = true">预览</button>
+      </div>
+      <div class="clear"></div>
     </div>
     <!-- 编辑区域 -->
     <div class="editor-content">
@@ -152,7 +112,15 @@
                   <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar" />
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
-                <div class="basic-info-intro-text" id="introEditor"></div>
+                <div class="basic-info-intro-text">
+                  <ckeditor
+                    class="intro-editor"
+                    :editor="introEditor.editor"
+                    :config="introEditor.editorConfig"
+                    :value="introEditor.intro"
+                    @onEditorInput="onIntroEditorInput"
+                  ></ckeditor>
+                </div>
               </div>
             </div>
             <div class="basic-info-property">
@@ -210,7 +178,14 @@
         <div class="maincontent">
           <div class="maincontent-header">正文</div>
           <div class="maincontent-body">
-            <div id="editor"></div>
+            <ckeditor
+              class="content-editor"
+              :editor="contentEditor.editor"
+              :config="contentEditor.editorConfig"
+              :value="contentEditor.content"
+              @ready="onReady"
+              @input="onContentEditorInput"
+            >></ckeditor>
           </div>
         </div>
         <div class="reference">
@@ -307,32 +282,24 @@
         <el-button type="primary" @click="handleReference">确 定</el-button>
       </div>
     </el-dialog>
-    <entryReview
-      :form="form"
-      :drawerFlag="drawerFlag"
-      v-on:handleClose="handleClose"
-    ></entryReview>
+    <entryReview :form="form" :drawerFlag="drawerFlag" v-on:handleClose="handleClose"></entryReview>
   </div>
 </template>
 
 <script>
+import { BodyEditor, IntroEditor } from "flll-entry-editor";
+import MyUploadAdapter from "../../components/myUploadAdapter.js";
 
 import entryReview from "../../components/entryReview";
-import Quill from "quill";
-import Delta from "quill-delta";
-import katex from "katex";
-import ImageResize from "quill-image-resize-module";
-import "katex/dist/katex.min.css";
-window.Quill.register("modules/imageResize", ImageResize);
 
 export default {
   name: "myEditor",
   components: {
     entryReview
   },
-  watch:{
-    selectAttribute:{
-      handler(n, o){
+  watch: {
+    selectAttribute: {
+      handler(n, o) {
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
           this.refreshAttribute(n);
@@ -342,7 +309,7 @@ export default {
   },
   data() {
     return {
-      selectAttribute: '',
+      selectAttribute: "",
       timeout: null,
       drawerFlag: false,
       options: [],
@@ -359,15 +326,83 @@ export default {
         infoBox: [],
         content: "",
         reference: [],
-        relation: [],
+        relation: []
       },
       introEditor: {
-        editor: null,
-        intro: ""
+        intro: "",
+        editorObject: null,
+        editor: IntroEditor,
+        editorConfig: {
+          toolbar: [
+            "bold",
+            "italic",
+            "underline",
+            "strikethrough",
+            "|",
+            "fontColor",
+            "fontBackgroundColor",
+            "|",
+            "link",
+            "blockquote",
+            "|",
+            "removeFormat",
+            "|",
+            "undo",
+            "redo"
+          ]
+        }
       },
-      contenteditor: {
-        editor: null,
-        content: ""
+      contentEditor: {
+        content: "",
+        editorObject: null,
+        editor: BodyEditor,
+        editorConfig: {
+          toolbar: [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "underline",
+            "strikethrough",
+            "|",
+            "fontColor",
+            "fontBackgroundColor",
+            "|",
+            "numberedList",
+            "bulletedList",
+            "|",
+            "link",
+            "blockquote",
+            "imageUpload",
+            "insertTable",
+            "|",
+            "removeFormat",
+            "|",
+            "undo",
+            "redo"
+          ],
+          heading: {
+            options: [
+              {
+                model: "paragraph",
+                title: "Paragraph",
+                class: "ck-heading_paragraph"
+              },
+              {
+                model: "heading1",
+                view: "h2",
+                title: "Heading 1",
+                class: "ck-heading_heading1"
+              },
+              {
+                model: "heading2",
+                view: "h3",
+                title: "Heading 2",
+                class: "ck-heading_heading2"
+              }
+            ]
+          }
+        }
       },
       recommend: {},
       others: {
@@ -541,7 +576,7 @@ export default {
             label: "哲学",
             children: [
               { value: "逻辑", label: "逻辑" },
-              { value: "伦理学", label: "伦理学" },
+              { value: "伦理学", label: "伦理学" }
             ]
           },
           {
@@ -764,7 +799,7 @@ export default {
           }
         ],
         selectVisible: false,
-        selectValue: '',
+        selectValue: "",
         attributeOptions: [],
         recommendcatalog: [],
         catalog: [],
@@ -785,6 +820,7 @@ export default {
     this.initData();
   },
   methods: {
+    // 初始化数据
     initData() {
       this.$axios
         .post("/api/user/getTaskContent", {
@@ -803,9 +839,7 @@ export default {
             }
             this.form.content = res.data.data.content;
             this.introEditor.intro = this.form.intro;
-            this.contenteditor.content = this.form.content;
-            this.initIntroEditor();
-            this.initContentEditor();
+            this.contentEditor.content = this.form.content;
           } else {
             this.$message({
               message: res.data.msg,
@@ -822,69 +856,23 @@ export default {
           }
         });
     },
-    initIntroEditor() {
-      this.introEditor.editor = new Quill("#introEditor", {
-        theme: "bubble",
-        modules: {
-          toolbar: ["bold", "italic", "underline", "strike", "link"]
-        }
-      });
-      this.introEditor.editor.root.innerHTML = this.introEditor.intro;
-      this.introEditor.editor.on("text-change", (delta, oldDelta, source) => {
-        if (source == "api") {
-          console.log("An API call triggered this change.");
-        } else if (source == "user") {
-          this.form.intro = this.introEditor.editor.root.innerHTML;
-        }
-      });
+    // 初始化Toolbar
+    onReady(editor) {
+      // Insert the toolbar
+      this.$refs.toolbar.appendChild(editor.ui.view.toolbar.element);
+      editor.plugins.get("FileRepository").createUploadAdapter = loader => {
+        return new MyUploadAdapter(loader);
+      };
+      this.contentEditor.editorObject = editor;
     },
-    initContentEditor() {
-      window.katex = katex;
-      this.contenteditor.editor = new Quill("#editor", {
-        theme: "snow",
-        modules: {
-          formula: true,
-          imageResize: {},
-          toolbar: {
-            container: "#toolbar",
-            handlers: {
-              link: value => {
-                if (value) {
-                  var href = prompt("请输入链接：");
-                  this.contenteditor.editor.format("link", href);
-                } else {
-                  this.contenteditor.editor.format("link", false);
-                }
-              },
-              image: value => {
-                if (value) {
-                  // 触发input框选择图片文件
-                  document.querySelector("#inserted-image input").click();
-                } else {
-                  this.contenteditor.editor.format("image", false);
-                }
-              },
-              formula: value => {
-                if (value) {
-                  var href = prompt("请输入公式：");
-                  this.contenteditor.editor.format("formula", href);
-                } else {
-                  this.contenteditor.editor.format("formula", false);
-                }
-              }
-            }
-          }
-        }
-      });
-      this.contenteditor.editor.root.innerHTML = this.contenteditor.content;
-      this.contenteditor.editor.on("text-change", (delta, oldDelta, source) => {
-        if (source == "api") {
-          console.log("An API call triggered this change.");
-        } else if (source == "user") {
-          this.form.content = this.contenteditor.editor.root.innerHTML;
-          this.refreshCatalog();
-        }
-      });
+    // 绑定词条介绍
+    onIntroEditorInput(editor) {
+      this.form.intro = editor;
+    },
+    // 绑定词条内容
+    onContentEditorInput(editor) {
+      this.form.content = editor;
+      this.refreshCatalog();
     },
     // 词条图片上传限制
     beforeAvatarUpload(file) {
@@ -894,8 +882,8 @@ export default {
       }
       return isLt2M;
     },
+    // TODO 未完成， 需要把关系写入数据库
     save() {
-      // 未完成， 需要把关系写入数据库
       this.$axios
         .post("/api/user/saveTaskContent", {
           taskId: new Number(this.taskId),
@@ -937,17 +925,17 @@ export default {
     },
     // 更新目录
     refreshCatalog() {
-      var nodes = this.contenteditor.editor.root.childNodes;
+      var nodes = this.contentEditor.editorObject.sourceElement.childNodes;
       this.others.catalog.splice(0, this.others.catalog.length);
       var i1 = 0;
       var i2 = 0;
       for (var node of nodes) {
         var type;
-        if (node.tagName == "H1") {
+        if (node.tagName == "H2") {
           type = 1;
           i1 = i1 + 1;
           i2 = 0;
-        } else if (node.tagName == "H2") {
+        } else if (node.tagName == "H3") {
           type = 2;
           i2 = i2 + 1;
         } else {
@@ -964,15 +952,8 @@ export default {
         });
       }
     },
+    // TODO 应用目录
     applyRecommendCatalog() {
-      var delta = new Delta();
-      delta.retain(this.contenteditor.editor.getLength());
-      for (var cata of this.others.recommendcatalog) {
-        delta.insert(cata.title + "\n", {
-          header: cata.type
-        });
-      }
-      this.contenteditor.editor.updateContents(delta);
       this.refreshCatalog();
     },
     handleFieldDelete(tag) {
@@ -987,9 +968,9 @@ export default {
         this.form.field.push(selectValue[0]);
       }
       this.others.selectVisible = false;
-      this.others.selectValue = '';
+      this.others.selectValue = "";
     },
-    refreshAttribute(attribute){
+    refreshAttribute(attribute) {
       this.$axios
         .get("/data/getAttribute", {
           params: {
@@ -999,8 +980,8 @@ export default {
         .then(res => {
           if (res.data) {
             this.form.infoBox.splice(0, this.form.infoBox.length);
-            for(var attribute of res.data.attributes){
-              this.form.infoBox.push({key:attribute, value: ''});
+            for (var attribute of res.data.attributes) {
+              this.form.infoBox.push({ key: attribute, value: "" });
             }
           }
         })
@@ -1027,10 +1008,6 @@ export default {
         this.$message.error("图片插入失败");
       }
     },
-    // 富文本图片上传失败
-    uploadError() {
-      this.$message.error("图片插入失败");
-    },
     // 词条图片上传
     handleAvatarSuccess(res, file) {
       this.form.imageUrl = res.data.url;
@@ -1054,7 +1031,6 @@ export default {
       }
     },
     handleReference() {
-      // 处理参考资料
       if (this.others.referenceForm.type == 1) {
         this.form.reference.push({
           title: this.others.referenceForm.title,
@@ -1094,6 +1070,7 @@ export default {
       //   this.options = [];
       // }
     },
+    // 关系处理
     toAddRelation() {
       let arr = [
         {
@@ -1115,10 +1092,6 @@ export default {
 </script>
 
 <style>
-
-@import "quill/dist/quill.core.css";
-@import "quill/dist/quill.snow.css";
-@import "quill/dist/quill.bubble.css";
 .myEditor {
   position: absolute;
   left: 0px;
@@ -1130,13 +1103,27 @@ export default {
   word-break: break-all;
 }
 /* 编辑工具栏 */
-.editor-toolbar {
-  position: absolute;
-  z-index: 999;
-  width: 100%;
-  height: 42px;
+.editor-op {
+  height: 38px;
 }
-.editor-toolbar .custom-buttom {
+.editor-toolbar {
+  float: left;
+  z-index: 999;
+  width: 85%;
+  height: 38px;
+}
+.editor-toolbar-op {
+  float: left;
+  z-index: 999;
+  width: 14%;
+  height: 38px;
+  border: 1px solid rgb(196, 196, 196);
+  background: #fafafa;
+}
+.editor-toolbar-op .custom-buttom {
+  margin-left: 25px;
+  margin-top: 10px;
+
   outline: none;
 }
 
@@ -1145,7 +1132,7 @@ export default {
   position: absolute;
   width: 100%;
   overflow-y: auto;
-  top: 42px;
+  top: 40px;
   bottom: 0px;
   background: rgb(240, 240, 240);
 }
@@ -1278,20 +1265,37 @@ export default {
   border: 0px;
 }
 
-.ql-snow .ql-editor {
+/* 简介 */
+.intro-editor {
+  border: 0px;
+  background: #fff;
+  color: #000;
+  padding: 0px;
+  height: 176px;
+}
+.intro-editor p {
+  margin-top: 3px;
+  text-indent: 2em;
+  word-wrap: break-word;
+  line-height: 24px;
+}
+
+/* 正文 */
+.content-editor {
   margin: 0 15px;
   background: #fff;
   color: #000;
   padding: 0px;
   font-size: 15px;
+  min-height: 700px;
 }
-.ql-snow .ql-editor p {
-  margin-bottom: 5px;
+.content-editor p {
+  margin-top: 4px;
   text-indent: 2em;
   word-wrap: break-word;
   line-height: 24px;
 }
-.ql-snow .ql-editor h1 {
+.content-editor h2 {
   font-size: 20px;
   font-weight: bold;
   line-height: 24px;
@@ -1300,7 +1304,7 @@ export default {
   margin: 35px 0 15px;
   clear: both;
 }
-.ql-snow .ql-editor h2 {
+.content-editor h3 {
   font-size: 18px;
   font-family: Arial;
   line-height: 22px;
