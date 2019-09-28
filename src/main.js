@@ -7,12 +7,12 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './router/router.js'
 import axios from 'axios'
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
+import CKEditor from '@ckeditor/ckeditor5-vue';
+
 
 Vue.use(Vuex)
 Vue.use(ElementUI)
-Vue.use(mavonEditor)
+Vue.use( CKEditor );
 Vue.config.productionTip = false
 
 // 全局注册，使用方法为:this.$axios
@@ -45,13 +45,13 @@ const store = new Vuex.Store({
 })
 
 router.beforeEach((to, from, next) => {
-  let token = localStorage.getItem('token')
+  // let token = localStorage.getItem('token')
   if (to.path === '/' || to.name === 'entryPreview') {
     return next()
   }
-  if (!token && to.path !== '/login' && to.path !== '/register') {
-    return next('/login')
-  }
+  // if (!token && to.path !== '/login' && to.path !== '/register') {
+  //   return next('/login')
+  // }
   next()
 })
 

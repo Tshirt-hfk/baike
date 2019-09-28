@@ -13,6 +13,11 @@ export default new Router({
       component: index
     },
     {
+      path: '/test',
+      name: 'test',
+      component: () => import('../components/entryEditor')
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/login')

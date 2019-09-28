@@ -14,8 +14,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-vue": "^1.0.0",
     "axios": "^0.19.0",
     "element-ui": "^2.10.0",
+    "flll-entry-editor": "^1.0.0",
     "highlight": "^0.2.4",
     "katex": "^0.10.2",
     "moment": "^2.24.0",
