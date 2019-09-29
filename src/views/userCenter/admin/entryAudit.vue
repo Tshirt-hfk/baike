@@ -9,7 +9,7 @@
       </el-table-column>
       <el-table-column align="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id)">查看</el-button>
+          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id, scope.row.isTask)">查看</el-button>
           <el-button type="primary" @click="audit(scope.row, true)">通 过</el-button>
           <el-button type="danger" @click="rejectFlag = true">拒绝</el-button>
           <el-dialog title="未通过原因" :visible.sync="rejectFlag" width="600px">
@@ -94,14 +94,12 @@ export default {
   methods: {
     init() {
       this.$axios
-        .post("/api/user/getEntry", { //!!!!!!!!!!!!!!!!!!!!!!!!!!!
-          type: 5
-        })
+        .post("/api/admin/getRecord")
         .then(res => {
           if (res.data.data) {
-            this.entries = res.data.data.assignments;
-            this.tableData = res.data.data.assignments;
-            this.displayData = res.data.data.assignments.slice(0, 5);
+            this.entries = res.data.data.records;
+            this.tableData = res.data.data.records;
+            this.displayData = res.data.data.records.slice(0, 5);
           } else {
             //this.$message({
               //message: res.data.msg
@@ -137,10 +135,11 @@ export default {
         this.displayData = this.tableData.slice(0, this.pagesize);
       }
     },
-    getTaskContent(id){
+    getTaskContent(id, isTask){
         this.$axios
           .post("/api/user/getTaskContent", {
-              taskId: new Number(id)
+              taskId: new Number(id),
+              isTask: isTask
           })
           .then(res => {
             if (res.data.data) {
@@ -172,6 +171,30 @@ export default {
               });
             }
           });
+    },
+    audit(row, pass) {
+      this.$axios
+        .post("/api/admin/auditRecord", {
+          recordId: row.id,
+          reason: this.reason,
+          pass: pass
+        })
+        .then(res => {
+          if (res.data) {
+            this.init();
+            this.$message({
+              message: res.data.msg
+            });
+          }
+        })
+        .catch(error => {
+          if (error.response) {
+            this.$message({
+              message: error.response.data.msg,
+              type: "warning"
+            });
+          }
+        });
     },
     handleClose(done) {
       this.drawerFlag = false;

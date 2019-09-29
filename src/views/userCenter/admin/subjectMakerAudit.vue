@@ -93,14 +93,14 @@ export default {
   methods: {
     init() {
       this.$axios
-        .post("/api/user/getEntry", { //!!!!!!!!!!!!!!!!!!!!!!!!!!!
-          type: 5
+        .post("/api/admin/getApplication", { 
+          affair : 1  // 表示专题制作人权限申请
         })
         .then(res => {
           if (res.data.data) {
-            this.entries = res.data.data.assignments;
-            this.tableData = res.data.data.assignments;
-            this.displayData = res.data.data.assignments.slice(0, 5);
+            this.entries = res.data.data.applications;
+            this.tableData = res.data.data.applications;
+            this.displayData = res.data.data.applications.slice(0, 5);
           } else {
             //this.$message({
               //message: res.data.msg
@@ -136,41 +136,29 @@ export default {
         this.displayData = this.tableData.slice(0, this.pagesize);
       }
     },
-    getTaskContent(id){
-        this.$axios
-          .post("/api/user/getTaskContent", {
-              taskId: new Number(id)
-          })
-          .then(res => {
-            if (res.data.data) {
-              this.form.entryName = res.data.data.entryName;
-              this.form.imageUrl = res.data.data.imageUrl;
-              this.form.intro = res.data.data.intro;
-              this.form.field.splice(0, this.form.field.length);
-              for (var field of res.data.data.field) {
-                this.form.field.push(field);
-              }
-              this.form.infoBox.splice(0, this.form.infoBox.length);
-              for (var info of res.data.data.infoBox) {
-                this.form.infoBox.push(info);
-              }
-              this.form.content = res.data.data.content;
-              this.drawerFlag = true;
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning"
-              });
-            }
-          })
-          .catch(error => {
-            if (error.response) {
-              this.$message({
-                message: error.response.data.msg,
-                type: "warning"
-              });
-            }
-          });
+    audit(row, pass) {
+      this.$axios
+        .post("/api/admin/auditApplication", {
+          applicationId: row.id,
+          reason: this.reason,
+          pass: pass
+        })
+        .then(res => {
+          if (res.data) {
+            this.init();
+            this.$message({
+              message: res.data.msg
+            });
+          }
+        })
+        .catch(error => {
+          if (error.response) {
+            this.$message({
+              message: error.response.data.msg,
+              type: "warning"
+            });
+          }
+        });
     },
     handleClose(done) {
       this.drawerFlag = false;
