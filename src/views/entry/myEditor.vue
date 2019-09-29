@@ -315,6 +315,7 @@ export default {
       relation: "",
       optionInRelation: ["上位词", "下位词", "贡献词"],
       taskId: this.$route.query.id,
+      isTask: this.$route.query.isTask,
       form: {
         entryName: "",
         field: [],
@@ -421,271 +422,288 @@ export default {
   methods: {
     // 初始化数据
     initData() {
-      this.$axios
-        .post("/api/user/getTaskContent", {
-          taskId: new Number(this.taskId)
-        })
-        .then(res => {
-          if (res.data.data) {
-            this.form.entryName = res.data.data.entryName;
-            this.form.imageUrl = res.data.data.imageUrl;
-            this.form.intro = res.data.data.intro;
-            for (var field of res.data.data.field) {
-              this.form.field.push(field);
-            }
-            for (var info of res.data.data.infoBox) {
-              this.form.infoBox.push(info);
-            }
-            this.form.content = res.data.data.content;
-            this.introEditor.intro = this.form.intro;
-            this.contentEditor.content = this.form.content;
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
-        .catch(error => {
-          if (error.response) {
-            this.$message({
-              message: error.response.data.msg,
-              type: "warning"
-            });
-          }
-        });
-    },
-    // 初始化Toolbar
-    onReady(editor) {
-      // Insert the toolbar
-      this.$refs.toolbar.appendChild(editor.ui.view.toolbar.element);
-      editor.plugins.get("FileRepository").createUploadAdapter = loader => {
-        return new MyUploadAdapter(loader);
-      };
-      this.contentEditor.editorObject = editor;
-    },
-    // 绑定词条介绍
-    onIntroEditorInput(editor) {
-      this.form.intro = editor;
-    },
-    // 绑定词条内容
-    onContentEditorInput(editor) {
-      this.form.content = editor;
-      this.refreshCatalog();
-    },
-    // 词条图片上传限制
-    beforeAvatarUpload(file) {
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isLt2M;
-    },
-    // TODO 未完成， 需要把关系写入数据库
-    save() {
-      this.$axios
-        .post("/api/user/saveTaskContent", {
-          taskId: new Number(this.taskId),
-          form: this.form
-        })
-        .then(res => {
-          if (res.data) {
-            this.$message({
-              message: res.data.msg
-            });
-            this.$router.push("/usercenter/myentry");
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
-        .catch(error => {
-          if (error.response) {
-            this.$message({
-              message: error.response.data.msg,
-              type: "warning"
-            });
-          }
-        });
-    },
-    // 目录显示控制
-    catalogHanlder() {
-      if (this.others.catalogOpen == false) {
-        this.$refs.catalogSide.style.display = "block";
-        this.others.catalogOpen = true;
-        this.$refs.catalogButton.style.color = "#06c";
-      } else {
-        this.$refs.catalogSide.style.display = "none";
-        this.others.catalogOpen = false;
-        this.$refs.catalogButton.style.color = "";
-      }
-    },
-    // 更新目录
-    refreshCatalog() {
-      var nodes = this.contentEditor.editorObject.sourceElement.childNodes;
-      this.others.catalog.splice(0, this.others.catalog.length);
-      var i1 = 0;
-      var i2 = 0;
-      for (var node of nodes) {
-        var type;
-        if (node.tagName == "H2") {
-          type = 1;
-          i1 = i1 + 1;
-          i2 = 0;
-        } else if (node.tagName == "H3") {
-          type = 2;
-          i2 = i2 + 1;
-        } else {
-          continue;
+      if (this.$route.query.form) {
+        this.form.entryName = this.$route.query.form.entryName;
+        this.form.imageUrl = this.$route.query.form.imageUrl;
+        this.form.intro = this.$route.query.form.intro;
+        for (var field of this.$route.query.form.field) {
+          this.form.field.push(field);
         }
-        var index = i1.toString();
-        if (i2 != 0) index = index + "." + i2.toString();
-        node.id = "t" + index;
-        var title = node.textContent;
-        this.others.catalog.push({
-          title: title,
-          index: index,
-          type: type
-        });
-      }
-    },
-    // TODO 应用目录
-    applyRecommendCatalog() {
-      this.refreshCatalog();
-    },
-    handleFieldDelete(tag) {
-      this.form.field.splice(this.form.field.indexOf(tag), 1);
-    },
-    showSelect() {
-      this.others.selectVisible = true;
-    },
-    addField() {
-      let selectValue = this.others.selectValue;
-      if (selectValue) {
-        this.form.field.push(selectValue[0]);
-      }
-      this.others.selectVisible = false;
-      this.others.selectValue = "";
-    },
-    refreshAttribute(attribute) {
-      this.$axios
-        .get("/data/getAttribute", {
-          params: {
-            category: attribute
-          }
-        })
-        .then(res => {
-          if (res.data) {
-            this.form.infoBox.splice(0, this.form.infoBox.length);
-            for (var attribute of res.data.attributes) {
-              this.form.infoBox.push({ key: attribute, value: "" });
-            }
-          }
-        })
-        .catch(error => {
-          if (error.response) {
-            this.$message({
-              message: error.response.data.msg,
-              type: "warning"
-            });
-          }
-        });
-    },
-    refreshAttribute() {},
-    uploadSuccess(res, file) {
-      // 如果上传成功
-      if (res.data && res.data.url) {
-        // 获取光标所在位置
-        let length = this.contenteditor.editor.getSelection().index;
-        // 插入图片  res.url为服务器返回的图片地址
-        this.contenteditor.editor.insertEmbed(length, "image", res.data.url);
-        // 调整光标到最后
-        this.contenteditor.editor.setSelection(length + 1);
-      } else {
-        this.$message.error("图片插入失败");
-      }
-    },
-    // 词条图片上传
-    handleAvatarSuccess(res, file) {
-      this.form.imageUrl = res.data.url;
-    },
-    // 参考资料
-    addReference() {
-      this.others.referenceForm.type = 1;
-      this.others.dialogFormVisible = true;
-    },
-    editReference(id) {
-      this.others.referenceForm.type = 2;
-      this.others.referenceForm.aim = id;
-      this.others.referenceForm.title = this.form.reference[id].title;
-      this.others.referenceForm.author = this.form.reference[id].author;
-      this.others.referenceForm.url = this.form.reference[id].url;
-      this.others.dialogFormVisible = true;
-    },
-    deleteReference(id) {
-      if (this.form.reference.length > id) {
-        this.form.reference.splice(id, 1);
-      }
-    },
-    handleReference() {
-      if (this.others.referenceForm.type == 1) {
-        this.form.reference.push({
-          title: this.others.referenceForm.title,
-          author: this.others.referenceForm.author,
-          url: this.others.referenceForm.url
-        });
-      } else if (this.others.referenceForm.type == 2) {
-        this.form.reference[
-          this.others.referenceForm.aim
-        ].title = this.others.referenceForm.title;
-        this.form.reference[
-          this.others.referenceForm.aim
-        ].author = this.others.referenceForm.author;
-        this.form.reference[
-          this.others.referenceForm.aim
-        ].url = this.others.referenceForm.url;
-      }
-      this.others.referenceForm.title = "";
-      this.others.referenceForm.author = "";
-      this.others.referenceForm.url = "";
-      this.others.dialogFormVisible = false;
-    },
-    remoteMethod(query) {
-      // if (query !== "") {
-      //   this.loading = true;
-      //   this.value = query;
-      //   this.$axios
-      //     .post("http://192.168.1.121:9000/", { keyword: query }) //向远程服务器模糊搜索
-      //     .then(res => {
-      //       if (res.data.data) {
-      //         this.options = res.data.data.entrys;
-      //       }
-      //       this.loading = false;
-      //     })
-      //     .catch(error => {});
-      // } else {
-      //   this.options = [];
-      // }
-    },
-    // 关系处理
-    toAddRelation() {
-      let arr = [
-        {
-          name: this.aimEntry,
-          relation: this.relation
+        for (var info of this.$route.query.form.infoBox) {
+          this.form.infoBox.push(info);
         }
-      ];
-      this.form.relation.push(arr);
-    },
-    toDeleteRelation(index) {
-      this.form.relation.splice(index, 1);
-      window.console.log("nmh");
-    },
-    handleClose(done) {
-      this.drawerFlag = false;
+        this.form.content = this.$route.query.form.content;
+        this.introEditor.intro = this.form.intro;
+        this.contenteditor.content = this.form.content;
+      } else {
+        this.$axios
+          .post("/api/user/getTaskContent", {
+            taskId: new Number(this.taskId),
+            isTask: this.isTask
+          })
+          .then(res => {
+            if (res.data.data) {
+              this.form.entryName = res.data.data.entryName;
+              this.form.imageUrl = res.data.data.imageUrl;
+              this.form.intro = res.data.data.intro;
+              for (var field of res.data.data.field) {
+                this.form.field.push(field);
+              }
+              for (var info of res.data.data.infoBox) {
+                this.form.infoBox.push(info);
+              }
+              this.form.content = res.data.data.content;
+              this.introEditor.intro = this.form.intro;
+              this.contenteditor.content = this.form.content;
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "warning"
+              });
+            }
+          })
+          .catch(error => {
+            if (error.response) {
+              this.$message({
+                message: error.response.data.msg,
+                type: "warning"
+              });
+            }
+          });
+      }
     }
+  },
+  // 初始化Toolbar
+  onReady(editor) {
+    // Insert the toolbar
+    this.$refs.toolbar.appendChild(editor.ui.view.toolbar.element);
+    editor.plugins.get("FileRepository").createUploadAdapter = loader => {
+      return new MyUploadAdapter(loader);
+    };
+    this.contentEditor.editorObject = editor;
+  },
+  // 绑定词条介绍
+  onIntroEditorInput(editor) {
+    this.form.intro = editor;
+  },
+  // 绑定词条内容
+  onContentEditorInput(editor) {
+    this.form.content = editor;
+    this.refreshCatalog();
+  },
+  // 词条图片上传限制
+  beforeAvatarUpload(file) {
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      this.$message.error("上传头像图片大小不能超过 2MB!");
+    }
+    return isLt2M;
+  },
+  // TODO 未完成， 需要把关系写入数据库
+  save() {
+    this.$axios
+      .post("/api/user/saveTaskContent", {
+        taskId: new Number(this.taskId),
+        form: this.form,
+        isTask: this.isTask
+      })
+      .then(res => {
+        if (res.data) {
+          this.$message({
+            message: res.data.msg
+          });
+          this.$router.push("/usercenter/myentry");
+        } else {
+          this.$message({
+            message: res.data.msg,
+            type: "warning"
+          });
+        }
+      })
+      .catch(error => {
+        if (error.response) {
+          this.$message({
+            message: error.response.data.msg,
+            type: "warning"
+          });
+        }
+      });
+  },
+  // 目录显示控制
+  catalogHanlder() {
+    if (this.others.catalogOpen == false) {
+      this.$refs.catalogSide.style.display = "block";
+      this.others.catalogOpen = true;
+      this.$refs.catalogButton.style.color = "#06c";
+    } else {
+      this.$refs.catalogSide.style.display = "none";
+      this.others.catalogOpen = false;
+      this.$refs.catalogButton.style.color = "";
+    }
+  },
+  // 更新目录
+  refreshCatalog() {
+    var nodes = this.contentEditor.editorObject.sourceElement.childNodes;
+    this.others.catalog.splice(0, this.others.catalog.length);
+    var i1 = 0;
+    var i2 = 0;
+    for (var node of nodes) {
+      var type;
+      if (node.tagName == "H2") {
+        type = 1;
+        i1 = i1 + 1;
+        i2 = 0;
+      } else if (node.tagName == "H3") {
+        type = 2;
+        i2 = i2 + 1;
+      } else {
+        continue;
+      }
+      var index = i1.toString();
+      if (i2 != 0) index = index + "." + i2.toString();
+      node.id = "t" + index;
+      var title = node.textContent;
+      this.others.catalog.push({
+        title: title,
+        index: index,
+        type: type
+      });
+    }
+  },
+  // TODO 应用目录
+  applyRecommendCatalog() {
+    this.refreshCatalog();
+  },
+  handleFieldDelete(tag) {
+    this.form.field.splice(this.form.field.indexOf(tag), 1);
+  },
+  showSelect() {
+    this.others.selectVisible = true;
+  },
+  addField() {
+    let selectValue = this.others.selectValue;
+    if (selectValue) {
+      this.form.field.push(selectValue[0]);
+    }
+    this.others.selectVisible = false;
+    this.others.selectValue = "";
+  },
+  refreshAttribute(attribute) {
+    this.$axios
+      .get("/data/getAttribute", {
+        params: {
+          category: attribute
+        }
+      })
+      .then(res => {
+        if (res.data) {
+          this.form.infoBox.splice(0, this.form.infoBox.length);
+          for (var attribute of res.data.attributes) {
+            this.form.infoBox.push({ key: attribute, value: "" });
+          }
+        }
+      })
+      .catch(error => {
+        if (error.response) {
+          this.$message({
+            message: error.response.data.msg,
+            type: "warning"
+          });
+        }
+      });
+  },
+  refreshAttribute() {},
+  uploadSuccess(res, file) {
+    // 如果上传成功
+    if (res.data && res.data.url) {
+      // 获取光标所在位置
+      let length = this.contenteditor.editor.getSelection().index;
+      // 插入图片  res.url为服务器返回的图片地址
+      this.contenteditor.editor.insertEmbed(length, "image", res.data.url);
+      // 调整光标到最后
+      this.contenteditor.editor.setSelection(length + 1);
+    } else {
+      this.$message.error("图片插入失败");
+    }
+  },
+  // 词条图片上传
+  handleAvatarSuccess(res, file) {
+    this.form.imageUrl = res.data.url;
+  },
+  // 参考资料
+  addReference() {
+    this.others.referenceForm.type = 1;
+    this.others.dialogFormVisible = true;
+  },
+  editReference(id) {
+    this.others.referenceForm.type = 2;
+    this.others.referenceForm.aim = id;
+    this.others.referenceForm.title = this.form.reference[id].title;
+    this.others.referenceForm.author = this.form.reference[id].author;
+    this.others.referenceForm.url = this.form.reference[id].url;
+    this.others.dialogFormVisible = true;
+  },
+  deleteReference(id) {
+    if (this.form.reference.length > id) {
+      this.form.reference.splice(id, 1);
+    }
+  },
+  handleReference() {
+    if (this.others.referenceForm.type == 1) {
+      this.form.reference.push({
+        title: this.others.referenceForm.title,
+        author: this.others.referenceForm.author,
+        url: this.others.referenceForm.url
+      });
+    } else if (this.others.referenceForm.type == 2) {
+      this.form.reference[
+        this.others.referenceForm.aim
+      ].title = this.others.referenceForm.title;
+      this.form.reference[
+        this.others.referenceForm.aim
+      ].author = this.others.referenceForm.author;
+      this.form.reference[
+        this.others.referenceForm.aim
+      ].url = this.others.referenceForm.url;
+    }
+    this.others.referenceForm.title = "";
+    this.others.referenceForm.author = "";
+    this.others.referenceForm.url = "";
+    this.others.dialogFormVisible = false;
+  },
+  remoteMethod(query) {
+    // if (query !== "") {
+    //   this.loading = true;
+    //   this.value = query;
+    //   this.$axios
+    //     .post("http://192.168.1.121:9000/", { keyword: query }) //向远程服务器模糊搜索
+    //     .then(res => {
+    //       if (res.data.data) {
+    //         this.options = res.data.data.entrys;
+    //       }
+    //       this.loading = false;
+    //     })
+    //     .catch(error => {});
+    // } else {
+    //   this.options = [];
+    // }
+  },
+  // 关系处理
+  toAddRelation() {
+    let arr = [
+      {
+        name: this.aimEntry,
+        relation: this.relation
+      }
+    ];
+    this.form.relation.push(arr);
+  },
+  toDeleteRelation(index) {
+    this.form.relation.splice(index, 1);
+    window.console.log("nmh");
+  },
+  handleClose(done) {
+    this.drawerFlag = false;
   }
 };
 </script>

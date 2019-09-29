@@ -170,7 +170,7 @@ export default {
       value: "",
       likeNum: "0",
       columns: 4,
-      entryId: null,
+      originEntryId: null,
       tableData: [],
       form: {
         entryName: "",
@@ -199,6 +199,7 @@ export default {
         })
         .then(res => {
           if (res.data) {
+            this.originEntryId = res.data.entryId;
             this.form.entryName = res.data.entryName;
             this.form.intro = res.data.intro;
             this.form.infoBox.splice(0, this.form.infoBox.length);
@@ -223,7 +224,7 @@ export default {
       this.$refs.editor.innerHTML = this.form.content;
     },
     toEntryEdit() {
-
+      this.$router.push({ path: "/entryedit", query: {form: this.form, isTask: "false"}});
     },
     search() {
       this.name = this.value;
