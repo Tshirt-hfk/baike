@@ -289,10 +289,6 @@ export default {
 </script>
 
 <style scoped>
-@import "quill/dist/quill.core.css";
-@import "quill/dist/quill.snow.css";
-@import "katex/dist/katex.min.css";
-
 dl,
 dd,
 ol,

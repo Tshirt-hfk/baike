@@ -183,11 +183,11 @@ export default {
       var i2 = 0;
       for (var node of nodes) {
         var type;
-        if (node.tagName == "H1") {
+        if (node.tagName == "H2") {
           type = 1;
           i1 = i1 + 1;
           i2 = 0;
-        } else if (node.tagName == "H2") {
+        } else if (node.tagName == "H3") {
           type = 2;
           i2 = i2 + 1;
         } else {
@@ -215,10 +215,6 @@ export default {
 </script>
 
 <style scoped>
-@import "quill/dist/quill.core.css";
-@import "quill/dist/quill.snow.css";
-@import "katex/dist/katex.min.css";
-
 dl,
 dd,
 ol,
