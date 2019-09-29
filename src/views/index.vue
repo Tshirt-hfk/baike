@@ -152,6 +152,7 @@ export default {
   },
   data() {
     return {
+      status: this.$store.state.status,
       rollingTime: 5000,
       searchResult: [],
       timeout: null,
@@ -228,7 +229,10 @@ export default {
       console.log(key, keyPath);
     },
     toUserCenter() {
-      this.$router.push("/usercenter/mysubject");
+      if(this.status == '3')
+        this.$router.push("/adminAudit");
+      else
+        this.$router.push("/usercenter/mysubject");
     },
     toEntryExhibition(entryName){
       var { href } = this.$router.resolve({

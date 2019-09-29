@@ -67,18 +67,6 @@
       </div>
     </div>
     <div class="uc-body-wrapper">
-      <!-- <div v-if="pageIndex == '1'">
-        <mySubject></mySubject>
-      </div>
-      <div v-else-if="pageIndex == '2'">
-        <myEntry></myEntry>
-      </div>
-      <div v-else-if="pageIndex == '3'">
-        <myTask></myTask>
-      </div>
-      <div v-else-if="pageIndex == '4'">   
-         待添加
-      </div> -->
       <router-view/>
     </div>
   </div>
@@ -100,8 +88,8 @@ export default {
   },
   data() {
     return {
+      status: this.$store.state.status,
       userName: this.$store.state.name,
-      pageIndex: '1',
     };
   },
   methods: {

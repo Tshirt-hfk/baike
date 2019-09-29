@@ -315,6 +315,7 @@ export default {
       relation: "",
       optionInRelation: ["上位词", "下位词", "贡献词"],
       taskId: this.$route.query.id,
+      isTask: this.$route.query.isTask,
       form: {
         entryName: "",
         field: [],
@@ -421,39 +422,55 @@ export default {
   methods: {
     // 初始化数据
     initData() {
-      this.$axios
-        .post("/api/user/getTaskContent", {
-          taskId: new Number(this.taskId)
-        })
-        .then(res => {
-          if (res.data.data) {
-            this.form.entryName = res.data.data.entryName;
-            this.form.imageUrl = res.data.data.imageUrl;
-            this.form.intro = res.data.data.intro;
-            for (var field of res.data.data.field) {
-              this.form.field.push(field);
+      if(this.$route.query.form){
+        this.form.entryName = this.$route.query.form.entryName;
+        this.form.imageUrl = this.$route.query.form.imageUrl;
+        this.form.intro = this.$route.query.form.intro;
+        for (var field of this.$route.query.form.field) {
+          this.form.field.push(field);
+        }
+        for (var info of this.$route.query.form.infoBox) {
+          this.form.infoBox.push(info);
+        }
+        this.form.content = this.$route.query.form.content;
+        this.introEditor.intro = this.form.intro;
+        this.contenteditor.content = this.form.content;
+      }else{
+        this.$axios
+          .post("/api/user/getTaskContent", {
+            taskId: new Number(this.taskId),
+            isTask: this.isTask
+          })
+          .then(res => {
+            if (res.data.data) {
+              this.form.entryName = res.data.data.entryName;
+              this.form.imageUrl = res.data.data.imageUrl;
+              this.form.intro = res.data.data.intro;
+              for (var field of res.data.data.field) {
+                this.form.field.push(field);
+              }
+              for (var info of res.data.data.infoBox) {
+                this.form.infoBox.push(info);
+              }
+              this.form.content = res.data.data.content;
+              this.introEditor.intro = this.form.intro;
+              this.contenteditor.content = this.form.content;
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "warning"
+              });
             }
-            for (var info of res.data.data.infoBox) {
-              this.form.infoBox.push(info);
+          })
+          .catch(error => {
+            if (error.response) {
+              this.$message({
+                message: error.response.data.msg,
+                type: "warning"
+              });
             }
-            this.form.content = res.data.data.content;
-            this.introEditor.intro = this.form.intro;
-            this.contentEditor.content = this.form.content;
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
-        .catch(error => {
-          if (error.response) {
-            this.$message({
-              message: error.response.data.msg,
-              type: "warning"
-            });
-          }
-        });
+          });
+      }
     },
     // 初始化Toolbar
     onReady(editor) {
@@ -486,7 +503,8 @@ export default {
       this.$axios
         .post("/api/user/saveTaskContent", {
           taskId: new Number(this.taskId),
-          form: this.form
+          form: this.form,
+          isTask: this.isTask
         })
         .then(res => {
           if (res.data) {
