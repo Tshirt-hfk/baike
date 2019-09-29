@@ -72,7 +72,7 @@
           </div>
         </div>
         <div class="preview-content" id="mainContent">
-          <div ref="previewEntry" v-html="form.content" class="ql-editor ql-snow"></div>
+          <div ref="previewEntry" v-html="form.content" class="ck-content"></div>
         </div>
       </div>
       <div class="preview-side-wrap">
@@ -214,7 +214,10 @@ export default {
 };
 </script>
 
+<style src="../style/content-style.css" scoped>
+</style>
 <style scoped>
+
 dl,
 dd,
 ol,
@@ -227,7 +230,7 @@ p {
   margin: 0;
   padding: 0;
 }
-.ql-editor {
+.ck-content {
   margin: 0;
   padding: 0;
 }

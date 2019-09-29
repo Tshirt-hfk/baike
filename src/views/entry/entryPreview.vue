@@ -95,7 +95,7 @@
             </div>
           </div>
           <div class="preview-content" id="mainContent">
-            <div ref="editor" class="ql-editor ql-snow"></div>
+            <div ref="editor" class="ck-content"></div>
           </div>
         </div>
         <div class="preview-side-wrap">
@@ -158,7 +158,6 @@
 </template>
 
 <script>
-
 export default {
   name: "entryPreview",
   computed: {
@@ -288,6 +287,8 @@ export default {
 };
 </script>
 
+<style src="../../style/content-style.css" scoped>
+</style>
 <style scoped>
 dl,
 dd,
@@ -301,7 +302,7 @@ p {
   margin: 0;
   padding: 0;
 }
-.ql-editor {
+.ck-content {
   margin: 0;
   padding: 0;
 }
