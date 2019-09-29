@@ -1109,15 +1109,17 @@ export default {
 .editor-toolbar-op {
   float: left;
   z-index: 999;
-  width: 14%;
-  height: 38px;
+  width: 15%;
+  height: 40px;
   border: 1px solid rgb(196, 196, 196);
   background: #fafafa;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 .editor-toolbar-op .custom-buttom {
   margin-left: 25px;
   margin-top: 10px;
-
   outline: none;
 }
 
