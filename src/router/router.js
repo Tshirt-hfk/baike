@@ -15,7 +15,7 @@ export default new Router({
     {
       path: '/test',
       name: 'test',
-      component: () => import('../components/entryEditor')
+      component: () => import('../components/entryCreate')
     },
     {
       path: '/login',
