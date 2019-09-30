@@ -192,21 +192,24 @@ export default {
   methods: {
     init() {
       this.$axios
-        .get("/data/fetchPageByName", {
+        .get("/data/algoInterface", {
           params: {
-            name: this.name
+            nameList: this.name
           }
         })
         .then(res => {
-          if (res.data) {
-            this.originEntryId = res.data.entryId;
-            this.form.entryName = res.data.entryName;
-            this.form.intro = res.data.intro;
+          // TODO 处理同名词条
+          if (res.data && res.data.length>0) {
+            let data = res.data[0].info
+            this.form.field = data.field
+            this.originEntryId = data.entryId;
+            this.form.entryName = data.entryName;
+            this.form.intro = data.intro;
             this.form.infoBox.splice(0, this.form.infoBox.length);
-            for (var info of res.data.infoBox) {
+            for (var info of data.infoBox) {
               this.form.infoBox.push(info);
             }
-            this.form.content = res.data.content;
+            this.form.content = data.content;
             this.initContent();
             this.refreshCatalog();
           }
@@ -224,7 +227,37 @@ export default {
       this.$refs.editor.innerHTML = this.form.content;
     },
     toEntryEdit() {
-      this.$router.push({ path: "/entryedit", query: {form: this.form, isTask: "false"}});
+          this.$axios
+          .post("/api/user/exitUserRecord", {
+            entryName: this.form.entryName,
+          })
+          .then(res => {
+            if (res.data.data) {
+              if(res.data.data.state == 4){
+                this.$confirm('您已有该词条版本正在审核，是否前往查看?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning',
+                  center: true
+                }).then(() => {
+                  this.$router.push({ path: "/entryedit", query: {entryName: this.form.entryName, isTask: "false", 
+                    state: res.data.data.state, id: res.data.data.id}});
+                }).catch(() => {      
+                });
+              }else
+                this.$router.push({ path: "/entryedit", query: {entryName: this.form.entryName, isTask: "false", 
+                state: res.data.data.state, id: res.data.data.id}});
+            }else
+              this.$router.push({ path: "/entryedit", query: {entryName: this.form.entryName, isTask: "false"}});
+          })
+          .catch(error => {
+            if (error.response) {
+              this.$message({
+                message: error.response.data.msg,
+                type: "warning"
+              });
+            }
+          });
     },
     search() {
       this.name = this.value;
