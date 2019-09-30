@@ -9,14 +9,40 @@
               <el-radio-button label="right">我创建的</el-radio-button>
             </el-radio-group>
             <div class="uc-apply-info">
-                  <a href="" class="uc-btn-apply" target="_blank">申请专题制作人权限</a>
+                  <a class="uc-btn-apply" @click="applyFlag = true;checked = false">申请专题制作人权限</a>
                   <p style="font-style:normal;font-size: 10px; margin-top: 13px;">获得众智化系统认证，享受更多权限!</p>
             </div>
           </div>
-          <el-card style="width: 1200px;min-height:680px">  <!--高度后期需要自适应 -->
+          <el-card style="width: 1200px;min-height:560px">  <!--高度后期需要自适应 -->
             <router-view ></router-view>
           </el-card>
         </div>
+        <el-dialog
+          :visible.sync="applyFlag"
+          width="1000px"
+          center
+          :show-close=false
+          top = 12vh>
+          <div class="apply-title">
+            <div class="apply-title-main">制作人申请须知</div>
+            <div class="apply-title-notice">欢迎进行专题制作人权限申请，为了您能更好地通过审核，您需要认真阅读以下要求</div>
+          </div>
+          <div class="apply-body">
+            1、专题内容符合社会主义核心价值观，弘扬正能量 <br>
+            2、对专题内词条的审核积极正面，不带有个人情感色彩，仅从学术严谨度出发 <br>
+            3、禁止利用网站进行非法活动 <br>
+            4、 <br>
+            5、 <br>
+          </div>
+          <div class="apply-checkBox">
+            <el-checkbox v-model="checked">我已认真阅读并同意以上条款</el-checkbox>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="applyFlag = false">取 消</el-button>
+            <el-button id="confirm" type="primary" @click="apply" 
+            :disabled="checked == false" :autofocus=true>申 请</el-button>
+          </span>
+        </el-dialog>
       </div>
     </div>
 </template>
@@ -28,6 +54,8 @@ export default {
     data() {
         return{
             tabSelection: 'left',
+            applyFlag: false,
+            checked: false,
         };
     },
     mounted(){
@@ -43,6 +71,28 @@ export default {
             this.$router.push("./joinedsubject")
           else if(this.tabSelection=="right")
             this.$router.push("./createdsubject")
+        },
+        apply(){
+          this.applyFlag = false;
+          this.$axios
+            .post("/api/user/applyAuthority", {
+              affair : 1 // 表示申请专题制作人
+            })
+            .then(res => {
+              if (res.data) {
+                this.$message({
+                  message: res.data.msg
+                });
+              }
+            })
+            .catch(error => {
+              if (error.response) {
+                this.$message({
+                  message: error.response.data.msg,
+                  type: "warning"
+                });
+              }
+            });
         },
     }
 }
@@ -87,9 +137,34 @@ export default {
   margin-left: 25px; 
 }
 .uc-btn-apply:hover{
-  color:#13227a;
+  cursor: pointer;
+  opacity: 0.8;
 }
 .uc-section-task-mine{
   padding: 20px 0 50px;
+}
+.apply-title{
+  margin-top: -20px;
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+.apply-title-main{
+  font-size: 25px;
+  color: #333;
+}
+.apply-title-notice{
+  margin-top: 10px;
+  padding-bottom: 10px;
+  color: #a9a9a9;
+}
+.apply-body{
+  font-size: 16px;
+  line-height: 30px;
+  margin: 25px 25px 25px 50px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e5e5;
+}
+.apply-checkBox{
+  text-align: center;
 }
 </style>

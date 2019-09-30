@@ -21,32 +21,32 @@
         <template v-else-if="status==='1'">
           <!-- 普通用户 -->
           <el-dropdown @command="handleCommand">
-            <span class="el-dropdown-link">
+            <div class="el-dropdown-link">
                 <div class="header-icon">
-                    <img src="https://static.hdslb.com/images/member/noface.gif" class="header-face">
+                    <img src="https://static.hdslb.com/images/member/noface.gif" class="header-face-user">
                 </div>
                   {{userName}} 
                 <i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
+            </div>
             <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="1">我的任务</el-dropdown-item>
+                <el-dropdown-item command="1">我的专题</el-dropdown-item>
                 <el-dropdown-item command="2">我的词条</el-dropdown-item>
-                <el-dropdown-item command="3">我的收藏</el-dropdown-item>
+                <el-dropdown-item command="3">我的任务</el-dropdown-item>
                 <el-dropdown-item command="4" divided>登出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-link @click="loginOut" style="margin-left:10px; margin-bottom:3px; margin-right:12px">消息</el-link>
+          <el-link @click="loginOut" style="margin-left:10px; margin-bottom: 2px; margin-right:12px"
+            :underline="false">消息</el-link>
           <el-dropdown @command="handleCommand">
-            <span class="el-dropdown-link">
+            <div style="margin-top: 8px" class="el-dropdown-link">
                 设置<i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
+            </div>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="5">账号设置</el-dropdown-item>
                 <el-dropdown-item command="6">资料设置</el-dropdown-item>
                 <el-dropdown-item command="7">消息设置</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-link @click="toSubject" class="header-createsubject">创建专题</el-link>
         </template>
         <template v-else-if="status==='2'">
           <!-- 专题制作人 -->
@@ -80,7 +80,10 @@
         </template>
         <template v-else-if="status==='3'">
           <!-- 管理员 -->
-          <el-button @click="loginOut">登出</el-button>
+          <div style="margin-top: 2px">
+          <el-button size="mini" @click="entryAudit">管理审核</el-button>
+          <el-button size="mini" @click="loginOut">登出</el-button>
+          </div>
         </template>
       </div>
     </div>
@@ -137,8 +140,8 @@ export default {
           }
         });
     },
-    toUserCenter() {
-      this.$router.push("/usercenter");
+    entryAudit(){
+      this.$router.push("/adminAudit/entryAudit");
     },
     toIndex() {
       this.$router.push("/");
@@ -186,6 +189,9 @@ export default {
 </script>
 
 <style scoped>
+.el-button{
+  margin: 0 auto;
+}
 .header {
   position: relative;
   top: 0px;
@@ -224,7 +230,6 @@ export default {
 }
 .header-r {
   float: right;
-  height: 35px;
   font-size: 18px;
 }
 .header-line{
@@ -247,11 +252,21 @@ export default {
   margin-top: -5px;
   margin-right: 7px;
 }
+.header-face-user{
+  border: 1px solid #8bbb0f;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  margin-top: -1px;
+}
 .header-face{
   border: 1px solid #8bbb0f;
   width: 100%;
   height: 100%;
   border-radius: 50%;
+}
+.el-dropdown :hover{
+  color: #409EFF;
 }
 .el-dropdown-link{
   cursor: pointer;

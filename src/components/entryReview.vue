@@ -72,7 +72,7 @@
           </div>
         </div>
         <div class="preview-content" id="mainContent">
-          <div ref="previewEntry" v-html="form.content" class="ql-editor ql-snow"></div>
+          <div ref="previewEntry" v-html="form.content" class="ck-content"></div>
         </div>
       </div>
       <div class="preview-side-wrap">
@@ -214,10 +214,9 @@ export default {
 };
 </script>
 
+<style src="../style/content-style.css">
+</style>
 <style scoped>
-@import "quill/dist/quill.core.css";
-@import "quill/dist/quill.snow.css";
-@import "katex/dist/katex.min.css";
 
 dl,
 dd,
@@ -231,7 +230,7 @@ p {
   margin: 0;
   padding: 0;
 }
-.ql-editor {
+.ck-content {
   margin: 0;
   padding: 0;
 }

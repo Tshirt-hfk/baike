@@ -13,6 +13,11 @@ export default new Router({
       component: index
     },
     {
+      path: '/test',
+      name: 'test',
+      component: () => import('../components/entryCreate')
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/login')
@@ -103,6 +108,24 @@ export default new Router({
           path: 'emailmodify',
           name: 'emailModify',
           component: () => import('../views/userCenter/myInfo/emailModify')
+        }
+      ]
+    },
+    { // 管理员审核页面
+      path: '/adminAudit',
+      name: 'adminAudit',
+      component: () => import('../views/userCenter/adminAudit'),
+      redirect: '/adminAudit/entryAudit',
+      children: [
+        {
+          path: 'entryAudit',
+          name: 'entryAudit',
+          component: () => import('../views/userCenter/admin/entryAudit')
+        },
+        {
+          path: 'subjectMakerAudit',
+          name: 'subjectMakerAudit',
+          component: () => import('../views/userCenter/admin/subjectMakerAudit')
         }
       ]
     },

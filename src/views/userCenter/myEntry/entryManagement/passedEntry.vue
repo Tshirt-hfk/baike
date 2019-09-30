@@ -12,7 +12,7 @@
       </el-table-column>
       <el-table-column align="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id)">查看</el-button>
+          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id, scope.row.source)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -127,10 +127,11 @@ export default {
         this.displayData = this.tableData.slice(0, this.pagesize);
       }
     },
-    getTaskContent(id){
+    getTaskContent(id, source){
         this.$axios
           .post("/api/user/getTaskContent", {
-              taskId: new Number(id)
+              taskId: new Number(id),
+              source: source
           })
           .then(res => {
             if (res.data.data) {

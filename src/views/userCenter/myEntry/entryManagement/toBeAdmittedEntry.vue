@@ -31,8 +31,8 @@
       </el-table-column>
       <el-table-column align="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="jumpToEdit">编辑</el-button>
-          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id)">预览</el-button>
+          <el-button size="mini" type="primary" @click="jumpToEdit(scope.row.source)">编辑</el-button>
+          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id, scope.row.source)">预览</el-button>
           <el-button size="mini" type="success" @click="getReason(scope.$index)">提交</el-button>
         </template>
       </el-table-column>
@@ -131,7 +131,7 @@ export default {
       entryId: 0,
       modifyReason: [],
       reason: "",
-      tag: 0
+      tag: 0,
     };
   },
   mounted() {
@@ -176,14 +176,15 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    getId(row) {
+    getId(row) {          //有必要么？
       this.entryId = row.id;
     },
-    jumpToEdit() {
-      this.$router.push({ path: "/entryedit", query: { id: this.entryId } });
+    jumpToEdit(source) {
+      this.$router.push({ path: "/entryedit", query: { id: this.entryId , source: source} });
     },
     getReason(index) {
       this.modifyReason = this.displayData[index].modifyReason;
+      this.isTask = this.displayData[index].isTask;
       this.tag = index;
       this.admitFlag = true;
     },
@@ -193,7 +194,8 @@ export default {
       this.$axios
         .post("/api/user/admitEntry", {
           entryIds: array,
-          reason: this.reason
+          reason: this.reason,
+          isTask: this.isTask
         })
         .then(res => {
           if (res.data) {
@@ -216,12 +218,15 @@ export default {
     },
     deleteEntry() {
       var array = new Array();
+      var isTaskArray = new Array();
       for (var i = 0; i < this.multipleSelection.length; i++) {
         array.push(this.multipleSelection[i].id);
+        isTaskArray.push(this.multipleSelection[i].isTask);
       }
       this.$axios
         .post("/api/user/giveUpTask", {
-          entryIds: array
+          entryIds: array,
+          isTaskArray: isTaskArray
         })
         .then(res => {
           if (res.data) {
@@ -264,10 +269,11 @@ export default {
         this.displayData = this.tableData.slice(0, this.pagesize);
       }
     },
-    getTaskContent(id) {
+    getTaskContent(id, source) {
         this.$axios
           .post("/api/user/getTaskContent", {
-            taskId: new Number(id)
+            taskId: new Number(id),
+            source: source
           })
           .then(res => {
             if (res.data.data) {

@@ -5,7 +5,7 @@
     placeholder="请输入词条名称"
     :trigger-on-focus="false"
     @select="handleSelect"
-	:value="value"
+	  :value="value"
     @input="input"
   ></el-autocomplete>
 </template>

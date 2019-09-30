@@ -23,7 +23,7 @@
           </div>
         </el-card>
         </div>
-      </div>
+    </div>
 </template>
 
 <script>
