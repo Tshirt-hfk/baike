@@ -8,7 +8,7 @@
               <el-radio-button label="left">我参加的</el-radio-button>
               <el-radio-button label="right">我创建的</el-radio-button>
             </el-radio-group>
-            <div class="uc-apply-info">
+            <div v-if="status == '1'" class="uc-apply-info">
                   <a class="uc-btn-apply" @click="applyFlag = true;checked = false">申请专题制作人权限</a>
                   <p style="font-style:normal;font-size: 10px; margin-top: 13px;">获得众智化系统认证，享受更多权限!</p>
             </div>
@@ -53,6 +53,7 @@ export default {
     name: "mySubject",
     data() {
         return{
+            status: this.$store.state.status,
             tabSelection: 'left',
             applyFlag: false,
             checked: false,
