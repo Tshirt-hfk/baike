@@ -143,23 +143,23 @@
               <div>
                 <template v-for="(item,index) in form.infoBox">
                   <div :key="index" class="basic-info-property-item">
-                    <el-form-item style="width:65px;float:left">
+                    <el-form-item style="width:80px;float:left">
                       <el-input
                         class="basic-info-property-label"
                         type="text"
                         size="mini"
-                        maxlength="10"
+                        maxlength="20"
                         v-model="item.key"
                       ></el-input>
                     </el-form-item>
-                    <el-form-item style="width:255px;float:left;margin-left:10px">
-                      <el-input type="text" size="mini" maxlength="20" v-model="item.value"></el-input>
+                    <el-form-item style="width:255px;float:left;margin-left:20px">
+                      <el-input type="text" size="mini" maxlength="50" v-model="item.value"></el-input>
                     </el-form-item>
                     <div style="float:left;margin-left:8px;line-height:40px;">
                       <a
                         style="cursor:pointer"
                         class="el-icon-delete"
-                        @click="form.infoBox.splice(i,1)"
+                        @click="form.infoBox.splice(index,1)"
                       ></a>
                     </div>
                     <div class="clear"></div>
