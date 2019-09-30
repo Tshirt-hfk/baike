@@ -19,7 +19,7 @@
         </div>
         <el-dialog
           :visible.sync="applyFlag"
-          width="55%"
+          width="1000px"
           center
           :show-close=false
           top = 12vh>
@@ -35,7 +35,7 @@
             5、 <br>
           </div>
           <div class="apply-checkBox">
-            <el-checkbox v-model="checked" @change="buttonChange">我已认真阅读并同意以上条款</el-checkbox>
+            <el-checkbox v-model="checked">我已认真阅读并同意以上条款</el-checkbox>
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button @click="applyFlag = false">取 消</el-button>
