@@ -118,7 +118,6 @@
                     :editor="introEditor.editor"
                     :config="introEditor.editorConfig"
                     v-model="form.intro"
-                    @onEditorInput="onIntroEditorInput"
                   ></ckeditor>
                 </div>
               </div>
