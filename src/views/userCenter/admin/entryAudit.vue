@@ -13,9 +13,9 @@
       </el-table-column>
       <el-table-column align="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id, scope.row.isTask)">查看</el-button>
+          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id)">查看</el-button>
           <el-button type="primary" @click="audit(scope.row, true)">通 过</el-button>
-          <el-button type="danger" @click="rejectFlag = true">拒绝</el-button>
+          <el-button type="danger" @click="reason='';rejectFlag = true">拒绝</el-button>
           <el-dialog title="未通过原因" :visible.sync="rejectFlag" width="600px">
             <span>
               <div style="margin: 15px 0;"></div>
@@ -67,9 +67,11 @@ export default {
   },
   data() {
     return {
+      rejectFlag: false,
       searchValue: '',
       drawerFlag: false,
       relationData: [],
+      reason:"",
       form: {
         entryName: "",
         field: [],
@@ -122,12 +124,14 @@ export default {
     stateChange(state){
       this.$emit('stateChange', state)
     },
+    // 分页功能
     handleCurrentChange(val) {
       this.currentPage = val;
       let indexleft = val - 1;
       let size = this.pagesize;
       this.displayData = this.tableData.slice(indexleft*size, val*size);
     },
+    // filter
     remoteMethod(query) {
       if (query !== "") {
         this.tableData = this.applications.filter(entry => {
@@ -139,11 +143,11 @@ export default {
         this.displayData = this.tableData.slice(0, this.pagesize);
       }
     },
-    getTaskContent(id, isTask){
+    getTaskContent(id){
         this.$axios
           .post("/api/user/getTaskContent", {
               taskId: new Number(id),
-              isTask: isTask
+              source: 1
           })
           .then(res => {
             if (res.data.data) {
@@ -207,7 +211,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .passentry-version{
   text-decoration: underline;
   cursor: pointer;
