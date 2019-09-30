@@ -18,13 +18,13 @@ module.exports = {
         }
       },
       '/resource':{
-        target:"http://localhost:8081",
+        target:"http://101.200.34.92:8081",
         pathRewrite:{
           '^/resource':'/resource'
         }
       },
       '/data':{
-        target:"http://0.0.0.0:6000",
+        target:"http://124.207.169.23:8080",
         pathRewrite:{
           '^/data':''
         }

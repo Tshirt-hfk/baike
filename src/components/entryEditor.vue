@@ -171,10 +171,9 @@
 
 <script>
 import {
-  DecoupledEditor,
-  InlineEditor
-} from "@ckeditor/ckeditor5-build-decoupled-document";
-import "@ckeditor/ckeditor5-build-decoupled-document/build/translations/zh-cn.js";
+  BodyEditor,
+  IntroEditor
+} from "flll-entry-editor";
 import MyUploadAdapter from "./myUploadAdapter.js";
 
 export default {
@@ -194,9 +193,8 @@ export default {
       basicInfoEditor: {
         intro:"",
         editorObject: null,
-        editor: InlineEditor,
+        editor: IntroEditor,
         editorConfig: {
-          language: "zh-cn",
           toolbar: [
             "bold",
             "italic",
@@ -219,9 +217,8 @@ export default {
       contentEditor: {
         content:"",
         editorObject: null,
-        editor: DecoupledEditor,
+        editor: BodyEditor,
         editorConfig: {
-          language: "zh-cn",
           toolbar: [
             "heading",
             "|",

@@ -72,10 +72,7 @@
             </div>
             <div class="preview-cataloglist">
               <ol v-for="n in columns" :key="n">
-                <li
-                  v-for="(cata, index) in catalog.slice((n-1)*12)"
-                  :key="index"
-                >
+                <li v-for="(cata, index) in catalog.slice((n-1)*12)" :key="index">
                   <div v-if="index < 12">
                     <template v-if="cata.type == 1">
                       <span class="catalog-index1">{{cata.index}}</span>
@@ -95,7 +92,7 @@
             </div>
           </div>
           <div class="preview-content" id="mainContent">
-            <div ref="editor" class="ql-editor ql-snow"></div>
+            <div ref="editor" class="ck-content"></div>
           </div>
         </div>
         <div class="preview-side-wrap">
@@ -158,7 +155,6 @@
 </template>
 
 <script>
-
 export default {
   name: "entryPreview",
   computed: {
@@ -171,9 +167,9 @@ export default {
       value: "",
       likeNum: "0",
       columns: 4,
-      originEntryId: null,
       tableData: [],
       form: {
+        originEntryId: -1,
         entryName: "",
         field: "",
         imageUrl: "",
@@ -193,21 +189,24 @@ export default {
   methods: {
     init() {
       this.$axios
-        .get("/data/fetchPageByName", {
+        .get("/data/algoInterface", {
           params: {
-            name: this.name
+            nameList: this.name
           }
         })
         .then(res => {
-          if (res.data) {
-            this.originEntryId = res.data.entryId;
-            this.form.entryName = res.data.entryName;
-            this.form.intro = res.data.intro;
+          // TODO 处理同名词条
+          if (res.data && res.data.length > 0) {
+            let data = res.data[0].info;
+            this.form.field = data.field;
+            this.form.originEntryId = data.id;
+            this.form.entryName = data.entryName;
+            this.form.intro = data.intro;
             this.form.infoBox.splice(0, this.form.infoBox.length);
-            for (var info of res.data.infoBox) {
+            for (var info of data.infoBox) {
               this.form.infoBox.push(info);
             }
-            this.form.content = res.data.content;
+            this.form.content = data.content;
             this.initContent();
             this.refreshCatalog();
           }
@@ -225,7 +224,43 @@ export default {
       this.$refs.editor.innerHTML = this.form.content;
     },
     toEntryEdit() {
-      this.$router.push({ path: "/entryedit", query: {form: this.form, isTask: "false"}});
+      this.$axios
+        .post("/api/user/exitUserRecord", {
+          originId: this.form.originEntryId
+        })
+        .then(res => {
+          window.console.log(res.data)
+          if (res.data.data) {
+            if (res.data.data.state == 1) {
+              this.$confirm("您已有该词条版本正在编辑，是否前往查看?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+                center: true
+              })
+                .then(() => {
+                  this.$router.push({
+                    path: "/entryedit",
+                    query: { id: res.data.data.id, source: 1 }
+                  });
+                })
+                .catch(() => {});
+            } else if (res.data.data.state == 0)
+              window.console.log(this.form)
+              this.$router.push({
+                path: "/entryedit",
+                query: { id: this.form.originEntryId, source: 0 }
+              });
+          }
+        })
+        .catch(error => {
+          if (error.response) {
+            this.$message({
+              message: error.response.data.msg,
+              type: "warning"
+            });
+          }
+        });
     },
     search() {
       this.name = this.value;
@@ -282,18 +317,14 @@ export default {
         });
       }
     },
-    querySearch(query, cb) {
-
-    }
+    querySearch(query, cb) {}
   }
 };
 </script>
 
+<style src="../../style/content-style.css" scoped>
+</style>
 <style scoped>
-@import "quill/dist/quill.core.css";
-@import "quill/dist/quill.snow.css";
-@import "katex/dist/katex.min.css";
-
 dl,
 dd,
 ol,
@@ -306,7 +337,7 @@ p {
   margin: 0;
   padding: 0;
 }
-.ql-editor {
+.ck-content {
   margin: 0;
   padding: 0;
 }
