@@ -229,7 +229,7 @@
             placeholder="请输入词条名称"
             :trigger-on-focus="false"
             @select="handleSelect"
-            :value="value"
+            :value="relationValue"
             @input="input"
           ></el-autocomplete>
           <el-select v-model="relation" placeholder="关系选择" style="width: 150px">
@@ -303,7 +303,7 @@ export default {
       drawerFlag: false,
       options: [],
       loading: false,
-      value: [],
+      relationValue: "",
       relation: "",
       optionInRelation: ["上位词", "下位词", "贡献词"],
       taskId: -1,
