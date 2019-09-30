@@ -297,7 +297,7 @@ export default {
   },
   data() {
     return {
-      type: -1,
+      source: 0,
       selectAttribute: "",
       timeout: null,
       drawerFlag: false,
@@ -414,7 +414,7 @@ export default {
     initData() {
       // 0：
       if (this.$route.query.source == 0) {
-        this.type = 1
+        this.source = 1
         this.$axios
           .get("/data/fetchPageById", {
             params: {
@@ -445,12 +445,12 @@ export default {
             }
           });
       } else {
-        this.type = this.$route.query.source
+        this.source = this.$route.query.source
         this.taskId = this.$route.query.id;
         this.$axios
           .post("/api/user/getTaskContent", {
             taskId: new Number(this.taskId),
-            source: new Number(this.$route.query.source)
+            source: new Number(this.source)
           })
           .then(res => {
             
@@ -507,12 +507,11 @@ export default {
     },
     // TODO 未完成， 需要把关系写入数据库
     save() {
-      window.console.log(this.form)
       this.$axios
         .post("/api/user/saveTaskContent", {
           taskId: new Number(this.taskId),
           form: this.form,
-          type: this.type
+          source: this.source
         })
         .then(res => {
           if (res.data) {
