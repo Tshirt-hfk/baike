@@ -218,6 +218,7 @@ export default {
   },
   data() {
     return {
+      entryField: [],
       form: {
         name: "",
         category: ""
@@ -364,13 +365,19 @@ export default {
         document.getElementById("step1").style.display = 'none';
         document.getElementById("step2").style.display = 'inline';
       }else if(this.stepActive == 1){
+        this.entryField.push(this.form.category);
         this.$axios
         .post("/api/user/createEntry", {
           entryName: this.form.name,
-          field: this.form.category,
+          field: this.entryField,
         })
         .then(res => {
-
+          if(res.data.data){
+            this.$router.push({
+                path: "/entryedit",
+                query: { id: res.data.data.id, source: 1}
+              });
+          }
         })
         .catch(error => {
           if (error.response) {
