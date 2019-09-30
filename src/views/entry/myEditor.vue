@@ -381,14 +381,14 @@ export default {
           heading: {
             options: [
               {
-                model: "heading2",
-                view: "h2",
+                model: "heading1",
+                view: "h1",
                 title: "标题一",
                 class: "ck-heading_heading2"
               },
               {
-                model: "heading3",
-                view: "h3",
+                model: "heading2",
+                view: "h2",
                 title: "标题二",
                 class: "ck-heading_heading2"
               }
@@ -422,19 +422,74 @@ export default {
   methods: {
     // 初始化数据
     initData() {
-      if(this.$route.query.form){
-        this.form.entryName = this.$route.query.form.entryName;
-        this.form.imageUrl = this.$route.query.form.imageUrl;
-        this.form.intro = this.$route.query.form.intro;
-        for (var field of this.$route.query.form.field) {
-          this.form.field.push(field);
+      if(this.$route.query.isTask == "false"){
+        if(this.$route.query.state == 3){
+          this.$axios
+          .post("/api/user/getTaskContent", {
+            taskId: this.taskId,
+            isTask: this.isTask
+          })
+          .then(res => {
+            if (res.data.data) {
+              this.form.entryName = res.data.data.entryName;
+              this.form.imageUrl = res.data.data.imageUrl;
+              this.form.intro = res.data.data.intro;
+              for (var field of res.data.data.field) {
+                this.form.field.push(field);
+              }
+              for (var info of res.data.data.infoBox) {
+                this.form.infoBox.push(info);
+              }
+              this.form.content = res.data.data.content;
+              this.introEditor.intro = this.form.intro;
+              this.contenteditor.content = this.form.content;
+            } else {
+              //this.$message({
+                //message: res.data.msg
+              //});
+            }
+          })
+          .catch(error => {
+            if (error.response) {
+              this.$message({
+                message: error.response.data.msg,
+                type: "warning"
+              });
+            }
+          });
+        }else{
+          this.$axios
+          .get("/data/algoInterface", {
+            params: {
+              nameList: this.$route.query.entryName
+            }
+          })
+          .then(res => {
+            // TODO 处理同名词条
+            if (res.data && res.data.length>0) {
+              let data = res.data[0].info
+              this.form.field = data.field
+              this.originEntryId = data.entryId;
+              this.form.entryName = data.entryName;
+              this.form.intro = data.intro;
+              this.form.infoBox.splice(0, this.form.infoBox.length);
+              for (var info of data.infoBox) {
+                this.form.infoBox.push(info);
+              }
+              this.form.content = data.content;
+              this.initContent();
+              this.refreshCatalog();
+            }
+          })
+          .catch(error => {
+            if (error.response) {
+              this.$message({
+                message: error.response.data.msg,
+                type: "warning"
+              });
+            }
+          });
         }
-        for (var info of this.$route.query.form.infoBox) {
-          this.form.infoBox.push(info);
-        }
-        this.form.content = this.$route.query.form.content;
-        this.introEditor.intro = this.form.intro;
-        this.contenteditor.content = this.form.content;
       }else{
         this.$axios
           .post("/api/user/getTaskContent", {
@@ -548,11 +603,11 @@ export default {
       var i2 = 0;
       for (var node of nodes) {
         var type;
-        if (node.tagName == "H2") {
+        if (node.tagName == "H1") {
           type = 1;
           i1 = i1 + 1;
           i2 = 0;
-        } else if (node.tagName == "H3") {
+        } else if (node.tagName == "H2") {
           type = 2;
           i2 = i2 + 1;
         } else {
@@ -914,7 +969,7 @@ export default {
   word-wrap: break-word;
   line-height: 24px;
 }
-.content-editor h2 {
+.content-editor h1 {
   font-size: 20px;
   font-weight: bold;
   line-height: 24px;
@@ -923,7 +978,7 @@ export default {
   margin: 35px 0 15px;
   clear: both;
 }
-.content-editor h3 {
+.content-editor h2 {
   font-size: 18px;
   font-family: Arial;
   line-height: 22px;
