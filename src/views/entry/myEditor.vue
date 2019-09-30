@@ -117,7 +117,7 @@
                     class="intro-editor"
                     :editor="introEditor.editor"
                     :config="introEditor.editorConfig"
-                    :value="introEditor.intro"
+                    v-model="form.intro"
                     @onEditorInput="onIntroEditorInput"
                   ></ckeditor>
                 </div>
@@ -177,7 +177,7 @@
               class="content-editor"
               :editor="contentEditor.editor"
               :config="contentEditor.editorConfig"
-              :value="contentEditor.content"
+              v-model="form.content"
               @ready="onReady"
               @input="onContentEditorInput"
             >></ckeditor>
@@ -319,7 +319,6 @@ export default {
         relation: []
       },
       introEditor: {
-        intro: "",
         editorObject: null,
         editor: IntroEditor,
         editorConfig: {
@@ -342,7 +341,6 @@ export default {
         }
       },
       contentEditor: {
-        content: "",
         editorObject: null,
         editor: BodyEditor,
         editorConfig: {
@@ -414,6 +412,7 @@ export default {
   methods: {
     // 初始化数据
     initData() {
+      // 0：
       if (this.$route.query.source == 0) {
         this.type = 1
         this.$axios
@@ -423,12 +422,10 @@ export default {
             }
           })
           .then(res => {
-            // TODO 处理
             if (res.data) {
-              window.console.log(res.data)
               let data = res.data;
               this.form.field = data.field;
-              this.form.originId = data.entryId;
+              this.form.originId = data.id;
               this.form.entryName = data.entryName;
               this.form.intro = data.intro;
               this.form.infoBox.splice(0, this.form.infoBox.length);
@@ -436,9 +433,6 @@ export default {
                 this.form.infoBox.push(info);
               }
               this.form.content = data.content;
-              this.introEditor.intro = this.form.intro;
-              this.contentEditor.content = this.form.content;
-              window.console.log(this.contentEditor.content)
               this.refreshCatalog();
             }
           })
@@ -456,11 +450,12 @@ export default {
         this.$axios
           .post("/api/user/getTaskContent", {
             taskId: new Number(this.taskId),
-            type: new Number(this.$route.query.source)
+            source: new Number(this.$route.query.source)
           })
           .then(res => {
+            
             if (res.data.data) {
-              this.form.originId = res.data.data.originId;
+              this.form.originId = res.data.data.originalId;
               this.form.entryName = res.data.data.entryName;
               this.form.imageUrl = res.data.data.imageUrl;
               this.form.intro = res.data.data.intro;
@@ -471,8 +466,6 @@ export default {
                 this.form.infoBox.push(info);
               }
               this.form.content = res.data.data.content;
-              this.introEditor.intro = this.form.intro;
-              this.contentEditor.content = this.form.content;
               this.refreshCatalog();
             } else {
               this.$message({
@@ -500,13 +493,8 @@ export default {
       };
       this.contentEditor.editorObject = editor;
     },
-    // 绑定词条介绍
-    onIntroEditorInput(editor) {
-      this.form.intro = editor;
-    },
-    // 绑定词条内容
+    // 绑定更新目录
     onContentEditorInput(editor) {
-      this.form.content = editor;
       this.refreshCatalog();
     },
     // 词条图片上传限制
@@ -519,6 +507,7 @@ export default {
     },
     // TODO 未完成， 需要把关系写入数据库
     save() {
+      window.console.log(this.form)
       this.$axios
         .post("/api/user/saveTaskContent", {
           taskId: new Number(this.taskId),

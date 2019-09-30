@@ -31,8 +31,8 @@
       </el-table-column>
       <el-table-column align="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="jumpToEdit(scope.row.isTask)">编辑</el-button>
-          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id, scope.row.isTask)">预览</el-button>
+          <el-button size="mini" type="primary" @click="jumpToEdit(scope.row.source)">编辑</el-button>
+          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id, scope.row.source)">预览</el-button>
           <el-button size="mini" type="success" @click="getReason(scope.$index)">提交</el-button>
         </template>
       </el-table-column>
@@ -179,8 +179,8 @@ export default {
     getId(row) {          //有必要么？
       this.entryId = row.id;
     },
-    jumpToEdit(isTask) {
-      this.$router.push({ path: "/entryedit", query: { id: this.entryId , isTask: isTask} });
+    jumpToEdit(source) {
+      this.$router.push({ path: "/entryedit", query: { id: this.entryId , source: source} });
     },
     getReason(index) {
       this.modifyReason = this.displayData[index].modifyReason;
@@ -269,11 +269,11 @@ export default {
         this.displayData = this.tableData.slice(0, this.pagesize);
       }
     },
-    getTaskContent(id, isTask) {
+    getTaskContent(id, source) {
         this.$axios
           .post("/api/user/getTaskContent", {
             taskId: new Number(id),
-            isTask: isTask
+            source: source
           })
           .then(res => {
             if (res.data.data) {

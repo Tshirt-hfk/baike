@@ -229,7 +229,7 @@ export default {
           originId: this.form.originEntryId
         })
         .then(res => {
-          window.console.log(res.data)
+          window.console.log(res.data.data);
           if (res.data.data) {
             if (res.data.data.state == 1) {
               this.$confirm("您已有该词条版本正在编辑，是否前往查看?", "提示", {
@@ -239,18 +239,26 @@ export default {
                 center: true
               })
                 .then(() => {
+                  window.console.log(res.data.data)
                   this.$router.push({
                     path: "/entryedit",
                     query: { id: res.data.data.id, source: 1 }
                   });
                 })
                 .catch(() => {});
-            } else if (res.data.data.state == 0)
-              window.console.log(this.form)
+            } else if (res.data.data.state == 0) {
               this.$router.push({
                 path: "/entryedit",
                 query: { id: this.form.originEntryId, source: 0 }
               });
+            } else {
+              // TODO 审核提示
+              this.$confirm("您已有该词条版本正在审核！", "提示", {
+                confirmButtonText: "确定",
+                type: "warning",
+                center: true
+              });
+            }
           }
         })
         .catch(error => {

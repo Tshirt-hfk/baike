@@ -214,7 +214,7 @@ export default {
 };
 </script>
 
-<style src="../style/content-style.css" scoped>
+<style src="../style/content-style.css">
 </style>
 <style scoped>
 
