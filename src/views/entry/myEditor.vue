@@ -250,15 +250,6 @@
         </div>
       </div>
     </div>
-    <!-- 图片上传 -->
-    <el-upload
-      id="inserted-image"
-      :action="others.serverUrl"
-      name="file"
-      :show-file-list="false"
-      :on-success="uploadSuccess"
-      :on-error="uploadError"
-    ></el-upload>
     <!-- 添加参考资料 -->
     <el-dialog title="添加参考资料" :visible.sync="others.dialogFormVisible" width="500px">
       <el-form :model="others.referenceForm">
@@ -306,6 +297,7 @@ export default {
   },
   data() {
     return {
+      type: -1,
       selectAttribute: "",
       timeout: null,
       drawerFlag: false,
@@ -314,9 +306,9 @@ export default {
       value: [],
       relation: "",
       optionInRelation: ["上位词", "下位词", "贡献词"],
-      taskId: this.$route.query.id,
-      isTask: this.$route.query.isTask,
+      taskId: -1,
       form: {
+        originId: -1,
         entryName: "",
         field: [],
         imageUrl: "",
@@ -422,54 +414,21 @@ export default {
   methods: {
     // 初始化数据
     initData() {
-      if(this.$route.query.isTask == "false"){
-        if(this.$route.query.state == 3){
-          this.$axios
-          .post("/api/user/getTaskContent", {
-            taskId: this.taskId,
-            isTask: this.isTask
-          })
-          .then(res => {
-            if (res.data.data) {
-              this.form.entryName = res.data.data.entryName;
-              this.form.imageUrl = res.data.data.imageUrl;
-              this.form.intro = res.data.data.intro;
-              for (var field of res.data.data.field) {
-                this.form.field.push(field);
-              }
-              for (var info of res.data.data.infoBox) {
-                this.form.infoBox.push(info);
-              }
-              this.form.content = res.data.data.content;
-              this.introEditor.intro = this.form.intro;
-              this.contenteditor.content = this.form.content;
-            } else {
-              //this.$message({
-                //message: res.data.msg
-              //});
-            }
-          })
-          .catch(error => {
-            if (error.response) {
-              this.$message({
-                message: error.response.data.msg,
-                type: "warning"
-              });
-            }
-          });
-        }else{
-          this.$axios
-          .get("/data/algoInterface", {
+      if (this.$route.query.source == 0) {
+        this.type = 1
+        this.$axios
+          .get("/data/fetchPageById", {
             params: {
-              nameList: this.$route.query.entryName
+              entryId: new Number(this.$route.query.id)
             }
           })
           .then(res => {
-            // TODO 处理同名词条
-            if (res.data && res.data.length>0) {
-              let data = res.data[0].info
-              this.form.field = data.field
-              this.originEntryId = data.entryId;
+            // TODO 处理
+            if (res.data) {
+              window.console.log(res.data)
+              let data = res.data;
+              this.form.field = data.field;
+              this.form.originId = data.entryId;
               this.form.entryName = data.entryName;
               this.form.intro = data.intro;
               this.form.infoBox.splice(0, this.form.infoBox.length);
@@ -477,7 +436,9 @@ export default {
                 this.form.infoBox.push(info);
               }
               this.form.content = data.content;
-              this.initContent();
+              this.introEditor.intro = this.form.intro;
+              this.contentEditor.content = this.form.content;
+              window.console.log(this.contentEditor.content)
               this.refreshCatalog();
             }
           })
@@ -489,15 +450,17 @@ export default {
               });
             }
           });
-        }
-      }else{
+      } else {
+        this.type = this.$route.query.source
+        this.taskId = this.$route.query.id;
         this.$axios
           .post("/api/user/getTaskContent", {
             taskId: new Number(this.taskId),
-            isTask: this.isTask
+            type: new Number(this.$route.query.source)
           })
           .then(res => {
             if (res.data.data) {
+              this.form.originId = res.data.data.originId;
               this.form.entryName = res.data.data.entryName;
               this.form.imageUrl = res.data.data.imageUrl;
               this.form.intro = res.data.data.intro;
@@ -509,7 +472,8 @@ export default {
               }
               this.form.content = res.data.data.content;
               this.introEditor.intro = this.form.intro;
-              this.contenteditor.content = this.form.content;
+              this.contentEditor.content = this.form.content;
+              this.refreshCatalog();
             } else {
               this.$message({
                 message: res.data.msg,
@@ -559,7 +523,7 @@ export default {
         .post("/api/user/saveTaskContent", {
           taskId: new Number(this.taskId),
           form: this.form,
-          isTask: this.isTask
+          type: this.type
         })
         .then(res => {
           if (res.data) {
@@ -667,19 +631,6 @@ export default {
         });
     },
     refreshAttribute() {},
-    uploadSuccess(res, file) {
-      // 如果上传成功
-      if (res.data && res.data.url) {
-        // 获取光标所在位置
-        let length = this.contenteditor.editor.getSelection().index;
-        // 插入图片  res.url为服务器返回的图片地址
-        this.contenteditor.editor.insertEmbed(length, "image", res.data.url);
-        // 调整光标到最后
-        this.contenteditor.editor.setSelection(length + 1);
-      } else {
-        this.$message.error("图片插入失败");
-      }
-    },
     // 词条图片上传
     handleAvatarSuccess(res, file) {
       this.form.imageUrl = res.data.url;
