@@ -365,23 +365,12 @@ export default {
         document.getElementById("step2").style.display = 'inline';
       }else if(this.stepActive == 1){
         this.$axios
-        .post("/api/user/saveTaskContent", {
-          taskId: new Number(this.taskId),
-          form: this.form,
-          type: this.type
+        .post("/api/user/createEntry", {
+          entryName: this.form.name,
+          field: this.form.category,
         })
         .then(res => {
-          if (res.data) {
-            this.$message({
-              message: res.data.msg
-            });
-            this.$router.push("/usercenter/myentry");
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
+
         })
         .catch(error => {
           if (error.response) {
