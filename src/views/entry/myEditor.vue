@@ -225,12 +225,10 @@
           ></el-alert>
           <el-autocomplete
             style="margin-left: 15px;width: 210px;"
-            :fetch-suggestions="remoteMethod"
+            :fetch-suggestions="querySearch"
             placeholder="请输入词条名称"
             :trigger-on-focus="false"
-            @select="handleSelect"
-            :value="relationValue"
-            @input="input"
+            v-model="relationValue"
           ></el-autocomplete>
           <el-select v-model="relation" placeholder="关系选择" style="width: 150px">
             <el-option v-for="item in optionInRelation" :key="item" :label="item" :value="item"></el-option>
@@ -1055,7 +1053,7 @@ export default {
       this.others.referenceForm.url = "";
       this.others.dialogFormVisible = false;
     },
-    remoteMethod(query) {
+    querySearch(query) {
       // if (query !== "") {
       //   this.loading = true;
       //   this.value = query;
@@ -1074,17 +1072,24 @@ export default {
     },
     // 关系处理
     toAddRelation() {
-      let arr = [
-        {
-          name: this.aimEntry,
-          relation: this.relation
-        }
-      ];
-      this.form.relation.push(arr);
+      if(this.relationValue == "" || this.relation == ""){
+        this.$alert('关系对象或关系不能为空', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning',
+          center: true,
+          showClose: false,
+          });
+      }else{
+        let arr = 
+          {
+            name: this.relationValue,
+            relation: this.relation
+          };
+        this.form.relation.push(arr);
+      }
     },
     toDeleteRelation(index) {
       this.form.relation.splice(index, 1);
-      window.console.log("nmh");
     },
     handleClose(done) {
       this.drawerFlag = false;
