@@ -2,10 +2,14 @@
   <div>
     <el-input style="width: 300px; float: right;margin-bottom: 10px;" v-model="searchValue" placeholder="请输入关键词"></el-input>
     <el-table :data="displayData" style="width: 100%">
-      <el-table-column prop="name" label="申请人ID" width="250"> </el-table-column>
-      <el-table-column prop="field" label="词条优质版本" width="250"> </el-table-column>
-      <el-table-column label="词条通过率" width="250">
-        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
+      <el-table-column prop="name" label="申请人ID" width="250">
+        <template slot-scope="scope">{{scope.row.applicantID}}</template>
+      </el-table-column>
+      <el-table-column prop="field" label="词条优质版本" width="250">
+        <template slot-scope="scope">{{scope.row.premiumVersion}}</template>
+      </el-table-column>
+      <el-table-column label="词条通过版本" width="250">
+        <template slot-scope="scope">{{scope.row.passVersion}}</template>
       </el-table-column>
       <el-table-column align="right">
         <template slot-scope="scope">
@@ -77,7 +81,7 @@ export default {
       timeout: null,
       currentPage: 1,
       pagesize: 5,
-      entries: [],
+      applications: [],
       tableData: [],
       displayData: [],
     };
@@ -98,7 +102,7 @@ export default {
         })
         .then(res => {
           if (res.data.data) {
-            this.entries = res.data.data.applications;
+            this.applications = res.data.data.applications;
             this.tableData = res.data.data.applications;
             this.displayData = res.data.data.applications.slice(0, 5);
           } else {
@@ -127,12 +131,12 @@ export default {
     },
     remoteMethod(query) {
       if (query !== "") {
-        this.tableData = this.entries.filter(entry => {
+        this.tableData = this.applications.filter(entry => {
           return entry.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
         });
         this.displayData = this.tableData.slice(0, this.pagesize);
       } else {
-        this.tableData = this.entries;
+        this.tableData = this.applications;
         this.displayData = this.tableData.slice(0, this.pagesize);
       }
     },

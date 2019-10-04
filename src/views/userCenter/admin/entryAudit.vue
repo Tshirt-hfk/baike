@@ -2,16 +2,20 @@
   <div>
     <el-input style="width: 300px; float: right;margin-bottom: 10px;" v-model="searchValue" placeholder="请输入关键词"></el-input>
     <el-table :data="displayData" style="width: 100%">
-      <el-table-column prop="name" label="词条名称" width="450"> </el-table-column>
-      <el-table-column prop="field" label="领域" width="250"> </el-table-column>
+      <el-table-column prop="name" label="词条名称" width="450">
+        <template slot-scope="scope">{{ scope.row.name}}</template>
+      </el-table-column>
+      <el-table-column prop="field" label="领域" width="250">
+        <template slot-scope="scope">{{ scope.row.field}}</template>
+      </el-table-column>
       <el-table-column label="提交时间" width="180">
         <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
       </el-table-column>
       <el-table-column align="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id, scope.row.isTask)">查看</el-button>
+          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id)">查看</el-button>
           <el-button type="primary" @click="audit(scope.row, true)">通 过</el-button>
-          <el-button type="danger" @click="rejectFlag = true">拒绝</el-button>
+          <el-button type="danger" @click="reason='';rejectFlag = true">拒绝</el-button>
           <el-dialog title="未通过原因" :visible.sync="rejectFlag" width="600px">
             <span>
               <div style="margin: 15px 0;"></div>
@@ -63,9 +67,11 @@ export default {
   },
   data() {
     return {
+      rejectFlag: false,
       searchValue: '',
       drawerFlag: false,
       relationData: [],
+      reason:"",
       form: {
         entryName: "",
         field: [],
@@ -78,7 +84,7 @@ export default {
       timeout: null,
       currentPage: 1,
       pagesize: 5,
-      entries: [],
+      applications: [],
       tableData: [],
       displayData: [],
     };
@@ -97,7 +103,7 @@ export default {
         .post("/api/admin/getRecord")
         .then(res => {
           if (res.data.data) {
-            this.entries = res.data.data.records;
+            this.applications = res.data.data.records;
             this.tableData = res.data.data.records;
             this.displayData = res.data.data.records.slice(0, 5);
           } else {
@@ -118,28 +124,30 @@ export default {
     stateChange(state){
       this.$emit('stateChange', state)
     },
+    // 分页功能
     handleCurrentChange(val) {
       this.currentPage = val;
       let indexleft = val - 1;
       let size = this.pagesize;
       this.displayData = this.tableData.slice(indexleft*size, val*size);
     },
+    // filter
     remoteMethod(query) {
       if (query !== "") {
-        this.tableData = this.entries.filter(entry => {
+        this.tableData = this.applications.filter(entry => {
           return entry.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
         });
         this.displayData = this.tableData.slice(0, this.pagesize);
       } else {
-        this.tableData = this.entries;
+        this.tableData = this.applications;
         this.displayData = this.tableData.slice(0, this.pagesize);
       }
     },
-    getTaskContent(id, isTask){
+    getTaskContent(id){
         this.$axios
           .post("/api/user/getTaskContent", {
               taskId: new Number(id),
-              isTask: isTask
+              source: 1
           })
           .then(res => {
             if (res.data.data) {
@@ -203,7 +211,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .passentry-version{
   text-decoration: underline;
   cursor: pointer;
