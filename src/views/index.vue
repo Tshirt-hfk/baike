@@ -126,7 +126,7 @@
               <a class="title-name" @click="toSubjectExhibition(item.id)">{{item.name}}</a>
             </div>
             <div class="subject-description">
-              <img style="width: 133px;height: 100px;cursor: pointer" :src="item.src" @click="toSubjectExhibition(item.id)"/>
+              <img style="width: 133px;height: 100px;cursor: pointer" :src="item.imgUrl" @click="toSubjectExhibition(item.id)"/>
               <div class="subject-ctn">
                 <p>{{item.intro}}</p>
                 <a style="margin-left: 5px" v-for="fieldItem in item.field" 
