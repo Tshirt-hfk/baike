@@ -8,7 +8,7 @@
               <el-radio-button label="left">我参加的</el-radio-button>
               <el-radio-button label="right">我创建的</el-radio-button>
             </el-radio-group>
-            <div class="uc-apply-info">
+            <div v-if="status == '1'" class="uc-apply-info">
                   <a class="uc-btn-apply" @click="applyFlag = true;checked = false">申请专题制作人权限</a>
                   <p style="font-style:normal;font-size: 10px; margin-top: 13px;">获得众智化系统认证，享受更多权限!</p>
             </div>
@@ -19,7 +19,7 @@
         </div>
         <el-dialog
           :visible.sync="applyFlag"
-          width="55%"
+          width="1000px"
           center
           :show-close=false
           top = 12vh>
@@ -35,7 +35,7 @@
             5、 <br>
           </div>
           <div class="apply-checkBox">
-            <el-checkbox v-model="checked" @change="buttonChange">我已认真阅读并同意以上条款</el-checkbox>
+            <el-checkbox v-model="checked">我已认真阅读并同意以上条款</el-checkbox>
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button @click="applyFlag = false">取 消</el-button>
@@ -53,6 +53,7 @@ export default {
     name: "mySubject",
     data() {
         return{
+            status: this.$store.state.status,
             tabSelection: 'left',
             applyFlag: false,
             checked: false,
