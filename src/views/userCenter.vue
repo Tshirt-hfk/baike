@@ -288,6 +288,5 @@ dd,dl,dt,ul,li{
 }
 .uc-body-wrapper{
   position: relative;
-  overflow: hidden;
 }
 </style>
