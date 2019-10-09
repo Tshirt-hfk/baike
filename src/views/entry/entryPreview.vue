@@ -167,6 +167,7 @@ export default {
   data() {
     return {
       name: this.$route.params.name,
+      entryContentVisible: false,
       value: "",
       likeNum: "0",
       columns: 4,
@@ -199,16 +200,19 @@ export default {
         })
         .then(res => {
           if (res.data) {
-            this.originEntryId = res.data.entryId;
-            this.form.entryName = res.data.entryName;
-            this.form.intro = res.data.intro;
-            this.form.infoBox.splice(0, this.form.infoBox.length);
-            for (var info of res.data.infoBox) {
-              this.form.infoBox.push(info);
+            if(res.data.entryId != -1){
+              this.entryContentVisible = true;
+              this.originEntryId = res.data.entryId;
+              this.form.entryName = res.data.entryName;
+              this.form.intro = res.data.intro;
+              this.form.infoBox.splice(0, this.form.infoBox.length);
+              for (var info of res.data.infoBox) {
+                this.form.infoBox.push(info);
+              }
+              this.form.content = res.data.content;
+              this.initContent();
+              this.refreshCatalog();
             }
-            this.form.content = res.data.content;
-            this.initContent();
-            this.refreshCatalog();
           }
         })
         .catch(error => {
@@ -224,7 +228,10 @@ export default {
       this.$refs.editor.innerHTML = this.form.content;
     },
     toEntryEdit() {
-      this.$router.push({ path: "/entryedit", query: {form: this.form, isTask: "false"}});
+      if(this.$store.state.status == '0')
+        this.$router.push("/login");
+      else
+        this.$router.push({ path: "/entryedit", query: {form: this.form, isTask: "false"}});
     },
     search() {
       this.name = this.value;

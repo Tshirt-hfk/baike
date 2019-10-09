@@ -24,7 +24,7 @@ module.exports = {
         }
       },
       '/data':{
-        target:"http://0.0.0.0:6000",
+        target:"http://124.207.169.23:8080",
         pathRewrite:{
           '^/data':''
         }
