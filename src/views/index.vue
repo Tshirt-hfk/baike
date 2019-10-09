@@ -303,7 +303,9 @@ export default {
       console.log(key, keyPath);
     },
     toUserCenter() {
-      if(this.status == '3')
+      if(this.status == '0')
+        this.$router.push("/login");
+      else if(this.status == '3')
         this.$router.push("/adminAudit");
       else
         this.$router.push("/usercenter/mysubject");
@@ -350,13 +352,17 @@ export default {
         }, 3000 * Math.random());
     },
     initEntryCreate(){
-      this.entryCreateFlag = true;
-      this.stepActive = 0;
-      this.checked = false;
-      document.getElementById("next").style.display = 'inline';
-      document.getElementById("confirm").style.display = 'none';
-      document.getElementById("step1").style.display = 'inline';
-      document.getElementById("step2").style.display = 'none';
+      if(this.status == '0')
+        this.$router.push("/login");
+      else{
+        this.entryCreateFlag = true;
+        this.stepActive = 0;
+        this.checked = false;
+        document.getElementById("next").style.display = 'inline';
+        document.getElementById("confirm").style.display = 'none';
+        document.getElementById("step1").style.display = 'inline';
+        document.getElementById("step2").style.display = 'none';
+      }
     },
     next(){
       if(this.stepActive == 0){
