@@ -1,7 +1,7 @@
 <template>
   <el-autocomplete
     :fetch-suggestions="querySearch"
-    placeholder="请输入词条名称"
+    :placeholder="placehilder"
     :trigger-on-focus="false"
     @select="handleSelect"
     :value="value"
@@ -18,7 +18,6 @@ export default {
   },
   data() {
     return {
-      loading: false,
       options: []
     };
   },
@@ -28,8 +27,7 @@ export default {
       this.$emit("update:value", value);
     },
     querySearch(query, cb) {
-      this.loading = true;
-      this.value = query;
+      if (!query) return;
       this.$axios
         .get("/data/getSimilarPageName", {
           params: {
@@ -38,11 +36,18 @@ export default {
           }
         })
         .then(res => {
-          if (res.data.data) {
-            this.options = res.data.data.subjects;
+          window.console.log(res.data.similar_pages);
+          if (res.data) {
+            let options = [];
+             res.data.similar_pages.forEach(element => {
+               options.push({
+                 value: element
+               })
+             });
+            cb(options);
           } else {
+
           }
-          this.loading = false;
         })
         .catch(error => {});
     },
