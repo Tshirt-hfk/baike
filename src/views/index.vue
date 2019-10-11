@@ -7,13 +7,7 @@
         </a>
       </div>
       <div class="index-search" v-on:keyup.enter="search" >
-        <el-autocomplete
-          v-model="value"
-          style="width: 440px"
-          :fetch-suggestions="querySearch"
-          placeholder="请输入词条名称"
-          :trigger-on-focus="false"
-        ></el-autocomplete>
+        <entrySearch style="width: 440px" v-bind:value.sync="value" placeholder="请输入词条名称"></entrySearch>
         <el-button type="primary" @click="search" style="margin-left: 10px">搜索词条</el-button>
       </div>
     </div>
@@ -205,14 +199,14 @@
 </template>
 
 <script>
-import myEntrySearch from "../components/myEntrySearch";
+import entrySearch from "../components/entrySearch";
 import classificationEntry from "./classificationEntry";
 import entryCategorySelector from "../components/entryCategorySelector";
 
 export default {
   name: "index",
   components: {
-    myEntrySearch,
+    entrySearch,
     classificationEntry,
     entryCategorySelector
   },
