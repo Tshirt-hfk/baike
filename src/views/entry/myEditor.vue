@@ -954,7 +954,6 @@ export default {
           index: index,
           type: type
         });
-        window.console.log("test");
       }
     },
     // TODO 应用目录
