@@ -885,14 +885,6 @@ export default {
     onContentEditorInput(editor) {
       this.refreshCatalog();
     },
-    // 词条图片上传限制
-    beforeAvatarUpload(file) {
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isLt2M;
-    },
     // TODO 未完成， 需要把关系写入数据库
     save() {
       this.$axios
@@ -951,10 +943,7 @@ export default {
           type = 2;
           i2 = i2 + 1;
         } else {
-          this.$message({
-            message: res.data.msg,
-            type: "warning"
-          });
+          continue;
         }
         var index = i1.toString();
         if (i2 != 0) index = index + "." + i2.toString();
@@ -965,6 +954,7 @@ export default {
           index: index,
           type: type
         });
+        window.console.log("test");
       }
     },
     // TODO 应用目录
@@ -1010,6 +1000,14 @@ export default {
         });
     },
     refreshAttribute() {},
+    // 词条图片上传限制
+    beforeAvatarUpload(file) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isLt2M;
+    },
     // 词条图片上传
     handleAvatarSuccess(res, file) {
       this.form.imageUrl = res.data.url;
@@ -1040,142 +1038,67 @@ export default {
         index: index,
         type: type
       });
-    }
-  },
-  // TODO 应用目录
-  applyRecommendCatalog() {
-    this.refreshCatalog();
-  },
-  handleFieldDelete(tag) {
-    this.form.field.splice(this.form.field.indexOf(tag), 1);
-  },
-  showSelect() {
-    this.others.selectVisible = true;
-  },
-  addField() {
-    let selectValue = this.others.selectValue;
-    if (selectValue) {
-      this.form.field.push(selectValue[0]);
-    }
-    this.others.selectVisible = false;
-    this.others.selectValue = "";
-  },
-  refreshAttribute(attribute) {
-    this.$axios
-      .get("/data/getAttribute", {
-        params: {
-          category: attribute
-        }
-      })
-      .then(res => {
-        if (res.data) {
-          this.form.infoBox.splice(0, this.form.infoBox.length);
-          for (var attribute of res.data.attributes) {
-            this.form.infoBox.push({ key: attribute, value: "" });
-          }
-        }
-      })
-      .catch(error => {
-        if (error.response) {
-          this.$message({
-            message: error.response.data.msg,
-            type: "warning"
-          });
-        }
-      });
-  },
-  refreshAttribute() {},
-  uploadSuccess(res, file) {
-    // 如果上传成功
-    if (res.data && res.data.url) {
-      // 获取光标所在位置
-      let length = this.contenteditor.editor.getSelection().index;
-      // 插入图片  res.url为服务器返回的图片地址
-      this.contenteditor.editor.insertEmbed(length, "image", res.data.url);
-      // 调整光标到最后
-      this.contenteditor.editor.setSelection(length + 1);
-    } else {
-      this.$message.error("图片插入失败");
-    }
-  },
-  // 词条图片上传
-  handleAvatarSuccess(res, file) {
-    this.form.imageUrl = res.data.url;
-  },
-  // 参考资料
-  addReference() {
-    this.others.referenceForm.type = 1;
-    this.others.dialogFormVisible = true;
-  },
-  editReference(id) {
-    this.others.referenceForm.type = 2;
-    this.others.referenceForm.aim = id;
-    this.others.referenceForm.title = this.form.reference[id].title;
-    this.others.referenceForm.author = this.form.reference[id].author;
-    this.others.referenceForm.url = this.form.reference[id].url;
-    this.others.dialogFormVisible = true;
-  },
-  deleteReference(id) {
-    if (this.form.reference.length > id) {
-      this.form.reference.splice(id, 1);
-    }
-  },
-  handleReference() {
-    if (this.others.referenceForm.type == 1) {
-      this.form.reference.push({
-        title: this.others.referenceForm.title,
-        author: this.others.referenceForm.author,
-        url: this.others.referenceForm.url
-      });
-    } else if (this.others.referenceForm.type == 2) {
-      this.form.reference[
-        this.others.referenceForm.aim
-      ].title = this.others.referenceForm.title;
-      this.form.reference[
-        this.others.referenceForm.aim
-      ].author = this.others.referenceForm.author;
-      this.form.reference[
-        this.others.referenceForm.aim
-      ].url = this.others.referenceForm.url;
-    }
-    this.others.referenceForm.title = "";
-    this.others.referenceForm.author = "";
-    this.others.referenceForm.url = "";
-    this.others.dialogFormVisible = false;
-  },
-  remoteMethod(query) {
-    // if (query !== "") {
-    //   this.loading = true;
-    //   this.value = query;
-    //   this.$axios
-    //     .post("http://192.168.1.121:9000/", { keyword: query }) //向远程服务器模糊搜索
-    //     .then(res => {
-    //       if (res.data.data) {
-    //         this.options = res.data.data.entrys;
-    //       }
-    //       this.loading = false;
-    //     })
-    //     .catch(error => {});
-    // } else {
-    //   this.options = [];
-    // }
-  },
-  // 关系处理
-  toAddRelation() {
-    let arr = [
-      {
-        name: this.aimEntry,
-        relation: this.relation
+    },
+    handleReference() {
+      if (this.others.referenceForm.type == 1) {
+        this.form.reference.push({
+          title: this.others.referenceForm.title,
+          author: this.others.referenceForm.author,
+          url: this.others.referenceForm.url
+        });
+      } else if (this.others.referenceForm.type == 2) {
+        this.form.reference[
+          this.others.referenceForm.aim
+        ].title = this.others.referenceForm.title;
+        this.form.reference[
+          this.others.referenceForm.aim
+        ].author = this.others.referenceForm.author;
+        this.form.reference[
+          this.others.referenceForm.aim
+        ].url = this.others.referenceForm.url;
       }
-    ];
-    this.form.relation.push(arr);
-  },
-  toDeleteRelation(index) {
-    this.form.relation.splice(index, 1);
-    window.console.log("nmh");
-  },
-  handleClose(done) {
-    this.drawerFlag = false;
+      this.others.referenceForm.title = "";
+      this.others.referenceForm.author = "";
+      this.others.referenceForm.url = "";
+      this.others.dialogFormVisible = false;
+    },
+    remoteMethod(query) {
+      // if (query !== "") {
+      //   this.loading = true;
+      //   this.value = query;
+      //   this.$axios
+      //     .post("http://192.168.1.121:9000/", { keyword: query }) //向远程服务器模糊搜索
+      //     .then(res => {
+      //       if (res.data.data) {
+      //         this.options = res.data.data.entrys;
+      //       }
+      //       this.loading = false;
+      //     })
+      //     .catch(error => {});
+      // } else {
+      //   this.options = [];
+      // }
+    },
+    // 关系处理
+    toAddRelation() {
+      let arr = [
+        {
+          name: this.aimEntry,
+          relation: this.relation
+        }
+      ];
+      this.form.relation.push(arr);
+    },
+    toDeleteRelation(index) {
+      this.form.relation.splice(index, 1);
+      window.console.log("nmh");
+    },
+    handleClose(done) {
+      this.drawerFlag = false;
+    },
+    querySearch() {
+      
+    }
   }
 };
 </script>
