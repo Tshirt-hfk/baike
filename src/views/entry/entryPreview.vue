@@ -1,16 +1,6 @@
 <template>
   <div class="preview-layout">
-    <div class="preview-searchbar">
-      <div class="preview-logo-headl">
-        <a title="首页" href="/">
-          <img src="/static/image/name.png" />
-        </a>
-      </div>
-      <div class="preview-search" v-on:keyup.enter="search">
-        <entrySearch style="width: 440px" v-bind:value.sync="value" placeholder="请输入词条名称"></entrySearch>
-        <el-button type="primary" @click="search" style="margin-left: 10px">搜索词条</el-button>
-      </div>
-    </div>
+    <entrySearchBar v-on:search="search"></entrySearchBar>
     <div v-if="entryContentVisible == true" class="preview-main">
       <div class="preview-divideline">
         <span class="preview-tit" style="font-size: 25px;">词条内容</span>
@@ -229,13 +219,13 @@
 </template>
 
 <script>
-import entrySearch from "../../components/entrySearch";
+import entrySearchBar from "../../components/entrySearchBar";
 import entryCategorySelector from "../../components/entryCategorySelector";
 
 export default {
   name: "entryPreview",
   components:{
-    entrySearch,
+    entrySearchBar,
     entryCategorySelector
   },
   computed: {
@@ -249,7 +239,6 @@ export default {
       checked: false,
       stepActive: 0,
       entryCreateFlag: false,
-      value: "",
       likeNum: "0",
       columns: 4,
       tableData: [],
@@ -406,13 +395,13 @@ export default {
       }
       this.stepActive++;
     },
-    search() {
+    search(value) {
       this.name = this.value;
       this.init();
       this.$router.push({
         name: "entryPreview",
         params: {
-          name: this.value
+          name: value
         }
       });
     },
@@ -532,22 +521,7 @@ p {
   margin: 0 auto;
   position: relative;
 }
-.preview-searchbar {
-  width: 808px;
-  height: 105px;
-  margin: 0 auto;
-  position: relative;
-  font-family: arial;
-}
-.preview-logo-headl {
-  padding: 25px 0 35px;
-  float: left;
-  line-height: 1;
-}
-.preview-search {
-  float: left;
-  padding: 37px 0;
-}
+
 .preview-main {
   width: 1170px;
   margin: 0 auto;

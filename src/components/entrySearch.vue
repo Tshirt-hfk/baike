@@ -1,7 +1,7 @@
 <template>
   <el-autocomplete
     :fetch-suggestions="querySearch"
-    :placeholder="placehilder"
+    :placeholder="placeholder"
     :trigger-on-focus="false"
     @select="handleSelect"
     :value="value"
@@ -14,7 +14,7 @@
 export default {
   name: "entrySearch",
   props: {
-    placehilder: String,
+    placeholder: String,
     value: String
   },
   data() {

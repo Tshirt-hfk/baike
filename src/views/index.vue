@@ -1,16 +1,6 @@
 <template>
   <div class="index-layout">
-    <div class="index-searchbar">
-      <div class="logo-headl">
-        <a title="首页" href="/">
-          <img style="width: 120px; height: 70px;" src="/static/image/logo.png" />
-        </a>
-      </div>
-      <div class="index-search" v-on:keyup.enter="search" >
-        <entrySearch style="width: 440px" v-bind:value.sync="value" v-on:handleSelect="handleSelect" placeholder="请输入词条名称"></entrySearch>
-        <el-button type="primary" @click="search" style="margin-left: 10px">搜索词条</el-button>
-      </div>
-    </div>
+    <entrySearchBar v-on:search="search"></entrySearchBar>
     <div class="index-navbar">
       <div class="index-navbar-menu">
         <el-menu
@@ -62,7 +52,11 @@
       <div class="index-main-wrap">
         <el-carousel height="350px" indicator-position="outside" :interval="rollingTime">
           <el-carousel-item v-for="item in homePageEntry" :key="item.id">
-            <img style="width: 710px; height: 350px;cursor:pointer" :src="item.src" @click="toEntryExhibition(item.name)"/>
+            <img
+              style="width: 710px; height: 350px;cursor:pointer"
+              :src="item.src"
+              @click="toEntryExhibition(item.name)"
+            />
             <div class="index-focus-intro">
               <div class="index-focus-summary">
                 <h2>
@@ -114,8 +108,9 @@
           :visible.sync="entryCreateFlag"
           width="1000px"
           center
-          :show-close=false
-          top = 12vh>
+          :show-close="false"
+          top="12vh"
+        >
           <el-steps :active="stepActive" finish-status="success" align-center>
             <el-step title="注意"></el-step>
             <el-step title="创建"></el-step>
@@ -126,11 +121,12 @@
               <div class="entryCreate-title-notice">欢迎创建词条，为了您能更好地通过审核，您需要认真阅读以下要求</div>
             </div>
             <div class="entryCreate-body">
-              1、词条内容符合社会主义核心价值观，弘扬正能量 <br>
-              2、词条内容的积极正面，不涉及违法犯罪活动 <br>
-              3、禁止编写虚假，恶搞的信息 <br>
-              4、 <br>
-              5、 <br>
+              1、词条内容符合社会主义核心价值观，弘扬正能量
+              <br />2、词条内容的积极正面，不涉及违法犯罪活动
+              <br />3、禁止编写虚假，恶搞的信息
+              <br />4、
+              <br />5、
+              <br />
             </div>
             <div class="entryCreate-checkBox">
               <el-checkbox v-model="checked">我已认真阅读并同意以上条款</el-checkbox>
@@ -148,8 +144,7 @@
             </div>
             <div class="entryCreate-entryCate">
               <span style="margin-right: 15px">词条类别:</span>
-              <entryCategorySelector v-bind:category.sync="form.category" 
-              placeholder="请选择词条分类"></entryCategorySelector>
+              <entryCategorySelector v-bind:category.sync="form.category" placeholder="请选择词条分类"></entryCategorySelector>
             </div>
             <el-alert
               title="为了提高您的创建成功率，还需注意"
@@ -157,20 +152,25 @@
               show-icon
               :closable="false"
               center
-              style="width: 500px; margin-left: 210px">
-            </el-alert>
+              style="width: 500px; margin-left: 210px"
+            ></el-alert>
             <div class="entryCreate-notice">
-              1、信息栏属性应基于描述词条最重要的部分 <br>
-              2、内容描述应详尽充分且符实 <br>
-              3、参考资料要权威来证明内容的真实性 <br>
+              1、信息栏属性应基于描述词条最重要的部分
+              <br />2、内容描述应详尽充分且符实
+              <br />3、参考资料要权威来证明内容的真实性
+              <br />
             </div>
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button @click="initEntryCreate" :disabled="stepActive == 0">上一步</el-button>
-            <el-button id="next" type="primary" @click="next" 
-            :disabled="checked == false" :autofocus=true>下一步</el-button>
-            <el-button id="confirm" type="primary" @click="next" 
-            :autofocus=true>创建</el-button>
+            <el-button
+              id="next"
+              type="primary"
+              @click="next"
+              :disabled="checked == false"
+              :autofocus="true"
+            >下一步</el-button>
+            <el-button id="confirm" type="primary" @click="next" :autofocus="true">创建</el-button>
             <el-button @click="entryCreateFlag = false">退出</el-button>
           </span>
         </el-dialog>
@@ -184,11 +184,18 @@
               <a class="title-name" @click="toSubjectExhibition(item.id)">{{item.name}}</a>
             </div>
             <div class="subject-description">
-              <img style="width: 133px;height: 100px;cursor: pointer" :src="item.imgUrl" @click="toSubjectExhibition(item.id)"/>
+              <img
+                style="width: 133px;height: 100px;cursor: pointer"
+                :src="item.imgUrl"
+                @click="toSubjectExhibition(item.id)"
+              />
               <div class="subject-ctn">
                 <p>{{item.intro}}</p>
-                <a style="margin-left: 5px" v-for="fieldItem in item.field" 
-                  :key="fieldItem">{{fieldItem}}</a>
+                <a
+                  style="margin-left: 5px"
+                  v-for="fieldItem in item.field"
+                  :key="fieldItem"
+                >{{fieldItem}}</a>
               </div>
             </div>
           </div>
@@ -199,14 +206,14 @@
 </template>
 
 <script>
-import entrySearch from "../components/entrySearch";
+import entrySearchBar from "../components/entrySearchBar";
 import classificationEntry from "./classificationEntry";
 import entryCategorySelector from "../components/entryCategorySelector";
 
 export default {
   name: "index",
   components: {
-    entrySearch,
+    entrySearchBar,
     classificationEntry,
     entryCategorySelector
   },
@@ -224,7 +231,6 @@ export default {
       rollingTime: 5000,
       searchResult: [],
       timeout: null,
-      value: "",
       field: "人物",
       //数据都要从数据库取
       homePageEntry: [
@@ -232,35 +238,30 @@ export default {
           id: "1",
           name: "建军节",
           intro: "八一建军节致敬中国军人，中国军人二十四小时展露英雄本色",
-          src:
-            "/static/image/jianjunjie.jpg"
+          src: "/static/image/jianjunjie.jpg"
         },
         {
           id: "2",
           name: "小红书",
           intro: "种草神器出事了，小红书被下架，启动整改全面排查",
-          src:
-            "/static/image/xiaohongshu.jpg"
+          src: "/static/image/xiaohongshu.jpg"
         },
         {
           id: "3",
           name: "迪斯尼",
           intro: "迪士尼影业年度票房创纪录，全年有望突破100亿美元",
-          src:
-            "/static/image/disini.jpg"
+          src: "/static/image/disini.jpg"
         },
         {
           id: "4",
           name: "小行星",
           intro: "险！一颗小行星擦过地球，科学家只提前1天发现",
-          src:
-            "/static/image/xiaoxingxing.jpg"
+          src: "/static/image/xiaoxingxing.jpg"
         },
         {
           name: "垃圾分类",
           intro: "上海实施垃圾分类“满月”:绿色消费理念推广普及游客",
-          src:
-            "/static/image/laji.jpg"
+          src: "/static/image/laji.jpg"
         }
       ],
       recommendSubject: []
@@ -270,24 +271,24 @@ export default {
     this.init();
   },
   methods: {
-    init(){
+    init() {
       this.$axios
-        .post("/api/user/getRecommendSubject",{})
+        .post("/api/user/getRecommendSubject", {})
         .then(res => {
-            if (res.data.data){
-              this.recommendSubject = res.data.data.subjects.splice(0, 3);
-            }
+          if (res.data.data) {
+            this.recommendSubject = res.data.data.subjects.splice(0, 3);
+          }
         })
         .catch(error => {
-            if (error.response) {
-            }
+          if (error.response) {
+          }
         });
     },
-    search() {
+    search(value) {
       var { href } = this.$router.resolve({
         name: "entryPreview",
         params: {
-          name: this.value
+          name: value
         }
       });
       window.open(href, "_blank");
@@ -297,14 +298,11 @@ export default {
       console.log(key, keyPath);
     },
     toUserCenter() {
-      if(this.status == '0')
-        this.$router.push("/login");
-      else if(this.status == '3')
-        this.$router.push("/adminAudit");
-      else
-        this.$router.push("/usercenter/mysubject");
+      if (this.status == "0") this.$router.push("/login");
+      else if (this.status == "3") this.$router.push("/adminAudit");
+      else this.$router.push("/usercenter/mysubject");
     },
-    toEntryExhibition(entryName){
+    toEntryExhibition(entryName) {
       var { href } = this.$router.resolve({
         name: "entryPreview",
         params: {
@@ -326,7 +324,7 @@ export default {
       // TODO
     },
     querySearch(query, cb) {
-        this.$axios
+      this.$axios
         .get("/data/fetchPageByName", {
           params: {
             name: query
@@ -334,59 +332,57 @@ export default {
         })
         .then(res => {
           if (res.data) {
- //             this.searchResult = ;
+            //             this.searchResult = ;
           }
         })
-        .catch(error => {
-        });
+        .catch(error => {});
 
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => {
-          cb(this.searchResult);
-        }, 3000 * Math.random());
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        cb(this.searchResult);
+      }, 3000 * Math.random());
     },
-    initEntryCreate(){
-      if(this.status == '0')
-        this.$router.push("/login");
-      else{
+    initEntryCreate() {
+      if (this.status == "0") this.$router.push("/login");
+      else {
         this.entryCreateFlag = true;
         this.stepActive = 0;
         this.checked = false;
-        document.getElementById("next").style.display = 'inline';
-        document.getElementById("confirm").style.display = 'none';
-        document.getElementById("step1").style.display = 'inline';
-        document.getElementById("step2").style.display = 'none';
+        document.getElementById("next").style.display = "inline";
+        document.getElementById("confirm").style.display = "none";
+        document.getElementById("step1").style.display = "inline";
+        document.getElementById("step2").style.display = "none";
       }
     },
-    next(){
-      if(this.stepActive == 0){
-        document.getElementById("next").style.display = 'none';
-        document.getElementById("confirm").style.display = 'inline';
-        document.getElementById("step1").style.display = 'none';
-        document.getElementById("step2").style.display = 'inline';
-      }else if(this.stepActive == 1){
+    next() {
+      if (this.stepActive == 0) {
+        document.getElementById("next").style.display = "none";
+        document.getElementById("confirm").style.display = "inline";
+        document.getElementById("step1").style.display = "none";
+        document.getElementById("step2").style.display = "inline";
+      } else if (this.stepActive == 1) {
         this.entryField.push(this.form.category);
         this.$axios
-        .post("/api/user/createEntry", {
-          entryName: this.form.name,
-          field: this.entryField,
-        })
-        .then(res => {
-          if(res.data.data){
-            this.$router.push({
+          .post("/api/user/createEntry", {
+            entryName: this.form.name,
+            field: this.entryField
+          })
+          .then(res => {
+            if (res.data.data) {
+              this.$router.push({
                 path: "/entryedit",
-                query: { id: res.data.data.id, source: 1}
+                query: { id: res.data.data.id, source: 1 }
               });
-          }
-        })
-        .catch(error => {
-          if (error.response) {
-            this.$message({
-              message: error.response.data.msg,
-              type: "warning"
-            });
-          }
-        });
+            }
+          })
+          .catch(error => {
+            if (error.response) {
+              this.$message({
+                message: error.response.data.msg,
+                type: "warning"
+              });
+            }
+          });
       }
       this.stepActive++;
     },
@@ -405,7 +401,7 @@ export default {
       //   })
       //   .catch(error => {});
     },
-    handleEntrySelect(item) {},
+    handleEntrySelect(item) {}
   }
 };
 </script>
@@ -545,7 +541,7 @@ h3 {
   font-size: 18px;
   color: #459df5;
 }
-.index-side-rightbox-title .number{
+.index-side-rightbox-title .number {
   margin-bottom: 20px;
   line-height: 1;
   font-size: 18px;
@@ -565,7 +561,7 @@ h3 {
   background: #409eff;
   cursor: pointer;
 }
-.index-side-rightbox a:hover{
+.index-side-rightbox a:hover {
   opacity: 0.9;
 }
 .index-side-recom {
@@ -676,31 +672,31 @@ h3 {
 .classification-content {
   margin-top: 20px;
 }
-.entryCreate-title{
+.entryCreate-title {
   margin-top: 20px;
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
 }
-.entryCreate-title-main{
+.entryCreate-title-main {
   font-size: 25px;
   color: #333;
 }
-.entryCreate-title-notice{
+.entryCreate-title-notice {
   margin-top: 10px;
   padding-bottom: 10px;
   color: #a9a9a9;
 }
-.entryCreate-body{
+.entryCreate-body {
   font-size: 16px;
   line-height: 30px;
   margin: 25px 25px 25px 50px;
   padding-bottom: 8px;
   border-bottom: 1px solid #e5e5e5;
 }
-.entryCreate-checkBox{
+.entryCreate-checkBox {
   text-align: center;
 }
-.entryCreate-entryName{
+.entryCreate-entryName {
   margin-top: 25px;
   margin-bottom: 25px;
   color: #333;
@@ -708,7 +704,7 @@ h3 {
   text-align: center;
   font-size: 18px;
 }
-.entryCreate-entryCate{
+.entryCreate-entryCate {
   margin-top: 30px;
   margin-bottom: 25px;
   color: #333;
@@ -716,7 +712,7 @@ h3 {
   text-align: center;
   font-size: 18px;
 }
-.entryCreate-notice{
+.entryCreate-notice {
   display: block;
   margin-left: 340px;
   margin-top: 10px;
