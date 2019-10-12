@@ -37,14 +37,8 @@ export default {
         })
         .then(res => {
           window.console.log(res.data.similar_pages);
-          if (res.data) {
-            let options = [];
-             res.data.similar_pages.forEach(element => {
-               options.push({
-                 value: element
-               })
-             });
-            cb(options);
+          if (res.data.data) {
+            cb(res.data.data);
           } else {
 
           }
