@@ -6,6 +6,7 @@
     @select="handleSelect"
     :value="value"
     @input="input"
+
   ></el-autocomplete>
 </template>
 
@@ -23,7 +24,7 @@ export default {
   },
   methods: {
     input(value) {
-      window.console.log(value);
+      // window.console.log(value);
       this.$emit("update:value", value);
     },
     querySearch(query, cb) {
@@ -36,14 +37,16 @@ export default {
           }
         })
         .then(res => {
-          window.console.log(res.data.data);
+          // window.console.log(res.data.data);
           if (res.data.data) {
             cb(res.data.data);
           }
         })
         .catch(error => {});
     },
-    handleSelect(item) {}
+    handleSelect(item) {
+      this.$emit("handleSelect", item)
+    }
   }
 };
 </script>

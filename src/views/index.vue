@@ -7,7 +7,7 @@
         </a>
       </div>
       <div class="index-search" v-on:keyup.enter="search" >
-        <entrySearch style="width: 440px" v-bind:value.sync="value" placeholder="请输入词条名称"></entrySearch>
+        <entrySearch style="width: 440px" v-bind:value.sync="value" v-on:handleSelect="handleSelect" placeholder="请输入词条名称"></entrySearch>
         <el-button type="primary" @click="search" style="margin-left: 10px">搜索词条</el-button>
       </div>
     </div>
@@ -390,6 +390,7 @@ export default {
       }
       this.stepActive++;
     },
+    handleSelect(item) {},
     querySearchAsync(queryString, cb) {
       // this.$axios
       //   .post("/api/user/searchSubject", {
