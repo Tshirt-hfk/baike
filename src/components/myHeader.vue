@@ -4,13 +4,6 @@
       <div class="header-l">
         <h1 @click="toIndex" style="cursor: pointer">众智化词条系统</h1>
       </div>
-      <!-- <div class="header-m">
-          <a class="header-link" href="/"> 首页</a>
-          <a class="header-link" href="/"> 方磊</a>
-          <a class="header-link" href="/"> 方磊</a>
-          <a class="header-link" href="/"> 方磊</a>
-          <a class="header-link" href="/"> 方磊</a>
-      </div> -->
       <div class="header-r">
         <template v-if="status==='0'">
           <!-- 未登陆 -->
