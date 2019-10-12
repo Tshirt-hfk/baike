@@ -104,7 +104,7 @@
           <a @click="entryCreateFlag=true">创建词条</a>
           <a @click="toRecommendEntry">完善词条</a>
         </div>
-        <entryCreate :entryCreateFlag="entryCreateFlag"></entryCreate>
+        <entryCreate :entryCreateFlag.sync="entryCreateFlag"></entryCreate>
         <div class="index-side-recom">
           <div class="index-side-recom-title">
             <h3>推荐专题</h3>
@@ -140,15 +140,13 @@
 import entryCreate from "../components/entryCreate";
 import entrySearchBar from "../components/entrySearchBar";
 import classificationEntry from "./classificationEntry";
-import entryCategorySelector from "../components/entryCategorySelector";
 
 export default {
   name: "index",
   components: {
     entryCreate,
     entrySearchBar,
-    classificationEntry,
-    entryCategorySelector
+    classificationEntry
   },
   data() {
     return {

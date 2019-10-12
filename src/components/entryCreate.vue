@@ -60,7 +60,7 @@
         :autofocus="true"
       >下一步</el-button>
       <el-button id="confirm" type="primary" @click="next" :autofocus="true">创建</el-button>
-      <el-button @click="entryCreateFlag=false">退出</el-button>
+      <el-button @click="handleFlag(false)">退出</el-button>
     </span>
   </el-dialog>
 </template>
@@ -73,7 +73,9 @@ export default {
   components: {
     entryCategorySelector
   },
-  props: ["entryCreateFlag"],
+  props: {
+    entryCreateFlag: Boolean
+  },
   data() {
     return {
       stepActive: 0,
@@ -87,7 +89,7 @@ export default {
   },
   methods: {
     initEntryCreate() {
-      this.entryCreateFlag = true;
+      this.handleFlag(true)
       this.stepActive = 0;
       this.checked = false;
       document.getElementById("next").style.display = "inline";
@@ -143,6 +145,9 @@ export default {
     },
     handleEntrySelect() {
       
+    },
+    handleFlag(flag) {
+      this.$emit("update:entryCreateFlag", flag)
     }
   }
 };

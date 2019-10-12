@@ -6,7 +6,7 @@
       </a>
     </div>
     <div class="preview-search">
-      <entrySearch style="width: 440px" v-bind:value.sync="value" placeholder="请输入词条名称"></entrySearch>
+      <entrySearch style="width: 440px" :value.sync="value" placeholder="请输入词条名称"></entrySearch>
       <el-button type="primary" @click="search" style="margin-left: 10px">搜索词条</el-button>
     </div>
   </div>
