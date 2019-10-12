@@ -36,11 +36,9 @@ export default {
           }
         })
         .then(res => {
-          window.console.log(res.data.similar_pages);
+          window.console.log(res.data.data);
           if (res.data.data) {
             cb(res.data.data);
-          } else {
-
           }
         })
         .catch(error => {});
