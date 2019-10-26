@@ -84,7 +84,7 @@
         </div>
         <div class="preview-side-wrap">
           <div class="preview-picture">
-            <img style="margin: 0 auto" width="245px" height="268px" :src="form.imageUrl" />
+            <img style="margin: 0 auto" width="268px" height="245px" :src="form.imageUrl" />
           </div>
           <!-- 上下位关系-->
           <div class="preview-relation">
