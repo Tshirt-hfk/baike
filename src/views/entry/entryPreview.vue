@@ -283,6 +283,7 @@ export default {
               this.form.infoBox.push(info);
             }
             this.form.content = data.content;
+            this.form.imageUrl = data.imageUrl;
             this.initContent();
             this.refreshCatalog();
           }
