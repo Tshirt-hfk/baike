@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="entryCreateFlag" width="1000px" center :show-close="false" top="12vh">
+  <el-dialog :visible="entryCreateFlag" @update:visible="handleFlag" width="1000px" center :show-close="false" top="12vh">
     <el-steps :active="stepActive" finish-status="success" align-center>
       <el-step title="注意"></el-step>
       <el-step title="创建"></el-step>
