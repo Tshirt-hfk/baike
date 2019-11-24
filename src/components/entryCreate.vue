@@ -1,5 +1,12 @@
 <template>
-  <el-dialog :visible="entryCreateFlag" @update:visible="handleFlag" width="1000px" center :show-close="false" top="12vh">
+  <el-dialog
+    :visible="entryCreateFlag"
+    @update:visible="handleFlag"
+    width="1000px"
+    center
+    :show-close="false"
+    top="12vh"
+  >
     <el-steps :active="stepActive" finish-status="success" align-center>
       <el-step title="注意"></el-step>
       <el-step title="创建"></el-step>
@@ -80,7 +87,7 @@ export default {
     return {
       stepActive: 0,
       status: this.$store.state.status,
-      checked:false,
+      checked: false,
       form: {
         name: "",
         category: ""
@@ -89,7 +96,7 @@ export default {
   },
   methods: {
     initEntryCreate() {
-      this.handleFlag(true)
+      this.handleFlag(true);
       this.stepActive = 0;
       this.checked = false;
       document.getElementById("next").style.display = "inline";
@@ -103,31 +110,38 @@ export default {
         document.getElementById("confirm").style.display = "inline";
         document.getElementById("step1").style.display = "none";
         document.getElementById("step2").style.display = "inline";
+        this.stepActive++;
       } else if (this.stepActive == 1) {
-        this.entryField.push(this.form.category);
-        this.$axios
-          .post("/api/user/createEntry", {
-            entryName: this.form.name,
-            field: this.entryField
-          })
-          .then(res => {
-            if (res.data.data) {
-              this.$router.push({
-                path: "/entryedit",
-                query: { id: res.data.data.id, source: 1 }
-              });
-            }
-          })
-          .catch(error => {
-            if (error.response) {
-              this.$message({
-                message: error.response.data.msg,
-                type: "warning"
-              });
-            }
+        // window.console.log(this.form.name);
+        // window.console.log(this.form.category);
+        if (this.form.name == "" || this.form.category == "") {
+          this.$message({
+            message: "请输入词条名称并选择词条分类！"
           });
+        } else {
+          this.$axios
+            .post("/api/user/createEntry", {
+              entryName: this.form.name,
+              field: this.form.category
+            })
+            .then(res => {
+              if (res.data.data) {
+                this.$router.push({
+                  path: "/entryedit",
+                  query: { id: res.data.data.id, source: 1 }
+                });
+              }
+            })
+            .catch(error => {
+              if (error.response) {
+                this.$message({
+                  message: error.response.data.msg,
+                  type: "warning"
+                });
+              }
+            });
+        }
       }
-      this.stepActive++;
     },
     querySearchAsync(queryString, cb) {
       // this.$axios
@@ -143,11 +157,9 @@ export default {
       //   })
       //   .catch(error => {});
     },
-    handleEntrySelect() {
-      
-    },
+    handleEntrySelect() {},
     handleFlag(flag) {
-      this.$emit("update:entryCreateFlag", flag)
+      this.$emit("update:entryCreateFlag", flag);
     }
   }
 };
