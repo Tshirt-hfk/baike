@@ -3,7 +3,7 @@
     <div class="preview-searchbar">
       <div class="preview-logo-headl">
         <a title="首页" href="/">
-          <img src="/static/image/name.png" />
+          <img style="width: 120px; height: 70px;" src="/static/image/logo.png" />
         </a>
       </div>
       <div class="preview-search" v-on:keyup.enter="search">
@@ -533,7 +533,7 @@ p {
   position: relative;
 }
 .preview-searchbar {
-  width: 808px;
+  width: 700px;
   height: 105px;
   margin: 0 auto;
   position: relative;
@@ -547,6 +547,7 @@ p {
 .preview-search {
   float: left;
   padding: 37px 0;
+  margin-left: 10px;
 }
 .preview-main {
   width: 1170px;

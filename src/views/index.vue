@@ -7,7 +7,7 @@
         </a>
       </div>
       <div class="index-search" v-on:keyup.enter="search" >
-        <entrySearch style="width: 440px" v-bind:value.sync="value" v-on:handleSelect="handleSelect" placeholder="请输入词条名称"></entrySearch>
+        <entrySearch style="width: 440px" v-bind:value.sync="value" v-on:handleSelect="handleSelect" placeholder="请输入词条名"></entrySearch>
         <el-button type="primary" @click="search" style="margin-left: 10px">搜索词条</el-button>
       </div>
     </div>
@@ -129,7 +129,7 @@
               1、词条内容符合社会主义核心价值观，弘扬正能量 <br>
               2、词条内容的积极正面，不涉及违法犯罪活动 <br>
               3、禁止编写虚假，恶搞的信息 <br>
-              4、 <br>
+              4、创建多义词词条时，标签领域必须填写 <br>
               5、 <br>
             </div>
             <div class="entryCreate-checkBox">
@@ -143,7 +143,7 @@
                 v-model="form.name"
                 :fetch-suggestions="querySearchAsync"
                 placeholder="请输入词条名称"
-                @select="handleEntrySelect"
+                @select="handleSelect"
               ></el-autocomplete>
             </div>
             <div class="entryCreate-entryCate">
@@ -212,6 +212,7 @@ export default {
   },
   data() {
     return {
+      createSearchValue: "",
       entryField: [],
       form: {
         name: "",
@@ -390,7 +391,10 @@ export default {
       }
       this.stepActive++;
     },
-    handleSelect(item) {},
+    handleSelect(item) {
+      this.value = item.name;
+      this.search();
+    },
     querySearchAsync(queryString, cb) {
       // this.$axios
       //   .post("/api/user/searchSubject", {
@@ -404,8 +408,7 @@ export default {
       //     this.loading = false;
       //   })
       //   .catch(error => {});
-    },
-    handleEntrySelect(item) {},
+    }
   }
 };
 </script>
