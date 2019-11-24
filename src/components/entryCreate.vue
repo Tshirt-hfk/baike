@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="entryCreateFlag" width="1000px" center :show-close="false" top="12vh">
+  <el-dialog :visible="entryCreateFlag" @update:visible="handleFlag" width="1000px" center :show-close="false" top="12vh">
     <el-steps :active="stepActive" finish-status="success" align-center>
       <el-step title="注意"></el-step>
       <el-step title="创建"></el-step>
@@ -61,7 +61,7 @@
         :autofocus="true"
       >下一步</el-button>
       <el-button id="confirm" type="primary" @click="next" :autofocus="true">创建</el-button>
-      <el-button @click="entryCreateFlag = false">退出</el-button>
+      <el-button @click="handleFlag(false)">退出</el-button>
     </span>
   </el-dialog>
 </template>
@@ -76,11 +76,15 @@ export default {
     entryCategorySelector,
     entrySearch
   },
+  props: {
+    entryCreateFlag: Boolean
+  },
   data() {
     return {
       searchValue: "",
       stepActive: 0,
-      entryCreateFlag: false,
+      status: this.$store.state.status,
+      checked:false,
       form: {
         name: "",
         category: ""
@@ -89,16 +93,13 @@ export default {
   },
   methods: {
     initEntryCreate() {
-      if (this.status == "0") this.$router.push("/login");
-      else {
-        this.entryCreateFlag = true;
-        this.stepActive = 0;
-        this.checked = false;
-        document.getElementById("next").style.display = "inline";
-        document.getElementById("confirm").style.display = "none";
-        document.getElementById("step1").style.display = "inline";
-        document.getElementById("step2").style.display = "none";
-      }
+      this.handleFlag(true)
+      this.stepActive = 0;
+      this.checked = false;
+      document.getElementById("next").style.display = "inline";
+      document.getElementById("confirm").style.display = "none";
+      document.getElementById("step1").style.display = "inline";
+      document.getElementById("step2").style.display = "none";
     },
     next() {
       if (this.stepActive == 0) {
@@ -131,37 +132,57 @@ export default {
           });
       }
       this.stepActive++;
+    },
+    querySearchAsync(queryString, cb) {
+      // this.$axios
+      //   .post("/api/user/searchSubject", {
+      //     keyword: query
+      //   })
+      //   .then(res => {
+      //     if (res.data.data) {
+      //       this.options = res.data.data.subjects;
+      //     } else {
+      //     }
+      //     this.loading = false;
+      //   })
+      //   .catch(error => {});
+    },
+    handleEntrySelect() {
+      
+    },
+    handleFlag(flag) {
+      this.$emit("update:entryCreateFlag", flag)
     }
   }
 };
 </script>
 
 <style scoped>
-.entryCreate-title{
+.entryCreate-title {
   margin-top: 20px;
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
 }
-.entryCreate-title-main{
+.entryCreate-title-main {
   font-size: 25px;
   color: #333;
 }
-.entryCreate-title-notice{
+.entryCreate-title-notice {
   margin-top: 10px;
   padding-bottom: 10px;
   color: #a9a9a9;
 }
-.entryCreate-body{
+.entryCreate-body {
   font-size: 16px;
   line-height: 30px;
   margin: 25px 25px 25px 50px;
   padding-bottom: 8px;
   border-bottom: 1px solid #e5e5e5;
 }
-.entryCreate-checkBox{
+.entryCreate-checkBox {
   text-align: center;
 }
-.entryCreate-entryName{
+.entryCreate-entryName {
   margin-top: 25px;
   margin-bottom: 25px;
   color: #333;
@@ -169,7 +190,7 @@ export default {
   text-align: center;
   font-size: 18px;
 }
-.entryCreate-entryCate{
+.entryCreate-entryCate {
   margin-top: 30px;
   margin-bottom: 25px;
   color: #333;
@@ -177,7 +198,7 @@ export default {
   text-align: center;
   font-size: 18px;
 }
-.entryCreate-notice{
+.entryCreate-notice {
   display: block;
   margin-left: 340px;
   margin-top: 10px;
