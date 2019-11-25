@@ -5,7 +5,7 @@
     </div>
     <div>
       <div v-for="category in categories" :key="category.name">
-        <subjectCategoryCard :category="category.name"></subjectCategoryCard>
+        <subjectCategoryCard :category="category.name" :id="category.id"></subjectCategoryCard>
       </div>
     </div>
   </div>
@@ -23,7 +23,8 @@ export default {
     return {
       categories: [
         {
-          name: "计算机科学与技术"
+          name: "计算机科学与技术",
+          id: 0,
         }
       ]
     };
