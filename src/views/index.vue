@@ -37,6 +37,7 @@
           <el-menu-item
             index="3"
             style="width: 150px; text-align: center;font-size: large;letter-spacing:12px;text-indent:10px"
+            @click="toSubjects"
           >专 题</el-menu-item>
         </el-menu>
         <div class="index-navbar-usercenter">
@@ -49,22 +50,18 @@
       </div>
     </div>
     <div class="index-main">
-      <subjectIntro></subjectIntro>
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
 import entrySearchBar from "../components/entrySearchBar";
-import indexRecommend from "./index/indexRecommend";
-import subjectIntro from "./subject/subjectIntro";
 
 export default {
   name: "index",
   components: {
-    entrySearchBar,
-    indexRecommend,
-    subjectIntro
+    entrySearchBar
   },
   data() {
     return {
@@ -89,6 +86,9 @@ export default {
       if (this.status == "0") this.$router.push("/login");
       else if (this.status == "3") this.$router.push("/adminAudit");
       else this.$router.push("/usercenter/mysubject");
+    },
+    toSubjects() {
+      this.$router.push("/subjects");
     },
     handleSelect(item) {},
   }
@@ -253,6 +253,7 @@ h3 {
   margin-top: 20px;
 }
 .index-main {
+  width: 1200px;
   margin: 0 auto;
 }
 </style>
