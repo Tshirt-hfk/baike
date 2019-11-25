@@ -50,6 +50,28 @@ export default {
         }
       ]
     };
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      this.$axios
+        .post("/api/subject/getRecommendSubjectByName", {
+          category: this.category
+        })
+        .then(res => {
+          if (res.data.data) {
+            for(let subject of res.data.data){
+              this.subjects.push(subject)
+            }
+          }
+        })
+        .catch(error => {
+          if (error.response) {
+          }
+        });
+    }
   }
 };
 </script>
