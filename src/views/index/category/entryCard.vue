@@ -2,7 +2,7 @@
   <el-card class="box-card" :body-style="{ padding: '10px' }">
     <div slot="header" class="clearfix">
       <span>{{name}}</span>
-      <el-button style="float: right; padding: 3px 0" type="text">查看</el-button>
+      <el-button style="float: right; padding: 3px 0" type="text" @click="toEntryIndex">查看</el-button>
     </div>
     <div>
       <div class="image">
@@ -15,12 +15,23 @@
 
 <script>
 export default {
-  name: "subjectIntroCard",
+  name: "entryCard",
   props: {
     id: Number,
     imageUrl: String,
     name: String,
     intro: String
+  },
+  methods: {
+    toEntryIndex() {
+      var { href } = this.$router.resolve({
+        name: "entryPreview",
+        params: {
+          name: this.name
+        }
+      });
+      window.open(href, "_blank");
+    }
   }
 };
 </script>

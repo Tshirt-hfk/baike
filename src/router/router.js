@@ -10,12 +10,30 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: index
+      component: index,
+      redirect: '/index',
+      children: [
+        {
+          path: 'index',
+          name: 'index1',
+          component: () => import('../views/index/indexRecommend'),
+        },
+        {
+          path: 'subjects',
+          name: 'subjects',
+          component: () => import('../views/index/subjectIntro'),
+        },
+        {
+          path: 'category/:name',
+          name: 'category',
+          component: () => import("../views/index/category"),
+        }
+      ]
     },
     {
       path: '/test',
       name: 'test',
-      component: () => import('../views/subject/subjectIntro')
+      component: () => import('../views/index/subjectIntro')
     },
     {
       path: '/login',

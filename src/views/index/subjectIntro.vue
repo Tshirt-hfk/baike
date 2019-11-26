@@ -4,8 +4,8 @@
       <span class="subject-category-header-text">全部专题</span>
     </div>
     <div>
-      <div v-for="category in categories" :key="category.name">
-        <subjectCategoryCard :category="category.name"></subjectCategoryCard>
+      <div v-for="category in categories" :key="category">
+        <subjectCategoryCard :category="category"></subjectCategoryCard>
       </div>
     </div>
     <div class="subjectUnknown">
@@ -35,25 +35,29 @@ export default {
   data() {
     return {
       categories: [
-        {
-          name: "计算机科学与技术"
-        }
       ],
-      subjects: [
-        {
-          id: 0,
-          name: "河流",
-          imageUrl: "http://101.200.34.92:8081/resource/image/260ca63909524fb593be134d31d2b3ee.png",
-          intro: "啊啊"
-        },
-        {
-          id: 1,
-          name: "海洋",
-          imageUrl: "http://101.200.34.92:8081/resource/image/260ca63909524fb593be134d31d2b3ee.png",
-          intro: "啊啊"
-        },
-      ]
+      subjects: []
     };
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      this.$axios
+        .get("/api/subject/getSubjectCategory")
+        .then(res => {
+          if (res.data.data) {
+            for(let category of res.data.data){
+              this.categories.push(category)
+            }
+          }
+        })
+        .catch(error => {
+          if (error.response) {
+          }
+        });
+    }
   }
 };
 </script>

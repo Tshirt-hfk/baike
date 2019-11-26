@@ -1,7 +1,7 @@
 <template>
   <div class="subjects">
     <div class="subject-header">
-      <span class="subject-category">{{category}}</span>
+      <span class="subject-category">分类精选</span>
       <el-link type="primary" :underline="false" class="subject-op">
         更多
         <i class="el-icon-d-arrow-right"></i>
@@ -9,7 +9,7 @@
     </div>
     <div>
       <div class="subjectIntro" v-for="subject in subjects" :key="subject.id">
-        <subjectIntroCard :id="subject.id" :name="subject.name" :imageUrl="subject.imageUrl" :intro="subject.intro"></subjectIntroCard>
+        <entryCard :id="subject.id" :name="subject.name" :imageUrl="subject.imageUrl" :intro="subject.intro"></entryCard>
       </div>
       <div class="clear"></div>
     </div>
@@ -17,39 +17,43 @@
 </template>
 
 <script>
-import subjectIntroCard from "./subjectIntroCard";
+import entryCard from "./entryCard";
 
 export default {
-  name: "subjectCategoryCard",
+  name: "categoryCard",
   props: {
 	  category: String
   },
   components: {
-    subjectIntroCard
+    entryCard
   },
   data() {
     return {
       subjects: [
-        {
-          id: 0,
-          name: "aa ",
-          imageUrl: "http://101.200.34.92:8081/resource/image/260ca63909524fb593be134d31d2b3ee.png",
-          intro: "啊啊"
-        },
-        {
-          id: 1,
-          name: "aa ",
-          imageUrl: "http://101.200.34.92:8081/resource/image/260ca63909524fb593be134d31d2b3ee.png",
-          intro: "啊啊"
-        },
-        {
-          id: 2,
-          name: "aa ",
-          imageUrl: "http://101.200.34.92:8081/resource/image/260ca63909524fb593be134d31d2b3ee.png",
-          intro: "啊啊"
-        }
       ]
     };
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      // this.$axios
+      //   .post("/api/entry/getRecommendSubjectByName", {
+      //     field: this.category
+      //   })
+      //   .then(res => {
+      //     if (res.data.data) {
+      //       for(let subject of res.data.data){
+      //         this.subjects.push(subject)
+      //       }
+      //     }
+      //   })
+      //   .catch(error => {
+      //     if (error.response) {
+      //     }
+      //   });
+    }
   }
 };
 </script>
