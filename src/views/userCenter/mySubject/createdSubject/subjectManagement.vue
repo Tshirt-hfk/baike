@@ -94,7 +94,6 @@ export default {
 <style>
 .management {
   width: 100%;
-  height: 500px;
 }
 .manage-back{
   width: 90%;
