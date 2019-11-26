@@ -67,7 +67,7 @@
         :disabled="checked == false"
         :autofocus="true"
       >下一步</el-button>
-      <el-button id="confirm" type="primary" @click="next" :autofocus="true">创建</el-button>
+      <el-button id="confirm" type="primary" @click="next" :autofocus="true" style="display:none">创建</el-button>
       <el-button @click="handleFlag(false)">退出</el-button>
     </span>
   </el-dialog>
