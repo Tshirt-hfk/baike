@@ -2,7 +2,7 @@
   <el-card class="box-card" :body-style="{ padding: '10px' }">
     <div slot="header" class="clearfix">
       <span>{{name}}</span>
-      <el-button style="float: right; padding: 3px 0" type="text">查看</el-button>
+      <el-button style="float: right; padding: 3px 0" type="text" @click="toSubjectIndex">查看</el-button>
     </div>
     <div>
       <div class="image">
@@ -21,6 +21,11 @@ export default {
     imageUrl: String,
     name: String,
     intro: String
+  },
+  methods: {
+    toSubjectIndex() {
+      this.$router.push({ path: "/subject", query: { id: this.id } });
+    }
   }
 };
 </script>
