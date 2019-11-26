@@ -166,7 +166,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style>
 .content {
   margin-left: 30px;
   width: 100%;
