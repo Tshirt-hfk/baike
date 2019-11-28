@@ -33,14 +33,14 @@ export default {
         entrys: [
             {
                 id: '1',
-                name: '李鹏',
-                intro: '李鹏同志遗体在北京被火化，习近平总书记亲自到场送别',
-                img_url: '/static/image/lipeng.jpg'
+                name: '屠呦呦',
+                intro: '“共和国勋章”获得者屠呦呦——与青蒿结缘 用中医药造福世界',
+                img_url: '/static/image/tuyouyou.jpg'
             },{
                 id: '2',
-                name: '蔡徐坤',
-                intro: 'UCAA艺术公益大使蔡徐坤帮助孩子走进艺术展',
-                img_url: '/static/image/caixukun.jpg'
+                name: '杨振宁',
+                intro: '杨振宁的真正地位曝光，《自然》评出物理史最强，活着的只剩一位',
+                img_url: '/static/image/yangzhenning.jpg'
             },{
                 id: '3',
                 name: '贝索斯',
@@ -157,15 +157,15 @@ export default {
         this.entrys.splice(0, this.entrys.length);
         this.entrys.push({
                 id: '1',
-                name: '李鹏',
-                intro: '李鹏同志遗体在北京被火化，习近平总书记亲自到场送别',
-                img_url: '/static/image/lipeng.jpg'
+                name: '屠呦呦',
+                intro: '“共和国勋章”获得者屠呦呦——与青蒿结缘 用中医药造福世界',
+                img_url: '/static/image/tuyouyou.jpg'
             });
         this.entrys.push({
                 id: '2',
-                name: '蔡徐坤',
-                intro: 'UCAA艺术公益大使蔡徐坤帮助孩子走进艺术展',
-                img_url: '/static/image/caixukun.jpg'
+                name: '杨振宁',
+                intro: '杨振宁的真正地位曝光，《自然》评出物理史最强，活着的只剩一位',
+                img_url: '/static/image/yangzhenning.jpg'
             });
         this.entrys.push({
                 id: '3',

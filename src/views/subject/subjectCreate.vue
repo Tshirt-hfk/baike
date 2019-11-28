@@ -519,10 +519,14 @@ export default {
         .post("/api/subjectMaker/createSubject", this.form)
         .then(res => {
           if (res.data) {
-            this.$message({
-              message: res.data.msg
-            });
-            this.$router.push("/usercenter/mysubject/createdsubject");
+            if(res.data.msg){
+              this.$message({
+                message: '专题已存在',
+                type: 'warning'
+              });
+            }
+            else
+              this.$router.push("/usercenter/mysubject/createdsubject");
           }
         })
         .catch(error => {

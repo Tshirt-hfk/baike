@@ -522,7 +522,6 @@ p {
   margin: 0 auto;
   position: relative;
 }
-
 .preview-main {
   width: 1170px;
   margin: 0 auto;

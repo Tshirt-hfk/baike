@@ -6,7 +6,6 @@
     @select="handleSelect"
     :value="value"
     @input="input"
-
   ></el-autocomplete>
 </template>
 

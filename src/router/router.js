@@ -15,13 +15,18 @@ export default new Router({
       children: [
         {
           path: 'index',
-          name: 'index',
+          name: 'index1',
           component: () => import('../views/index/indexRecommend'),
         },
         {
           path: 'subjects',
           name: 'subjects',
           component: () => import('../views/index/subjectIntro'),
+        },
+        {
+          path: 'category/:name',
+          name: 'category',
+          component: () => import("../views/index/category"),
         }
       ]
     },

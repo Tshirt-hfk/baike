@@ -20,7 +20,7 @@
         1、词条内容符合社会主义核心价值观，弘扬正能量
         <br />2、词条内容的积极正面，不涉及违法犯罪活动
         <br />3、禁止编写虚假，恶搞的信息
-        <br />4、
+        <br />4、创建多义词时，标签必须添加
         <br />5、
         <br />
       </div>
@@ -37,6 +37,7 @@
           placeholder="请输入词条名称"
           @select="handleEntrySelect"
         ></el-autocomplete>
+        <entrySearch style="width: 440px" v-bind:value.sync="searchValue" v-on:handleSelect="handleSelect" placeholder="请输入词条名称"></entrySearch>
       </div>
       <div class="entryCreate-entryCate">
         <span style="margin-right: 15px">词条类别:</span>
@@ -66,7 +67,7 @@
         :disabled="checked == false"
         :autofocus="true"
       >下一步</el-button>
-      <el-button id="confirm" type="primary" @click="next" :autofocus="true">创建</el-button>
+      <el-button id="confirm" type="primary" @click="next" :autofocus="true" style="display:none">创建</el-button>
       <el-button @click="handleFlag(false)">退出</el-button>
     </span>
   </el-dialog>
@@ -74,17 +75,20 @@
 
 <script>
 import entryCategorySelector from "./entryCategorySelector";
+import entrySearch from "./entrySearch";
 
 export default {
   name: "entryCreate",
   components: {
-    entryCategorySelector
+    entryCategorySelector,
+    entrySearch
   },
   props: {
     entryCreateFlag: Boolean
   },
   data() {
     return {
+      searchValue: "",
       stepActive: 0,
       status: this.$store.state.status,
       checked: false,

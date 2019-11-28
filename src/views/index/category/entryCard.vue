@@ -2,7 +2,7 @@
   <el-card class="box-card" :body-style="{ padding: '10px' }">
     <div slot="header" class="clearfix">
       <span>{{name}}</span>
-      <el-button style="float: right; padding: 3px 0" type="text" @click="toSubjectIndex">查看</el-button>
+      <el-button style="float: right; padding: 3px 0" type="text" @click="toEntryIndex">查看</el-button>
     </div>
     <div>
       <div class="image">
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "subjectIntroCard",
+  name: "entryCard",
   props: {
     id: Number,
     imageUrl: String,
@@ -23,8 +23,14 @@ export default {
     intro: String
   },
   methods: {
-    toSubjectIndex() {
-      this.$router.push({ path: "/subject", query: { id: this.id } });
+    toEntryIndex() {
+      var { href } = this.$router.resolve({
+        name: "entryPreview",
+        params: {
+          name: this.name
+        }
+      });
+      window.open(href, "_blank");
     }
   }
 };
@@ -41,10 +47,6 @@ export default {
 }
 .text {
   font-size: 16px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  overflow: hidden;
 }
 
 .clearfix:before,
