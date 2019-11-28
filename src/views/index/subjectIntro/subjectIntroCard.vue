@@ -6,7 +6,7 @@
     </div>
     <div>
       <div class="image">
-        <img :src="imageUrl" width="185" height="185" alt="专题图片" />
+        <img :src="imageUrl" width="180" height="180" alt="专题图片" />
       </div>
       <div class="intro text">{{intro}}</div>
     </div>
@@ -30,12 +30,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .image {
   float: left;
 }
 .intro {
-  width: 150px;
+  width: 152px;
   float: right;
   word-wrap: break-word;
 }
@@ -43,7 +43,7 @@ export default {
   font-size: 16px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 9;
+  -webkit-line-clamp: 8;
   overflow: hidden;
 }
 
@@ -57,7 +57,7 @@ export default {
 }
 
 .box-card {
-  width: 370px;
+  width: 368px;
   height: 255px;
 }
 .el-card__header {
