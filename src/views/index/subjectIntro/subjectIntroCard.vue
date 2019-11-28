@@ -41,6 +41,10 @@ export default {
 }
 .text {
   font-size: 16px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 9;
+  overflow: hidden;
 }
 
 .clearfix:before,
