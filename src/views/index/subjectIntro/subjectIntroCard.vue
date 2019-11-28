@@ -41,9 +41,9 @@ export default {
 }
 .text {
   font-size: 16px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 9;
   overflow: hidden;
 }
 
