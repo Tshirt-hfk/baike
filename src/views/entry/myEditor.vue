@@ -1108,7 +1108,7 @@ export default {
   left: 0px;
   right: 0px;
   bottom: 0px;
-  top: 35px;
+  top: 50px;
   font-family: SimSun, Arial;
   text-align: left;
   word-break: break-all;
@@ -1328,7 +1328,7 @@ export default {
 /* 菜单栏 */
 .catalog-side {
   position: fixed;
-  top: 84px;
+  top: 99px;
   left: 0px;
   bottom: 7px;
   width: 400px;
@@ -1386,7 +1386,7 @@ export default {
 .relationship-side {
   display: block;
   position: fixed;
-  top: 84px;
+  top: 99px;
   right: 0px;
   bottom: 7px;
   width: 400px;
