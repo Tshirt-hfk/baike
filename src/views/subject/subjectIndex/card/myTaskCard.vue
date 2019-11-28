@@ -49,21 +49,22 @@ export default {
     edit() {
       this.$router.push({
         path: "/entryedit",
-        query: { id: this.taskId }
+        query: { id: this.taskId, source: 2 }
       });
     },
     giveup() {
       this.$axios
-        .post("/api/user/giveUpAssignment", {
-          assignmentId: this.taskId
+        .post("/api/user/giveUpTask", {
+          entryIds: [this.taskId],
+          isTaskArray: [true]
         })
         .then(res => {
           if (!res.data.errcode) {
             this.refresh();
           }
           //this.$message({
-            //message: res.data.msg,
-            //type: "warning"
+          //message: res.data.msg,
+          //type: "warning"
           //});
         })
         .catch(error => {
