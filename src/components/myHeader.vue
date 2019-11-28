@@ -8,9 +8,9 @@
       <div class="header-r">
         <template v-if="status==='0'">
           <!-- 未登陆 -->
-          <el-link @click="toLogin" style="float:left; margin-top:15px">登录</el-link>
+          <el-link @click="toLogin" style="float:left; margin-top:8px">登录</el-link>
           <div class="header-login-line"> </div>
-          <el-link @click="toRegister" style="float:left;margin-left:7px;margin-top:15px">注册</el-link>
+          <el-link @click="toRegister" style="float:left;margin-left:7px;margin-top:8px">注册</el-link>
         </template>
         <template v-else-if="status==='1'">
           <!-- 普通用户 -->
@@ -241,7 +241,7 @@ export default {
   border-right: 1px solid #707070;
   height: 20px;
   margin-left: 7px;
-  margin-top: 15px;
+  margin-top: 8px;
 }
 .header-icon{
   float: left;
