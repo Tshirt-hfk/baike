@@ -36,6 +36,10 @@ export default {
 }
 .text {
   font-size: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .clearfix:before,

@@ -30,24 +30,6 @@ export default {
   data() {
     return {
       subjects: [
-        {
-          id: 0,
-          name: "aa ",
-          imageUrl: "http://101.200.34.92:8081/resource/image/260ca63909524fb593be134d31d2b3ee.png",
-          intro: "啊啊"
-        },
-        {
-          id: 1,
-          name: "aa ",
-          imageUrl: "http://101.200.34.92:8081/resource/image/260ca63909524fb593be134d31d2b3ee.png",
-          intro: "啊啊"
-        },
-        {
-          id: 2,
-          name: "aa ",
-          imageUrl: "http://101.200.34.92:8081/resource/image/260ca63909524fb593be134d31d2b3ee.png",
-          intro: "啊啊"
-        }
       ]
     };
   },
