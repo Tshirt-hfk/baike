@@ -514,12 +514,11 @@ export default {
       }
     },
     submit() {
-      window.console.log(this.form);
       this.$axios
         .post("/api/subjectMaker/createSubject", this.form)
         .then(res => {
           if (res.data) {
-            if(res.data.msg){
+            if(res.data.msg == '该专题已存在'){
               this.$message({
                 message: '专题已存在',
                 type: 'warning'
