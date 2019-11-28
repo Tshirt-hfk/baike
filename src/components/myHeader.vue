@@ -2,14 +2,15 @@
   <header class="header" id="header">
     <div class="header-middle">
       <div class="header-l">
-        <h1 @click="toIndex" style="cursor: pointer">众智化词条系统</h1>
+        <div @click="toIndex" class="header-l-title1">众智化词条系统</div>
+        <div class="header-l-title2">国家重点研发计划-专业内容知识服务众智平台与应用示范子课题项目</div>
       </div>
       <div class="header-r">
         <template v-if="status==='0'">
           <!-- 未登陆 -->
-          <el-link @click="toLogin" style="float:left; margin-top:7px">登录</el-link>
+          <el-link @click="toLogin" style="float:left; margin-top:15px">登录</el-link>
           <div class="header-login-line"> </div>
-          <el-link @click="toRegister" style="float:left;margin-left:7px;margin-top:7px">注册</el-link>
+          <el-link @click="toRegister" style="float:left;margin-left:7px;margin-top:15px">注册</el-link>
         </template>
         <template v-else-if="status==='1'">
           <!-- 普通用户 -->
@@ -190,7 +191,7 @@ export default {
   top: 0px;
   left: 0px;
   right: 0px;
-  height: 35px;
+  height: 50px;
   width: 100%;
 }
 .header-middle {
@@ -198,17 +199,22 @@ export default {
   width: 1200px;
   display: flex;
   justify-content: space-between;
-  height: 35px;
+  height: 50px;
 }
 .header-l{
   float: left;
-  height: 35px;
+  height: 50px;
 }
-.header-l h1 {
+.header-l-title1{
   color: #409eff;
   font-weight: 300;
   font-size: 21px;
   margin-top: 4px;
+  cursor: pointer
+}
+.header-l-title2{
+  color: #8a8a8a;
+  font-size: 10px;
 }
 .header-m{
   width: 900px;
@@ -224,6 +230,7 @@ export default {
 .header-r {
   float: right;
   font-size: 18px;
+  margin-top: 7px;
 }
 .header-line{
   width: 100%;
@@ -234,7 +241,7 @@ export default {
   border-right: 1px solid #707070;
   height: 20px;
   margin-left: 7px;
-  margin-top: 7px;
+  margin-top: 15px;
 }
 .header-icon{
   float: left;
@@ -275,7 +282,7 @@ export default {
     text-align: center;
     font-size: 14px;
     color: #fff;
-    border-radius: 0 0 6px 6px;
+    border-radius: 6px;
     margin-left: 10px;
 }
 .header-createsubject:hover{
