@@ -32,7 +32,11 @@
       <el-table-column align="right">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" @click="jumpToEdit(scope.row.source)">编辑</el-button>
-          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id, scope.row.source)">预览</el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            @click="getTaskContent(scope.row.id, scope.row.source)"
+          >预览</el-button>
           <el-button size="mini" type="success" @click="getReason(scope.$index)">提交</el-button>
         </template>
       </el-table-column>
@@ -131,7 +135,7 @@ export default {
       entryId: 0,
       modifyReason: [],
       reason: "",
-      tag: 0,
+      tag: 0
     };
   },
   mounted() {
@@ -176,18 +180,20 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    getId(row) {          //有必要么？
+    getId(row) {
+      //有必要么？
       this.entryId = row.id;
     },
     jumpToEdit(source) {
-      this.$router.push({ path: "/entryedit", query: { id: this.entryId , source: source} });
+      this.$router.push({
+        path: "/entryedit",
+        query: { id: this.entryId, source: source }
+      });
     },
     getReason(index) {
       this.modifyReason = this.displayData[index].modifyReason;
-      if(this.displayData[index].source==2)
-        this.isTask = true;
-      else
-        this.isTask = false;
+      if (this.displayData[index].source == 2) this.isTask = true;
+      else this.isTask = false;
       this.tag = index;
       this.admitFlag = true;
     },
@@ -224,7 +230,8 @@ export default {
       var isTaskArray = new Array();
       for (var i = 0; i < this.multipleSelection.length; i++) {
         array.push(this.multipleSelection[i].id);
-        isTaskArray.push(this.multipleSelection[i].isTask);
+        if (this.multipleSelection[i].source == 2) isTaskArray.push(true);
+        else isTaskArray.push(false);
       }
       this.$axios
         .post("/api/user/giveUpTask", {
@@ -273,41 +280,41 @@ export default {
       }
     },
     getTaskContent(id, source) {
-        this.$axios
-          .post("/api/user/getTaskContent", {
-            taskId: new Number(id),
-            source: source
-          })
-          .then(res => {
-            if (res.data.data) {
-              this.form.entryName = res.data.data.entryName;
-              this.form.imageUrl = res.data.data.imageUrl;
-              this.form.intro = res.data.data.intro;
-              this.form.field.splice(0, this.form.field.length);
-              for (var field of res.data.data.field) {
-                this.form.field.push(field);
-              }
-              this.form.infoBox.splice(0, this.form.infoBox.length);
-              for (var info of res.data.data.infoBox) {
-                this.form.infoBox.push(info);
-              }
-              this.form.content = res.data.data.content;
-              this.drawerFlag = true;
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning"
-              });
+      this.$axios
+        .post("/api/user/getTaskContent", {
+          taskId: new Number(id),
+          source: source
+        })
+        .then(res => {
+          if (res.data.data) {
+            this.form.entryName = res.data.data.entryName;
+            this.form.imageUrl = res.data.data.imageUrl;
+            this.form.intro = res.data.data.intro;
+            this.form.field.splice(0, this.form.field.length);
+            for (var field of res.data.data.field) {
+              this.form.field.push(field);
             }
-          })
-          .catch(error => {
-            if (error.response) {
-              this.$message({
-                message: error.response.data.msg,
-                type: "warning"
-              });
+            this.form.infoBox.splice(0, this.form.infoBox.length);
+            for (var info of res.data.data.infoBox) {
+              this.form.infoBox.push(info);
             }
-          });
+            this.form.content = res.data.data.content;
+            this.drawerFlag = true;
+          } else {
+            this.$message({
+              message: res.data.msg,
+              type: "warning"
+            });
+          }
+        })
+        .catch(error => {
+          if (error.response) {
+            this.$message({
+              message: error.response.data.msg,
+              type: "warning"
+            });
+          }
+        });
     },
     handleClose(done) {
       this.drawerFlag = false;
