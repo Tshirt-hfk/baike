@@ -184,7 +184,10 @@ export default {
     },
     getReason(index) {
       this.modifyReason = this.displayData[index].modifyReason;
-      this.isTask = this.displayData[index].isTask;
+      if(this.displayData[index].source==2)
+        this.isTask = true;
+      else
+        this.isTask = false;
       this.tag = index;
       this.admitFlag = true;
     },
