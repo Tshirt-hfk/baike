@@ -1138,6 +1138,7 @@ export default {
   margin-left: 25px;
   margin-top: 10px;
   outline: none;
+  font-size: 11px;
 }
 
 /* 编辑器 */
