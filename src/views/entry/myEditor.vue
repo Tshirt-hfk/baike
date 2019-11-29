@@ -209,7 +209,7 @@
         </div>
       </div>
       <!-- 上下位关系 -->
-      <div class="relationship-side">
+      <div class="relationship-side" style="display:none">
         <div class="relationship-side-title">
           <h5>词条关系</h5>
         </div>
