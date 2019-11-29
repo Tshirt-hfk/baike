@@ -37,7 +37,6 @@
           placeholder="请输入词条名称"
           @select="handleEntrySelect"
         ></el-autocomplete>
-        <entrySearch style="width: 440px" v-bind:value.sync="searchValue" v-on:handleSelect="handleSelect" placeholder="请输入词条名称"></entrySearch>
       </div>
       <div class="entryCreate-entryCate">
         <span style="margin-right: 15px">词条类别:</span>
@@ -75,13 +74,11 @@
 
 <script>
 import entryCategorySelector from "./entryCategorySelector";
-import entrySearch from "./entrySearch";
 
 export default {
   name: "entryCreate",
   components: {
-    entryCategorySelector,
-    entrySearch
+    entryCategorySelector
   },
   props: {
     entryCreateFlag: Boolean
