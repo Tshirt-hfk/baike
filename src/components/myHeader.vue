@@ -3,7 +3,7 @@
     <div class="header-middle">
       <div class="header-l">
         <div @click="toIndex" class="header-l-title1">众智化词条系统</div>
-        <div class="header-l-title2">国家重点研发计划-专业内容知识服务众智平台与应用示范子课题项目</div>
+        <div class="header-l-title2">国家重点研发计划(2017YFB1402400)资助</div>
       </div>
       <div class="header-r">
         <template v-if="status==='0'">
@@ -191,7 +191,7 @@ export default {
   top: 0px;
   left: 0px;
   right: 0px;
-  height: 50px;
+  height: 35px;
   width: 100%;
 }
 .header-middle {
@@ -199,22 +199,26 @@ export default {
   width: 1200px;
   display: flex;
   justify-content: space-between;
-  height: 50px;
+  height: 35px;
 }
 .header-l{
   float: left;
-  height: 50px;
+  height: 35px;
 }
 .header-l-title1{
   color: #409eff;
   font-weight: 300;
   font-size: 21px;
   margin-top: 4px;
-  cursor: pointer
+  cursor: pointer;
+  float:left;
 }
 .header-l-title2{
   color: #8a8a8a;
-  font-size: 10px;
+  font-size: 13px;
+  float:left;
+  margin-left: 10px;
+  margin-top: 11px;
 }
 .header-m{
   width: 900px;
@@ -230,7 +234,6 @@ export default {
 .header-r {
   float: right;
   font-size: 18px;
-  margin-top: 7px;
 }
 .header-line{
   width: 100%;
@@ -282,7 +285,7 @@ export default {
     text-align: center;
     font-size: 14px;
     color: #fff;
-    border-radius: 6px;
+    border-radius: 0 0 6px 6px;
     margin-left: 10px;
 }
 .header-createsubject:hover{
