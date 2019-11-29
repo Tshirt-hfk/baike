@@ -127,7 +127,7 @@
                 <h2>属性</h2>
                 <div style="float:right;margin-top:5px">
                   <entryCategorySelector
-                    v-bind:category.sync="form.category"
+                    v-bind:category.sync="selectAttribute"
                     placeholder="请选择词条分类"
                     style="margin-bottom: 10px;"
                   ></entryCategorySelector>
@@ -283,20 +283,14 @@ export default {
     entryCategorySelector
   },
   watch: {
-    selectAttribute: {
-      handler(n, o) {
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => {
-          this.refreshAttribute(n);
-        }, 300);
-      }
+    selectAttribute: function(val) {
+      if (val != "") this.refreshAttribute(val);
     }
   },
   data() {
     return {
       source: 0,
       selectAttribute: "",
-      timeout: null,
       drawerFlag: false,
       options: [],
       loading: false,
@@ -998,7 +992,6 @@ export default {
           }
         });
     },
-    refreshAttribute() {},
     // 词条图片上传限制
     beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 2;
@@ -1095,9 +1088,7 @@ export default {
     handleClose(done) {
       this.drawerFlag = false;
     },
-    querySearch() {
-      
-    }
+    querySearch() {}
   }
 };
 </script>
