@@ -53,7 +53,6 @@
             </div>
           </div>
           <a @click="entryCreateFlag=true">创建词条</a>
-          <a @click="toRecommendEntry">完善词条</a>
         </div>
         <entryCreate :entryCreateFlag.sync="entryCreateFlag"></entryCreate>
         <div class="index-side-recom">
@@ -177,9 +176,6 @@ export default {
       });
       window.open(href, "_blank");
     },
-    toRecommendEntry() {
-      // TODO
-    }
   }
 };
 </script>
