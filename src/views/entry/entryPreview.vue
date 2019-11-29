@@ -94,7 +94,7 @@
             </div>
             <ul>
               <li v-for="item in tableData" :key="item.name">
-                <div class="preview-relation-table">{{item.name}}</div>
+                <div class="preview-relation-table" style="cursor:pointer;color:blue" @click="toEntryPage(item.name)">{{item.name}}</div>
                 <div class="preview-relation-table">{{item.relation}}</div>
               </li>
             </ul>
@@ -381,7 +381,16 @@ export default {
         });
       }
     },
-    querySearch(query, cb) {}
+    querySearch(query, cb) {},
+    toEntryPage(entryName){
+      var { href } = this.$router.resolve({
+        name: "entryPreview",
+        params: {
+          name: entryName
+        }
+      });
+      window.open(href, "_blank");
+    }
   }
 };
 </script>
@@ -841,6 +850,8 @@ p {
   text-align: center;
   font-size: 14px;
   line-height: 39px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .relation-title {
   height: 40px;
