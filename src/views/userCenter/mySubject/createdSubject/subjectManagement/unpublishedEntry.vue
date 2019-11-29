@@ -38,7 +38,7 @@
       <el-button @click="dialogFormVisible = true">新建词条</el-button>
       <el-button @click="publishFlag = true">发布词条</el-button>
     </div>
-    <el-dialog title="新建词条" :visible.sync="dialogFormVisible" center width="500px" height="400px" top="30vh">
+    <el-dialog title="新建词条" :visible.sync="dialogFormVisible" center width="500px" top="30vh">
       <el-form :model="form" label-width="100px">
         <el-form-item label="名称" label-width="50px">
           <el-input v-model="form.name" autocomplete="on"></el-input>
@@ -863,7 +863,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .el-tag + .el-tag {
   margin-left: 10px;
   margin-top: 5px;
@@ -890,5 +890,8 @@ export default {
 .unpub-page {
   width: 100%;
   margin-top: 25px;
+}
+.clear {
+  clear:both
 }
 </style>
