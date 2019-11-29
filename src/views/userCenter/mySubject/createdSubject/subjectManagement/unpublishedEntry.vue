@@ -123,7 +123,6 @@
 <script>
 
 import subjectIndexVue from "../../../../subject/subjectIndex.vue";
-import { log } from "util";
 import entryReview from "../../../../../components/entryReview"
 
 export default {
