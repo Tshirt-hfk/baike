@@ -811,6 +811,7 @@ export default {
               this.form.originId = data.id;
               this.form.entryName = data.entryName;
               this.form.intro = data.intro;
+              this.form.imageUrl = data.imageUrl;
               this.form.infoBox.splice(0, this.form.infoBox.length);
               for (var info of data.infoBox) {
                 this.form.infoBox.push(info);
@@ -839,7 +840,7 @@ export default {
             if (res.data.data) {
               this.form.originId = res.data.data.originalId;
               this.form.entryName = res.data.data.entryName;
-              this.form.imageUrl = res.data.data.imageUrl;
+              this.form.imageUrl = res.data.data.imageUrl;      
               this.form.intro = res.data.data.intro;
               for (var field of res.data.data.field) {
                 this.form.field.push(field);
