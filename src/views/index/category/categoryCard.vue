@@ -8,8 +8,13 @@
       </el-link>
     </div>
     <div>
-      <div class="subjectIntro" v-for="subject in subjects" :key="subject.id">
-        <entryCard :id="subject.id" :name="subject.name" :imageUrl="subject.imageUrl" :intro="subject.intro"></entryCard>
+      <div class="subjectIntro" v-for="entry in entrys" :key="entry.id">
+        <entryCard
+          :id="entry.id"
+          :name="entry.name"
+          :imageUrl="entry.imageUrl"
+          :intro="entry.intro"
+        ></entryCard>
       </div>
       <div class="clear"></div>
     </div>
@@ -22,15 +27,14 @@ import entryCard from "./entryCard";
 export default {
   name: "categoryCard",
   props: {
-	  category: String
+    category: String
   },
   components: {
     entryCard
   },
   data() {
     return {
-      subjects: [
-      ]
+      entrys: []
     };
   },
   mounted() {
@@ -38,21 +42,27 @@ export default {
   },
   methods: {
     init() {
-      // this.$axios
-      //   .post("/api/entry/getRecommendSubjectByName", {
-      //     field: this.category
-      //   })
-      //   .then(res => {
-      //     if (res.data.data) {
-      //       for(let subject of res.data.data){
-      //         this.subjects.push(subject)
-      //       }
-      //     }
-      //   })
-      //   .catch(error => {
-      //     if (error.response) {
-      //     }
-      //   });
+      this.$axios
+        .get("/data/recommendByCategory", {
+          category: this.category
+        })
+        .then(res => {
+          window.console.log(res);
+          if (res.data) {
+            for (let entry of res.data) {
+              this.entrys.push({
+                id:1,
+                name:entry["page_name"],
+                intro:entry["info"]["intro"],
+                imageUrl:entry["info"]["imageUrl"]
+              });
+            }
+          }
+        })
+        .catch(error => {
+          if (error.response) {
+          }
+        });
     }
   }
 };

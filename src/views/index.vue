@@ -6,33 +6,27 @@
         <el-menu
           class="el-menu-demo"
           mode="horizontal"
-          @select="handleSelect"
           background-color="#459df5"
           text-color="#fff"
           active-text-color="#fff"
-          :router="true"
-          default-active="/"
           style="float: left;"
         >
           <el-menu-item
             index="/"
             style="width: 150px; text-align: center;font-size: large;letter-spacing:12px;text-indent:10px"
+            @click="toIndex"
           >首页</el-menu-item>
           <el-submenu index="2" style="width : 150px; text-align: center;font-size: large;">
             <template slot="title">
               <span style="font-size: large;letter-spacing:12px;text-indent:20px">分 类</span>
             </template>
-            <el-menu-item index="2-1" style="padding-left: 20px">艺术</el-menu-item>
-            <el-menu-item index="2-2" style="padding-left: 20px">科学</el-menu-item>
-            <el-menu-item index="2-3" style="padding-left: 20px">自然</el-menu-item>
-            <el-menu-item index="2-4" style="padding-left: 20px">文化</el-menu-item>
-            <el-menu-item index="2-5" style="padding-left: 20px">地理</el-menu-item>
-            <el-menu-item index="2-6" style="padding-left: 20px">生活</el-menu-item>
-            <el-menu-item index="2-7" style="padding-left: 20px">社会</el-menu-item>
-            <el-menu-item index="2-8" style="padding-left: 20px">人物</el-menu-item>
-            <el-menu-item index="2-9" style="padding-left: 20px">经济</el-menu-item>
-            <el-menu-item index="2-10" style="padding-left: 20px">体育</el-menu-item>
-            <el-menu-item index="2-11" style="padding-left: 20px">历史</el-menu-item>
+            <el-menu-item
+              v-for="category in categories"
+              :key="category"
+              :index="category"
+              style="padding-left: 20px"
+              @click="handleSelect(category)"
+            >{{category}}</el-menu-item>
           </el-submenu>
           <el-menu-item
             index="3"
@@ -66,6 +60,19 @@ export default {
   data() {
     return {
       status: this.$store.state.status,
+      categories: [
+        "艺术",
+        "科学",
+        "自然",
+        "文化",
+        "地理",
+        "社会",
+        "生活",
+        "人物",
+        "经济",
+        "体育",
+        "历史"
+      ]
     };
   },
   methods: {
@@ -90,7 +97,17 @@ export default {
     toSubjects() {
       this.$router.push("/subjects");
     },
-    handleSelect(item) {},
+    handleSelect(value) {
+      this.$router.push({
+        name: "category",
+        params: {
+          name: value
+        }
+      });
+    },
+    toIndex(){
+      this.$router.push('/index');
+    }
   }
 };
 </script>

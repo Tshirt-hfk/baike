@@ -23,24 +23,8 @@ export default {
     };
   },
   mounted() {
-    this.init();
   },
   methods: {
-    init() {
-      this.$axios
-        .get("/api/subject/getSubjectCategory")
-        .then(res => {
-          if (res.data.data) {
-            for(let category of res.data.data){
-              this.categories.push(category)
-            }
-          }
-        })
-        .catch(error => {
-          if (error.response) {
-          }
-        });
-    }
   }
 };
 </script>
