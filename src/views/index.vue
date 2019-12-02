@@ -25,7 +25,7 @@
               :key="category"
               :index="category"
               style="padding-left: 20px"
-              @click="handleSelect(category)"
+              @click="toCategory(category)"
             >{{category}}</el-menu-item>
           </el-submenu>
           <el-menu-item
@@ -86,9 +86,6 @@ export default {
       window.open(href, "_blank");
       this.value = "";
     },
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    },
     toUserCenter() {
       if (this.status == "0") this.$router.push("/login");
       else if (this.status == "3") this.$router.push("/adminAudit");
@@ -97,7 +94,7 @@ export default {
     toSubjects() {
       this.$router.push("/subjects");
     },
-    handleSelect(value) {
+    toCategory(value) {
       this.$router.push({
         name: "category",
         params: {
