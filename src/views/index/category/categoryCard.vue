@@ -44,17 +44,20 @@ export default {
     init() {
       this.$axios
         .get("/data/recommendByCategory", {
-          category: this.category
+          params: {
+            category: this.category
+          }
         })
         .then(res => {
           window.console.log(res);
+          window.console.log("test");
           if (res.data) {
             for (let entry of res.data) {
               this.entrys.push({
-                id:1,
-                name:entry["page_name"],
-                intro:entry["info"]["intro"],
-                imageUrl:entry["info"]["imageUrl"]
+                id: 1,
+                name: entry["page_name"],
+                intro: entry["info"]["intro"],
+                imageUrl: entry["info"]["imageUrl"]
               });
             }
           }
