@@ -32,6 +32,11 @@ export default {
   components: {
     entryCard
   },
+  watch: {
+    category: function(n, o) {
+      this.init();
+    }
+  },
   data() {
     return {
       entrys: []
@@ -49,12 +54,11 @@ export default {
           }
         })
         .then(res => {
-          window.console.log(res);
-          window.console.log("test");
           if (res.data) {
+            this.entrys.splice(0, this.entrys.length);
             for (let entry of res.data) {
               this.entrys.push({
-                id: 1,
+                id: entry["info"]["id"],
                 name: entry["page_name"],
                 intro: entry["info"]["intro"],
                 imageUrl: entry["info"]["imageUrl"]

@@ -17,6 +17,12 @@ export default {
   components: {
     categoryCard
   },
+  watch: {
+    $route: function(to ,from){
+      this.name = to.params.name
+      window.console.log(this.name)
+    }
+  },
   data() {
     return {
       name: this.$route.params.name,

@@ -6,9 +6,9 @@
     </div>
     <div>
       <div class="image">
-        <img :src="imageUrl" width="185" height="185" alt="专题图片" />
+        <img :src="imageUrl" width="180" height="180" alt="专题图片" />
       </div>
-      <div class="intro text">{{intro}}</div>
+      <div class="intro text" ref="intro"></div>
     </div>
   </el-card>
 </template>
@@ -21,6 +21,9 @@ export default {
     imageUrl: String,
     name: String,
     intro: String
+  },
+  mounted() {
+    this.$refs.intro.innerHTML = this.intro;
   },
   methods: {
     toEntryIndex() {
@@ -51,6 +54,10 @@ export default {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 8;
   overflow: hidden;
+}
+.text >>> p {
+  margin-block-start: 0em;
+  margin-block-end: 0em;
 }
 
 .clearfix:before,
