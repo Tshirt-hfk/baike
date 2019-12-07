@@ -6,7 +6,7 @@
     </div>
     <div>
       <div class="image">
-        <img :src="imageUrl" width="180" height="180" alt="专题图片" />
+        <img :src="imageUrl" width="180" height="180" alt="词条图片" />
       </div>
       <div class="intro text" ref="intro"></div>
     </div>
