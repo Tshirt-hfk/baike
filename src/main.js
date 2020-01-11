@@ -11,7 +11,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 
 Vue.use(Vuex)
 Vue.use(ElementUI)
-Vue.use( CKEditor );
+Vue.use(CKEditor)
 Vue.config.productionTip = false
 
 // 全局注册，使用方法为:this.$axios
