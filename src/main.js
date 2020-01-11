@@ -8,10 +8,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from './router/router.js'
 import axios from 'axios'
 import CKEditor from '@ckeditor/ckeditor5-vue';
-
+import VueLive2d from 'vue-live2d-model' 
+Vue.use(VueLive2d)
 Vue.use(Vuex)
 Vue.use(ElementUI)
-Vue.use( CKEditor );
+Vue.use(CKEditor)
 Vue.config.productionTip = false
 
 // 全局注册，使用方法为:this.$axios

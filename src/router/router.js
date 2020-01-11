@@ -33,7 +33,7 @@ export default new Router({
     {
       path: '/test',
       name: 'test',
-      component: () => import('../views/index/subjectIntro')
+      component: () => import('../views/test')
     },
     {
       path: '/login',
