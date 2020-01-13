@@ -148,6 +148,24 @@ export default new Router({
       ]
     },
     {
+      path: '/controlboard',
+      name: 'controlBoard',
+      component: () => import('../views/controlBoard'),
+      redirect: '/controlBoard/subjectManagement',
+      children: [
+        { // 专题管理
+          path: 'subjectmanagement',
+          name: 'subjectManagement',
+          component: () => import('../views/controlBoard/subjectManagement')
+        },
+        { // 词条管理
+          path: 'entrymanagement',
+          name: 'entryManagement',
+          component: () => import('../views/controlBoard/entryManagement')
+        }
+      ]
+    },
+    {
       path: '/subject',
       name: 'subjectIndex',
       component: () => import('../views/subject/subjectIndex')

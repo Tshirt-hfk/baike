@@ -61,6 +61,7 @@ export default {
   name: "entryManagement",
   components:{
     entryCreate,
+
   },
   watch:{
     searchValue:{
