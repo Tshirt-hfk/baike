@@ -1,6 +1,8 @@
 <template>
   <div class="em-layout">
     <div class="uc-myentry-title">词条管理</div>
+    <el-button type="primary" icon="el-icon-plus" @click="entryCreateFlag=true">新建词条</el-button>
+    <entryCreate :entryCreateFlag.sync="entryCreateFlag"></entryCreate>
     <el-input style="width: 300px; float: right;margin-bottom: 10px;" v-model="searchValue" placeholder="请输入关键词"></el-input>
     <el-table :data="displayData" style="width: 100%">
       <el-table-column type="selection" width="55"></el-table-column>
@@ -53,11 +55,12 @@
 <script>
 
 import moment from 'moment'
+import entryCreate from "../../components/entryCreate";
 
 export default {
   name: "entryManagement",
   components:{
-    
+    entryCreate,
   },
   watch:{
     searchValue:{
@@ -71,6 +74,7 @@ export default {
   },
   data() {
     return {
+      entryCreateFlag: false,
       rejectFlag: false,
       searchValue: '',
       drawerFlag: false,

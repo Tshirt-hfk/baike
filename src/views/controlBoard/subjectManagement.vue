@@ -1,6 +1,7 @@
 <template>
   <div class="em-layout">
     <div class="uc-myentry-title">专题管理</div>
+    <el-button type="primary" icon="el-icon-plus" @click="toSubject">新建专题</el-button>
     <el-input style="width: 300px; float: right;margin-bottom: 10px;" v-model="searchValue" placeholder="请输入关键词"></el-input>
     <el-table :data="displayData" style="width: 100%">
       <el-table-column type="selection" width="55"></el-table-column>
@@ -186,6 +187,17 @@ export default {
               });
             }
           });
+    },
+    toSubject() {
+      if(this.status == '1'){
+        this.$alert('您还没有专题创建权限', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            
+          }
+        });
+      }else
+        this.$router.push("/subjectcreate");
     },
     audit(row, pass) {
       this.$axios
