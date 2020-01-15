@@ -1,53 +1,102 @@
 <template>
   <div class="em-layout">
-    <div class="uc-myentry-title">词条管理</div>
-    <el-button type="primary" icon="el-icon-plus" @click="entryCreateFlag=true">新建词条</el-button>
-    <entryCreate :entryCreateFlag.sync="entryCreateFlag"></entryCreate>
-    <el-input style="width: 300px; float: right;margin-bottom: 10px;" v-model="searchValue" placeholder="请输入关键词"></el-input>
-    <el-table :data="displayData" style="width: 100%">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="name" label="词条名称" width="150">
-        <template slot-scope="scope">{{ scope.row.name}}</template>
-      </el-table-column>
-      <el-table-column prop="field" label="领域" width="150">
-        <template slot-scope="scope">{{ scope.row.field}}</template>
-      </el-table-column>
-      <el-table-column label="编辑次数" width="150">
-        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
-      </el-table-column>
-      <el-table-column label="创建时间" width="250">
-        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
-      </el-table-column>
-      <el-table-column label="浏览量" width="150">
-        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
-      </el-table-column>
-      <el-table-column label="状态" width="150">
-        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
-      </el-table-column>
-      <el-table-column align="right">
-        <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id)">查看</el-button>
-          <el-button type="primary" @click="audit(scope.row, true)">通 过</el-button>
-          <el-button type="danger" @click="reason='';rejectFlag = true">拒绝</el-button>
-          <el-dialog title="未通过原因" :visible.sync="rejectFlag" width="600px">
+    <div class="uc-myentry-title">本体管理</div>
+    <div class="entityMan-main">
+      <div class="entityMan-main-wrap">
+        <div class="uc-entity-title">分类体系管理</div>
+        <div style="margin-bottom: 20px;">
+          <el-input placeholder="请输入内容" v-model="input3" class="input-with-icon">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </div>
+        <el-tree
+          :data="data"
+          icon="el-icon-circle-plus"
+          node-key="id"
+          :expand-on-click-node="false">
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span>{{ node.label }}</span>
             <span>
-              <div style="margin: 15px 0;"></div>
-              <el-input type="textarea" v-model="reason" maxlength="30" show-word-limit></el-input>
-              <div style="margin: 10px 0;"></div>
+              <el-button
+                type="text"
+                size="mini"
+                icon="el-icon-edit"
+                @click="() => edit(data)">
+              </el-button>
+              <el-button
+                type="text"
+                icon="el-icon-circle-plus-outline"
+                circle
+                @click="() => append(data)">
+              </el-button>
+              <el-button
+                type="text"
+                icon="el-icon-remove-outline"
+                @click="() => remove(node, data)">
+              </el-button>
+              </span>
             </span>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="rejectFlag = false">返 回</el-button>
-              <el-button type="danger" @click="audit(scope.row, false);rejectFlag=false">确 定</el-button>
-            </span>
-          </el-dialog>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="passed-page">
-      <el-pagination @current-change="handleCurrentChange"
-        :current-page="currentPage" :page-size="pagesize"
-        layout="total, prev, pager, next, jumper" :total="tableData.length" 
-        style="width: 300px; max-width: 550px;margin: 0 auto"> </el-pagination>
+        </el-tree>
+        <span></span>
+      
+      <div>
+      <div class="uc-entity-title2">描述模板管理</div>
+      <div style="text-align:right;">
+        <el-button
+          type="text"
+          @click="() => editDesp()">
+          编辑
+        </el-button>
+      </div>
+
+      <div class="entity-description-template ">
+        <div class="entity-description-title">
+            <el-tabs v-model="activeName" @tab-click="handleTabClick">
+              <el-tab-pane 
+                :key="item.name"
+                v-for="(item, index) in tabs"
+                :label="item.label" :name="item.name">
+                <!-- <span slot="label">人物</span> -->
+                {{item.content}}
+              </el-tab-pane>
+            </el-tabs>
+            <div class="classification-content">
+            </div>
+        </div>
+      </div>
+      </div>
+
+      <div class="uc-entity-title2">
+        <div class="entity-catalogue-middle">
+          <div class="entity-catalogue-l">目录模板管理</div>
+          <div class="entity-catalogue-r"><el-button type="text">编辑</el-button></div>
+        </div>
+      </div>
+      <div style="margin-top: 50px;">
+        <el-input placeholder="请输入内容" v-model="input3" class="input-with-icon">
+          <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
+      </div>
+
+      <div class="entity-description-template ">
+        <div class="entity-description-title">
+            <el-tabs v-model="activeName2" @tab-click="handleTabClick2">
+              <el-tab-pane 
+                :key="item.name"
+                v-for="(item, index) in tabs2"
+                :label="item.label" :name="item.name">
+                {{item.content}}
+              </el-tab-pane>
+            </el-tabs>
+            <div class="classification-content">
+            </div>
+        </div>
+      </div>
+
+
+
+
+      </div>
     </div>
   </div>
 </template>
@@ -55,48 +104,128 @@
 <script>
 
 import moment from 'moment'
-import entryCreate from "../../components/entryCreate";
+
+
+let id = 1000;
 
 export default {
-  name: "entryManagement",
-  components:{
-    entryCreate,
+  name: "entityManagement",
+  // components:{
+  //   entryCreate,
 
-  },
-  watch:{
-    searchValue:{
-      handler(n, o){
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => {
-          this.remoteMethod(n);
-        }, 300);
-      }
-    }
-  },
+  // },
   data() {
-    return {
-      entryCreateFlag: false,
-      rejectFlag: false,
-      searchValue: '',
-      drawerFlag: false,
-      relationData: [],
-      reason:"",
-      form: {
-        entryName: "",
-        field: [],
-        imageUrl: "",
-        intro: "",
-        infoBox: [],
-        content: "",
-        reference: []
-      },
-      timeout: null,
-      currentPage: 1,
-      pagesize: 5,
-      applications: [],
-      tableData: [],
-      displayData: [],
-    };
+    const data = [{
+        id: 1,
+        label: '一级 1',
+        children: [{
+          id: 4,
+          label: '二级 1-1',
+          children: [{
+            id: 9,
+            label: '三级 1-1-1'
+          }, {
+            id: 10,
+            label: '三级 1-1-2'
+          }]
+        }]
+      }, {
+        id: 2,
+        label: '一级 2',
+        children: [{
+          id: 5,
+          label: '二级 2-1'
+        }, {
+          id: 6,
+          label: '二级 2-2'
+        }]
+      }, {
+        id: 3,
+        label: '一级 3',
+        children: [{
+          id: 7,
+          label: '二级 3-1'
+        }, {
+          id: 8,
+          label: '二级 3-2'
+        }]
+      }];
+
+      const temp = [
+            {
+              id:1,
+              label: "基本资料",
+              children:[],
+            },
+            {
+              id:2,
+              label: "生平",
+              children:[],
+            },
+            {
+              id:3,
+              label: "荣誉",
+              children:[],
+            },
+            {
+              id:4,
+              label: "参演作品",
+              children:[],
+            },
+          ]
+      return {
+        data: JSON.parse(JSON.stringify(data)),
+        // data: JSON.parse(JSON.stringify(data))
+        activeName: "人物",
+        activeName2: "人物",
+        tabs:[
+          {
+            label: "人物",
+            name: "人物",
+            content:"sagsgd"
+          },
+          {
+            label: "电影",
+            name: "电影",
+            content:"剧情片"
+          },
+          {
+            label: "汽车",
+            name: "汽车",
+            content:"奥迪"
+          },
+          {
+            label: "科技",
+            name: "科技",
+            content:"人工智能"
+          },
+        ],
+        tabs2:[
+          {
+            label: "人物",
+            name: "人物",
+            content:"asdkasmc"
+          },
+          {
+            label: "电影",
+            name: "电影",
+            content:"剧情片"
+          },
+          {
+            label: "汽车",
+            name: "汽车",
+            content:"奥迪"
+          },
+          {
+            label: "科技",
+            name: "科技",
+            content:"人工智能"
+          },
+        ],
+
+
+      }
+  
   },
   mounted() {
     this.init();
@@ -130,93 +259,42 @@ export default {
           }
         });
     },
-    stateChange(state){
-      this.$emit('stateChange', state)
-    },
-    // 分页功能
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      let indexleft = val - 1;
-      let size = this.pagesize;
-      this.displayData = this.tableData.slice(indexleft*size, val*size);
-    },
-    // filter
-    remoteMethod(query) {
-      if (query !== "") {
-        this.tableData = this.applications.filter(entry => {
-          return entry.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-        });
-        this.displayData = this.tableData.slice(0, this.pagesize);
-      } else {
-        this.tableData = this.applications;
-        this.displayData = this.tableData.slice(0, this.pagesize);
+
+    edit(data) {
+      const newChild = { id: id++, label: '请输入分类', children: [] };
+      if (!data.children) {
+        this.$set(data, 'children', []);
       }
+      data.children.push(newChild);
     },
-    getTaskContent(id){
-        this.$axios
-          .post("/api/user/getTaskContent", {
-              taskId: new Number(id),
-              source: 1
-          })
-          .then(res => {
-            if (res.data.data) {
-              this.form.entryName = res.data.data.entryName;
-              this.form.imageUrl = res.data.data.imageUrl;
-              this.form.intro = res.data.data.intro;
-              this.form.field.splice(0, this.form.field.length);
-              for (var field of res.data.data.field) {
-                this.form.field.push(field);
-              }
-              this.form.infoBox.splice(0, this.form.infoBox.length);
-              for (var info of res.data.data.infoBox) {
-                this.form.infoBox.push(info);
-              }
-              this.form.content = res.data.data.content;
-              this.drawerFlag = true;
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "warning"
-              });
-            }
-          })
-          .catch(error => {
-            if (error.response) {
-              this.$message({
-                message: error.response.data.msg,
-                type: "warning"
-              });
-            }
-          });
+
+    append(data) {
+      const newChild = { id: id++, label: '请输入分类', children: [] };
+      if (!data.children) {
+        this.$set(data, 'children', []);
+      }
+      data.children.push(newChild);
     },
-    audit(row, pass) {
-      this.$axios
-        .post("/api/admin/auditRecord", {
-          recordId: row.id,
-          reason: this.reason,
-          pass: pass
-        })
-        .then(res => {
-          if (res.data) {
-            this.init();
-            this.$message({
-              message: res.data.msg
-            });
-          }
-        })
-        .catch(error => {
-          if (error.response) {
-            this.$message({
-              message: error.response.data.msg,
-              type: "warning"
-            });
-          }
-        });
+
+    remove(node, data) {
+      const parent = node.parent;
+      const children = parent.data.children || parent.data;
+      const index = children.findIndex(d => d.id === data.id);
+      children.splice(index, 1);
     },
-    handleClose(done) {
-      this.drawerFlag = false;
+
+    editDescp(){
+
+    },
+
+    handleTabClick2(tab, event) {
+        // console.log(tab,event)
+        if(tab.name=="人物"){
+
+          console.log(tab.name)
+        }
     }
-  }
+  }  
 };
 </script>
 
@@ -235,6 +313,20 @@ export default {
   margin: 0;
   padding: 25px 0 0 0;
 }
+.uc-entity-title{
+  text-align: left;
+  line-height: 80px;
+  color: #666;
+  margin: 0;
+  padding: 0 0 0 0;
+}
+.uc-entity-title2{
+  text-align: left;
+  line-height: 80px;
+  color: #666;
+  margin: 0;
+  padding: 25px 0 0 0;
+}
 .passentry-version{
   text-decoration: underline;
   cursor: pointer;
@@ -243,5 +335,54 @@ export default {
 .passed-page{
   width: 100%;
   margin-top: 25px;
+}
+.entityMan-main {
+  width: 1050px;
+  margin: 0 auto;
+  min-height: 700px;
+  margin-top: 10px;
+}
+.entityMan-main-wrap {
+  float: left;
+  width: 710px;
+}
+
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 0px;
+}
+.entity-description-template {
+  margin-top: 25px;
+  width: 710px;
+}
+.entity-description-title {
+  height: 28px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e2e2e2;
+}
+
+.entity-catalogue-middle {
+  margin: 0 auto;
+  /* width: 1200px; */
+  display: flex;
+  justify-content: space-between;
+  height: 35px;
+}
+.entity-catalogue-l{
+  float: left;
+  height: 35px;
+}
+.entity-catalogue-r {
+  float: right;
+  /* font-size: 18px; */
+}
+
+.input-with-icon {
+  width: 60%
 }
 </style>
