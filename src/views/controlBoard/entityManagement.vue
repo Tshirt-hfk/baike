@@ -54,7 +54,7 @@
             <el-tabs v-model="activeName" @tab-click="handleTabClick">
               <el-tab-pane 
                 :key="item.name"
-                v-for="(item, index) in tabs"
+                v-for="item in tabs"
                 :label="item.label" :name="item.name">
                 <!-- <span slot="label">人物</span> -->
                 {{item.content}}
@@ -83,12 +83,12 @@
             <el-tabs v-model="activeName2" @tab-click="handleTabClick2">
               <el-tab-pane 
                 :key="item.name"
-                v-for="(item, index) in tabs2"
+                v-for="item in tabs2"
                 :label="item.label" :name="item.name">
-                {{item.content}}
               </el-tab-pane>
             </el-tabs>
             <div class="classification-content">
+              <entityCatalogueTab :catalogue="activeName2"></entityCatalogueTab>
             </div>
         </div>
       </div>
@@ -104,16 +104,17 @@
 <script>
 
 import moment from 'moment'
+import entityCatalogueTab from '../../components/entityCatalogueTab'
 
 
 let id = 1000;
 
 export default {
   name: "entityManagement",
-  // components:{
-  //   entryCreate,
+  components:{
+    entityCatalogueTab,
 
-  // },
+  },
   data() {
     const data = [{
         id: 1,
