@@ -162,7 +162,17 @@ export default new Router({
           path: 'entrymanagement',
           name: 'entryManagement',
           component: () => import('../views/controlBoard/entryManagement')
-        }
+        },
+        { // 本体管理
+          path: 'entitymanagement',
+          name: 'entityManagement',
+          component: () => import('../views/controlBoard/entityManagement')
+        },
+        { // 人员管理
+          path: 'usermanagement',
+          name: 'userManagement',
+          component: () => import('../views/controlBoard/userManagement')
+        }  
       ]
     },
     {

@@ -1,38 +1,27 @@
 <template>
-  <div>
+  <div class="em-layout">
+    <div class="uc-myentry-title">用户管理</div>
+    <el-button type="primary" icon="el-icon-plus" @click="userCreateFlag=true">新建用户</el-button>
+    <!-- <userCreate :entryCreateFlag.sync="userCreateFlag"></userCreate> -->
     <el-input style="width: 300px; float: right;margin-bottom: 10px;" v-model="searchValue" placeholder="请输入关键词"></el-input>
     <el-table :data="displayData" style="width: 100%">
-      <el-table-column prop="name" label="词条名称" width="450">
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column prop="name" label="用户名" width="150">
         <template slot-scope="scope">{{ scope.row.name}}</template>
       </el-table-column>
-      <el-table-column prop="field" label="领域" width="250">
-        <template slot-scope="scope">{{ scope.row.field}}</template>
+      <el-table-column prop="email" label="邮箱" width="150">
+        <template slot-scope="scope">{{ scope.row.email}}</template>
       </el-table-column>
-      <el-table-column label="提交时间" width="180">
-        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
+      <el-table-column prop="userGroup" label="用户组" width="150">
+        <template slot-scope="scope">{{ scope.row.userGroup}}</template>
+      </el-table-column>
+      <el-table-column prop="role" label="角色" width="250">
+        <template slot-scope="scope">{{ scope.row.role}}</template>
       </el-table-column>
       <el-table-column align="right">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id)">查看</el-button>
-          <el-button type="primary" @click="audit(scope.row, true)">通 过</el-button>
-          <el-button type="danger" @click="reason='';rejectFlag = true">拒绝</el-button>
-          <el-dialog title="未通过原因" :visible.sync="rejectFlag" width="600px">
-            <span>
-              <div style="margin: 15px 0;"></div>
-              <el-input type="textarea" v-model="reason" maxlength="30" show-word-limit></el-input>
-              <div style="margin: 10px 0;"></div>
-            </span>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="rejectFlag = false">返 回</el-button>
-              <el-button type="danger" @click="audit(scope.row, false);rejectFlag=false">确 定</el-button>
-            </span>
-          </el-dialog>
-          <entryReview
-            :relationData="relationData"
-            :form="form"
-            :drawerFlag="drawerFlag"
-            v-on:handleClose="handleClose"
-          ></entryReview>
+          <el-button size="mini" type="text" @click="userDelete(scope.row.name)">删除</el-button>
+          <el-button size="mini" type="text" @click="audit(scope.row, true)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,6 +30,11 @@
         :current-page="currentPage" :page-size="pagesize"
         layout="total, prev, pager, next, jumper" :total="tableData.length" 
         style="width: 300px; max-width: 550px;margin: 0 auto"> </el-pagination>
+        <!-- <el-pagination @current-change="handleCurrentChange"
+        :current-page="1" 
+        :page-size="1"
+        layout="total, prev, pager, next, jumper" :total="tableData.length" 
+        style="width: 300px; max-width: 550px;margin: 0 auto"> </el-pagination> -->
     </div>
   </div>
 </template>
@@ -48,13 +42,14 @@
 <script>
 
 import moment from 'moment'
-import entryReview from "../../../components/entryReview"
+// import entryCreate from "../../components/userCreate";
 
 export default {
-  name: "entryAudit",
-  components:{
-    entryReview,
-  },
+  name: "userManagement",
+//   components:{
+//     userCreate,
+
+//   },
   watch:{
     searchValue:{
       handler(n, o){
@@ -67,26 +62,63 @@ export default {
   },
   data() {
     return {
-      rejectFlag: false,
+      userCreateFlag: false,
+    //   rejectFlag: false,
       searchValue: '',
-      drawerFlag: false,
-      relationData: [],
-      reason:"",
+    //   drawerFlag: false,
+    //   relationData: [],
+    //   reason:"",
       form: {
-        entryName: "",
-        field: [],
-        imageUrl: "",
-        intro: "",
-        infoBox: [],
-        content: "",
-        reference: []
+        name: "",
+        email: "",
+        userGroup: "",
+        role: ""
       },
       timeout: null,
       currentPage: 1,
       pagesize: 5,
       applications: [],
-      tableData: [],
+    //   tableData: [],
       displayData: [],
+      tableData: [
+          {
+            name: "sxc",
+            email: "887283y@qq.com",
+            userGroup: "外包A",
+            role: "普通用户"
+          },
+          {
+            name: "石原里美",
+            email: "21092830@qq.com",
+            userGroup: "外包A",
+            role: "普通用户"
+          },
+          {
+            name: "新垣结衣",
+            email: "eq8wueqwu@qq.com",
+            userGroup: "外包A",
+            role: "普通用户"
+          },
+          {
+            name: "长泽雅美",
+            email: "887283y@qq.com",
+            userGroup: "外包A",
+            role: "普通用户"
+          },
+          {
+            name: "妻夫木聪",
+            email: "21092830@qq.com",
+            userGroup: "外包A",
+            role: "普通用户"
+          },
+          {
+            name: "柏原崇",
+            email: "eq8wueqwu@qq.com",
+            userGroup: "外包A",
+            role: "普通用户"
+          }
+
+      ],
     };
   },
   mounted() {
@@ -100,34 +132,10 @@ export default {
   methods: {
     init() {
       this.$axios
+        // 需要改成user获取接口
         .post("/api/admin/getRecord")
         .then(res => {
-          console.log("Here!: ", res.data)
-          // res.data.data.records = 
           if (res.data.data) {
-            console.log("Here!: ", res.data)
-            res.data.data.records = [
-              {
-                entryName: "test",
-                field: ["CS"],
-              },
-              {
-                entryName: "test2",
-                field: ["Phy"],
-              },
-              {
-                entryName: "test3",
-                field: ["CS"],
-              },
-              {
-                entryName: "test4",
-                field: ["Phy"],
-              },
-              {
-                entryName: "test5",
-                field: ["Phy"],
-              },
-            ]
             this.applications = res.data.data.records;
             this.tableData = res.data.data.records;
             this.displayData = res.data.data.records.slice(0, 5);
@@ -168,8 +176,9 @@ export default {
         this.displayData = this.tableData.slice(0, this.pagesize);
       }
     },
-    getTaskContent(id){
+    userDelete(name){
         this.$axios
+            // 改成用户删除接口
           .post("/api/user/getTaskContent", {
               taskId: new Number(id),
               source: 1
@@ -207,6 +216,7 @@ export default {
     },
     audit(row, pass) {
       this.$axios
+        //改成用户修改接口
         .post("/api/admin/auditRecord", {
           recordId: row.id,
           reason: this.reason,
@@ -237,6 +247,20 @@ export default {
 </script>
 
 <style scoped>
+.em-layout{
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+}
+.uc-myentry-title{
+  height: 80px;
+  text-align: center;
+  line-height: 80px;
+  font-size: 34px;
+  color: #666;
+  margin: 0;
+  padding: 25px 0 0 0;
+}
 .passentry-version{
   text-decoration: underline;
   cursor: pointer;
