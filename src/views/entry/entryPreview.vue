@@ -1,153 +1,164 @@
 <template>
   <div class="preview-layout">
     <entrySearchBar v-on:search="search"></entrySearchBar>
-    <div v-if="entryContentVisible == true" class="preview-main">
-      <div class="preview-divideline">
-        <span class="preview-tit" style="font-size: 25px;">词条内容</span>
-      </div>
-      <!-- <div v-if="" class="preview-polysemy">
+    <div>
+      <div>
+        <div v-if="entryContentVisible == true" class="preview-main">
+          <div class="preview-divideline">
+            <span class="preview-tit" style="font-size: 25px;">词条内容</span>
+          </div>
+          <!-- <div v-if="" class="preview-polysemy">
 
-      </div>-->
-      <el-card class="preview-intro">
-        <div class="preview-main-wrap">
-          <div class="preview-tool-bar">
-            <div class="tool-bar-collect">
-              <i class="el-icon-star-off"></i>
-              <span>收藏</span>
-            </div>
-            <div class="tool-bar-line"></div>
-            <div class="tool-bar-like">
-              <i class="el-icon-thumb"></i>
-              <span>{{likeNum}}</span>
-            </div>
-          </div>
-          <div class="clearfloat"></div>
-          <div class="preview-entryName">
-            <h1>{{form.entryName}}</h1>
-            <h2 v-for="item in form.field" :key="item">({{item}})</h2>
-            <el-button style="margin-left: 10px;" size="mini" @click="toEntryEdit()">编辑</el-button>
-          </div>
-          <div class="preview-entryintro" v-html="form.intro"></div>
-          <div class="preview-entry-attribute">
-            <div class="preview-basicinfo-title">
-              <h2 class="preview-basicinfo-h2">基本信息</h2>
-            </div>
-            <dl class="preview-attribute-left">
-              <div v-for="(prop, index) in form.infoBox" :key="index">
-                <div v-if="index % 2 == 0">
-                  <dt>{{prop.key}}</dt>
-                  <span style="float:left;line-height: 24px;margin-right: 5px;">:</span>
-                  <dd>{{prop.value}}</dd>
-                  <div style="clear: both"></div>
+          </div>-->
+          <el-card class="preview-intro">
+            <div class="preview-main-wrap">
+              <div class="preview-tool-bar">
+                <div class="tool-bar-collect">
+                  <i class="el-icon-star-off"></i>
+                  <span>收藏</span>
+                </div>
+                <div class="tool-bar-line"></div>
+                <div class="tool-bar-like">
+                  <i class="el-icon-thumb"></i>
+                  <span>{{likeNum}}</span>
                 </div>
               </div>
-            </dl>
-            <dl class="preview-attribute-right">
-              <div v-for="(prop, index) in form.infoBox" :key="index">
-                <div v-if="index % 2 !== 0">
-                  <dt>{{prop.key}}</dt>
-                  <span style="float:left;line-height: 24px;margin-right: 5px;">:</span>
-                  <dd>{{prop.value}}</dd>
-                  <div style="clear: both"></div>
-                </div>
+              <div class="clearfloat"></div>
+              <div class="preview-entryName">
+                <h1>{{form.entryName}}</h1>
+                <h2 v-for="item in form.field" :key="item">({{item}})</h2>
+                <el-button style="margin-left: 10px;" size="mini" @click="toEntryEdit()">编辑</el-button>
               </div>
-            </dl>
-          </div>
-          <div class="preview-catalog">
-            <div class="preview-catalog-title">
-              <h2 class="preview-title-h2">目录</h2>
-            </div>
-            <div class="preview-cataloglist">
-              <ol v-for="n in columns" :key="n">
-                <li v-for="(cata, index) in catalog.slice((n-1)*12)" :key="index">
-                  <div v-if="index < 12">
-                    <template v-if="cata.type == 1">
-                      <span class="catalog-index1">{{cata.index}}</span>
-                      <span class="catalog-text1">
-                        <a :href="'#t'+cata.index">{{cata.title}}</a>
-                      </span>
-                    </template>
-                    <template v-else>
-                      <span class="catalog-index2">▪</span>
-                      <span class="catalog-text2">
-                        <a :href="'#t'+cata.index">{{cata.title}}</a>
-                      </span>
-                    </template>
+              <div class="preview-entryintro" v-html="form.intro"></div>
+              <div class="preview-entry-attribute">
+                <div class="preview-basicinfo-title">
+                  <h2 class="preview-basicinfo-h2">基本信息</h2>
+                </div>
+                <dl class="preview-attribute-left">
+                  <div v-for="(prop, index) in form.infoBox" :key="index">
+                    <div v-if="index % 2 == 0">
+                      <dt>{{prop.key}}</dt>
+                      <span style="float:left;line-height: 24px;margin-right: 5px;">:</span>
+                      <dd>{{prop.value}}</dd>
+                      <div style="clear: both"></div>
+                    </div>
                   </div>
-                </li>
-              </ol>
-            </div>
-          </div>
-          <div class="preview-content" id="mainContent">
-            <div ref="editor" class="ck-content"></div>
-          </div>
-        </div>
-        <div class="preview-side-wrap">
-          <div class="preview-picture">
-            <img style="margin: 0 auto" width="269px" height="246px" :src="form.imageUrl" />
-          </div>
-          <!-- 上下位关系-->
-          <div class="preview-relation">
-            <div class="relation-title">
-              <h3 style="margin-left: 50px">词条名</h3>
-              <h3 style="margin-left: 80px">关系</h3>
-            </div>
-            <ul>
-              <li v-for="item in tableData" :key="item.name">
-                <div class="preview-relation-table" style="cursor:pointer;color:blue" @click="toEntryPage(item.name)">{{item.name}}</div>
-                <div class="preview-relation-table">{{item.relation}}</div>
-              </li>
-            </ul>
-          </div>
-          <div
-            class="preview-side-catalog"
-            style="visibility: hidden;bottom: 10px;"
-            id="sideRoller"
-          >
-            <div class="preview-side-bar">
-              <i class="el-icon-help circle-start"></i>
-              <i class="el-icon-help circle-end"></i>
-            </div>
-            <div class="preview-side-roller">
-              <div class="inner-container">
-                <ol class="preview-side-catalist">
-                  <li v-for="(cata, index) in catalog" :key="index">
-                    <template v-if="cata.type == 1">
-                      <a class="side-cata-pointer"></a>
-                      <span class="side-index1">{{cata.index}}</span>
-                      <span class="side-text1">
-                        <a :href="'#t'+cata.index">{{cata.title}}</a>
-                      </span>
-                    </template>
-                    <template v-else>
-                      <span class="side-index2">{{cata.index}}</span>
-                      <span class="side-text2">
-                        <a :href="'#t'+cata.index">{{cata.title}}</a>
-                      </span>
-                    </template>
-                  </li>
-                </ol>
+                </dl>
+                <dl class="preview-attribute-right">
+                  <div v-for="(prop, index) in form.infoBox" :key="index">
+                    <div v-if="index % 2 !== 0">
+                      <dt>{{prop.key}}</dt>
+                      <span style="float:left;line-height: 24px;margin-right: 5px;">:</span>
+                      <dd>{{prop.value}}</dd>
+                      <div style="clear: both"></div>
+                    </div>
+                  </div>
+                </dl>
+              </div>
+              <div class="preview-catalog">
+                <div class="preview-catalog-title">
+                  <h2 class="preview-title-h2">目录</h2>
+                </div>
+                <div class="preview-cataloglist">
+                  <ol v-for="n in columns" :key="n">
+                    <li v-for="(cata, index) in catalog.slice((n-1)*12)" :key="index">
+                      <div v-if="index < 12">
+                        <template v-if="cata.type == 1">
+                          <span class="catalog-index1">{{cata.index}}</span>
+                          <span class="catalog-text1">
+                            <a :href="'#t'+cata.index">{{cata.title}}</a>
+                          </span>
+                        </template>
+                        <template v-else>
+                          <span class="catalog-index2">▪</span>
+                          <span class="catalog-text2">
+                            <a :href="'#t'+cata.index">{{cata.title}}</a>
+                          </span>
+                        </template>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+              <div class="preview-content" id="mainContent">
+                <div ref="editor" class="ck-content"></div>
               </div>
             </div>
-            <div class="preview-side-button">
-              <div class="preview-side-up" @click="toPageTop">UP</div>
+            <div class="preview-side-wrap">
+              <div class="preview-picture">
+                <img style="margin: 0 auto" width="269px" height="246px" :src="form.imageUrl" />
+              </div>
+              <!-- 上下位关系-->
+              <div class="preview-relation">
+                <div class="relation-title">
+                  <h3 style="margin-left: 50px">词条名</h3>
+                  <h3 style="margin-left: 80px">关系</h3>
+                </div>
+                <ul>
+                  <li v-for="item in tableData" :key="item.name">
+                    <div
+                      class="preview-relation-table"
+                      style="cursor:pointer;color:blue"
+                      @click="toEntryPage(item.name)"
+                    >{{item.name}}</div>
+                    <div class="preview-relation-table">{{item.relation}}</div>
+                  </li>
+                </ul>
+              </div>
+              <div
+                class="preview-side-catalog"
+                style="visibility: hidden;bottom: 10px;"
+                id="sideRoller"
+              >
+                <div class="preview-side-bar">
+                  <i class="el-icon-help circle-start"></i>
+                  <i class="el-icon-help circle-end"></i>
+                </div>
+                <div class="preview-side-roller">
+                  <div class="inner-container">
+                    <ol class="preview-side-catalist">
+                      <li v-for="(cata, index) in catalog" :key="index">
+                        <template v-if="cata.type == 1">
+                          <a class="side-cata-pointer"></a>
+                          <span class="side-index1">{{cata.index}}</span>
+                          <span class="side-text1">
+                            <a :href="'#t'+cata.index">{{cata.title}}</a>
+                          </span>
+                        </template>
+                        <template v-else>
+                          <span class="side-index2">{{cata.index}}</span>
+                          <span class="side-text2">
+                            <a :href="'#t'+cata.index">{{cata.title}}</a>
+                          </span>
+                        </template>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="preview-side-button">
+                  <div class="preview-side-up" @click="toPageTop">UP</div>
+                </div>
+              </div>
             </div>
-          </div>
+          </el-card>
         </div>
-      </el-card>
-    </div>
-    <div v-else class="preview-none">
-      <el-card class="preview-none-card">
-        <div class="preview-none-apolo">
-          <span>抱歉，还未收录"</span>
-          <span style="color:#E6A23C">{{this.name}}</span>
-          <span>"词条</span>
+        <div v-else class="preview-none">
+          <el-card class="preview-none-card">
+            <div class="preview-none-apolo">
+              <span>抱歉，还未收录"</span>
+              <span style="color:#E6A23C">{{this.name}}</span>
+              <span>"词条</span>
+            </div>
+            <div class="preview-none-welcom">
+              <span>欢迎您来</span>
+              <span @click="entryCreateFlag = true" class="preview-none-create">创建</span>
+            </div>
+          </el-card>
         </div>
-        <div class="preview-none-welcom">
-          <span>欢迎您来</span>
-          <span @click="entryCreateFlag = true" class="preview-none-create">创建</span>
-        </div>
-      </el-card>
+      </div>
+      <div>
+        <vue-live2d :modelPath="modelPath"></vue-live2d>
+      </div>
     </div>
     <entryCreate :entryCreateFlag.sync="entryCreateFlag"></entryCreate>
   </div>
@@ -190,7 +201,13 @@ export default {
         content: "",
         reference: []
       },
-      catalog: []
+      catalog: [],
+      modelPath: [
+        {
+          order: 1,
+          path: "/static/live2d/live2d-widget-model-z16/assets/z16.model.json",
+        }
+      ]
     };
   },
   mounted() {
@@ -382,7 +399,7 @@ export default {
       }
     },
     querySearch(query, cb) {},
-    toEntryPage(entryName){
+    toEntryPage(entryName) {
       var { href } = this.$router.resolve({
         name: "entryPreview",
         params: {
