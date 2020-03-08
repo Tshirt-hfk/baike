@@ -1,11 +1,5 @@
 <template>
   <div class="contorlBoard-layout">
-    <div class="preview-searchBar">
-        <div class="preview-search">
-        <entrySearch style="width: 440px" :value.sync="value" placeholder="请输入词条名称"></entrySearch>
-        <el-button type="primary" @click="search" style="margin-left: 10px">搜索词条</el-button>
-        </div>
-    </div>
     <div class="cb-main-header">
       <div class="controlBoard-header">
         <a @click="pageSelection(1)">专题管理</a>
@@ -75,7 +69,7 @@ dd,dl,dt,ul,li{
 .cb-main-header{
     width: 100%;
     position: absolute;
-    top: 140px;
+    top: 0px;
     left: 0px;
     bottom: 0px;
 }
@@ -110,14 +104,5 @@ dd,dl,dt,ul,li{
     left: 200px;
     right: 0px;
     bottom: 0px;
-}
-.preview-searchBar {
-  height: 105px;
-  font-family: arial;
-}
-.preview-search {
-    width: 600px;
-    margin: 0 auto;
-    padding-top: 30px;
 }
 </style>
