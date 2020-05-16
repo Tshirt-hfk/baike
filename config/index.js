@@ -13,18 +13,21 @@ module.exports = {
     proxyTable: {
       '/api':{
         target:"http://101.200.34.92:8081",
+        // target:"http://localhost:8081",
         pathRewrite:{
           '^/api':"/api"
         }
       },
       '/resource':{
         target:"http://101.200.34.92:8081",
+        // target:"http://localhost:8081",
         pathRewrite:{
           '^/resource':'/resource'
         }
       },
       '/data':{
         target:"http://124.207.169.23:8080",
+        // target:"http://localhost:8080",
         pathRewrite:{
           '^/data':''
         }

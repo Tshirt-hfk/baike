@@ -1,14 +1,29 @@
 <template>
-  <div>
+  <div class="em-layout">
+    <div class="uc-myentry-title">专题管理</div>
+    <el-button type="primary" icon="el-icon-plus" @click="toSubject">新建专题</el-button>
     <el-input style="width: 300px; float: right;margin-bottom: 10px;" v-model="searchValue" placeholder="请输入关键词"></el-input>
     <el-table :data="displayData" style="width: 100%">
-      <el-table-column prop="name" label="词条名称" width="450">
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column prop="name" label="专题大类" width="150">
         <template slot-scope="scope">{{ scope.row.name}}</template>
       </el-table-column>
-      <el-table-column prop="field" label="领域" width="250">
+      <el-table-column prop="field" label="专题名" width="150">
         <template slot-scope="scope">{{ scope.row.field}}</template>
       </el-table-column>
-      <el-table-column label="提交时间" width="180">
+      <el-table-column label="总词条数" width="150">
+        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
+      </el-table-column>
+      <el-table-column label="已发布" width="150">
+        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
+      </el-table-column>
+      <el-table-column label="已认领" width="150">
+        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
+      </el-table-column>
+      <el-table-column label="已提交" width="150">
+        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
+      </el-table-column>
+      <el-table-column label="已通过" width="150">
         <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
       </el-table-column>
       <el-table-column align="right">
@@ -27,12 +42,6 @@
               <el-button type="danger" @click="audit(scope.row, false);rejectFlag=false">确 定</el-button>
             </span>
           </el-dialog>
-          <entryReview
-            :relationData="relationData"
-            :form="form"
-            :drawerFlag="drawerFlag"
-            v-on:handleClose="handleClose"
-          ></entryReview>
         </template>
       </el-table-column>
     </el-table>
@@ -48,12 +57,11 @@
 <script>
 
 import moment from 'moment'
-import entryReview from "../../../components/entryReview"
 
 export default {
-  name: "entryAudit",
+  name: "subjectManagement",
   components:{
-    entryReview,
+    
   },
   watch:{
     searchValue:{
@@ -102,39 +110,14 @@ export default {
       this.$axios
         .post("/api/admin/getRecord")
         .then(res => {
-          console.log("Here!: ", res.data)
-          // res.data.data.records = 
           if (res.data.data) {
-            console.log("Here!: ", res.data)
-            res.data.data.records = [
-              {
-                entryName: "test",
-                field: ["CS"],
-              },
-              {
-                entryName: "test2",
-                field: ["Phy"],
-              },
-              {
-                entryName: "test3",
-                field: ["CS"],
-              },
-              {
-                entryName: "test4",
-                field: ["Phy"],
-              },
-              {
-                entryName: "test5",
-                field: ["Phy"],
-              },
-            ]
             this.applications = res.data.data.records;
             this.tableData = res.data.data.records;
             this.displayData = res.data.data.records.slice(0, 5);
           } else {
-            this.$message({
-              message: res.data.msg
-            });
+            //this.$message({
+              //message: res.data.msg
+            //});
           }
         })
         .catch(error => {
@@ -205,6 +188,17 @@ export default {
             }
           });
     },
+    toSubject() {
+      if(this.status == '1'){
+        this.$alert('您还没有专题创建权限', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            
+          }
+        });
+      }else
+        this.$router.push("/subjectcreate");
+    },
     audit(row, pass) {
       this.$axios
         .post("/api/admin/auditRecord", {
@@ -237,6 +231,20 @@ export default {
 </script>
 
 <style scoped>
+.em-layout{
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+}
+.uc-myentry-title{
+  height: 80px;
+  text-align: center;
+  line-height: 80px;
+  font-size: 34px;
+  color: #666;
+  margin: 0;
+  padding: 25px 0 0 0;
+}
 .passentry-version{
   text-decoration: underline;
   cursor: pointer;
