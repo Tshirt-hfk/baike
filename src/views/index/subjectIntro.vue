@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="subject-category-header">
+    <el-card class="subject-category-header">
       <span class="subject-category-header-text">全部专题</span>
-    </div>
+    </el-card>
     <div>
       <div v-for="category in categories" :key="category">
         <subjectCategoryCard :category="category"></subjectCategoryCard>
       </div>
     </div>
     <div class="subjectUnknown">
-      <div class="subjectUnknown-header">
-        <span class="subjectUnknown-category">开放分类</span>
-      </div>
+      <el-card class="subjectUnknown-header">
+        <span class="subjectUnknown-header-text">开放分类</span>
+      </el-card>
       <div>
         <div class="subjectUnknownIntro" v-for="subject in subjects" :key="subject.id">
           <subjectUnknown :id="subject.id" :name="subject.name" :imageUrl="subject.imageUrl" :intro="subject.intro"></subjectUnknown>
@@ -64,41 +64,29 @@ export default {
 
 <style scoped>
 .subject-category-header {
-  margin-top: 10px;
-  border: 1px solid #409eff;
-  border-left: 5px solid #409eff;
-  height: 36px;
+  margin-top: 20px;
 }
 .subject-category-header-text {
-  float: left;
-  margin-left: 15px;
-  margin-top: 4px;
-  font-size: 20px;
+  margin: 0;
+  padding: 0;
+  border-left: 5px solid #4d95dc;
+  padding-left: 20px;
+  font-size: 25px;
 }
 .subjectUnknown {
   width: 1200px;
 }
 .subjectUnknown-header {
-  margin-top: 10px;
-  margin-left: 20px;
-  margin-right: 24px;
-  border: 1px solid #bfbfbf;
-  height: 35px;
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
-.subjectUnknown-category {
-  float: left;
-  margin-left: 20px;
-  margin-top: 3px;
-  font-size: 20px;
-  color: #409eff;
-}
-.subjectUnknown-header::before {
-  content: "";
-  display: inline-block;
-  width: 10px;
-  height: 37px;
-  background-color: #4d95dc;
-  position: absolute;
-  margin-top: -1px;
+.subjectUnknown-header-text {
+  margin: 0;
+  padding: 0;
+  border-left: 5px solid #4d95dc;
+  padding-left: 10px;
+  font-size: 15px;
 }
 </style>

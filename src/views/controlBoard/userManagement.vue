@@ -15,7 +15,7 @@
       <el-table-column prop="userGroup" label="用户组" width="150">
         <template slot-scope="scope">{{ scope.row.userGroup}}</template>
       </el-table-column>
-      <el-table-column prop="role" label="角色" width="250">
+      <el-table-column prop="role" label="角色" width="150">
         <template slot-scope="scope">{{ scope.row.role}}</template>
       </el-table-column>
       <el-table-column align="right">
@@ -258,7 +258,7 @@ export default {
   line-height: 80px;
   font-size: 34px;
   color: #666;
-  margin: 0;
+  margin: 0 0 40px 0;
   padding: 25px 0 0 0;
 }
 .passentry-version{
