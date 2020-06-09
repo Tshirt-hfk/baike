@@ -53,6 +53,7 @@ export default {
 }
 .intro {
   width: 750px;
+  height: 90px;
   float: left;
   margin-left: 20px;
   word-wrap: break-word;
@@ -71,7 +72,7 @@ export default {
 .subject-entry{
   float: left;
   margin-left: 20px;
-  margin-top: 20px;
+  margin-top: 8px;
   font-size: 18px;
 }
 .subject-entry-title{
