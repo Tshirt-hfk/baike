@@ -78,7 +78,7 @@ export default {
   methods: {
     getTasks() {
       this.$axios
-        .post("/api/user/getTask", {
+        .post("/api/user/getAssignment", {
           subjectId: new Number(this.subjectId),
           type: 3
         })
@@ -102,7 +102,8 @@ export default {
     getAssginments() {
       this.$axios
         .post("/api/user/getAssignment", {
-          subjectId: new Number(this.subjectId)
+          subjectId: new Number(this.subjectId),
+          type: 2
         })
         .then(res => {
           if (res.data.data) {
