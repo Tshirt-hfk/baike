@@ -1,6 +1,6 @@
 <template>
   <div class="contorlBoard-layout">
-    <div class="cb-main-header">
+    <div>
       <div class="controlBoard-header">
         <a @click="pageSelection(1)">专题管理</a>
         <a @click="pageSelection(2)">词条管理</a>
@@ -58,27 +58,20 @@ dd,dl,dt,ul,li{
   padding: 0;
 }
 .contorlBoard-layout {
-  width: 100%;
+  width: 80%;
   margin: 0 auto;
   margin-top: 2px;
   position: absolute;
   top: 35px;
-  left: 0;
-  bottom: 0;
-}
-.cb-main-header{
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    bottom: 0px;
+  left: 320px;
 }
 .controlBoard-header {
-    width: 200px;
-    height: 100%;
-    background: #52a3f5;
-    border-bottom: solid 1px #4C96E2;
+    width: 170px;
+    opacity: 0.8;
+    background: #666;
+    border-bottom: solid 1px #409eff;
     border-radius: 5px;
+    margin-top: 80px;
     float: left;
 }
 .controlBoard-header a{
@@ -95,14 +88,15 @@ dd,dl,dt,ul,li{
   padding: 15px 0
 }
 .controlBoard-header a:hover{
-  background:rgba(255, 255, 255,0.1)
+  background:rgba(255, 255, 255,0.1);
+  color: #409eff;
 }
 .cb-body-wrapper{
-    border-top: 1px solid #4C96E2;
-    position: absolute;
-    top: 0px;
-    left: 200px;
-    right: 0px;
-    bottom: 0px;
+  width: 1100px;
+  position: absolute;
+  top: 0px;
+  left: 180px;
+  right: 0px;
+  bottom: 0px;
 }
 </style>

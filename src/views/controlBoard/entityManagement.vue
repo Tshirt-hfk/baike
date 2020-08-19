@@ -3,83 +3,85 @@
     <div class="uc-myentry-title">本体管理</div>
     <div class="entityMan-main">
       <div class="entityMan-main-wrap">
-        <div class="uc-entity-title">分类体系管理</div>
-        <div style="margin-bottom: 20px;">
-          <el-input placeholder="请输入内容" v-model="input3" class="input-with-icon">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-input>
-        </div>
-        <el-tree
-          :data="data"
-          icon="el-icon-circle-plus"
-          node-key="id"
-          :expand-on-click-node="false">
-          <span class="custom-tree-node" slot-scope="{ node, data }">
-            <span>{{ node.label }}</span>
-            <span>
-              <el-button
-                type="text"
-                size="mini"
-                icon="el-icon-edit"
-                @click="() => edit(data)">
-              </el-button>
-              <el-button
-                type="text"
-                icon="el-icon-circle-plus-outline"
-                circle
-                @click="() => append(data)">
-              </el-button>
-              <el-button
-                type="text"
-                icon="el-icon-remove-outline"
-                @click="() => remove(node, data)">
-              </el-button>
+        <el-card class="box-card">
+          <div class="uc-entity-title">分类体系管理</div>
+          <div style="margin-bottom: 20px; width: 500px">
+            <el-input placeholder="输入关键字过滤" v-model="filterText" class="input-with-icon"></el-input>
+          </div>
+          <el-tree
+            :data="data"
+            icon="el-icon-circle-plus"
+            node-key="id"
+            :filter-node-method="filterNode"
+            ref="tree">
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+              <span v-show="!data.isEdit">
+                <span>{{node.label}}</span> 
               </span>
-            </span>
-        </el-tree>
-        <span></span>
-      
-      <div>
-      <div class="uc-entity-title2">描述模板管理</div>
-      <div style="text-align:right;">
-        <el-button
-          type="text"
-          @click="() => editDesp()">
-          编辑
-        </el-button>
-      </div>
+              <span v-show="data.isEdit">
+                <el-input class="slot-t-input" size="mini" autofocus
+                  v-model="data.label" :ref="'slotTreeInput' + data.id" @blur.stop="edit(node, data)"
+                  @keydown.native.enter="edit(node, data)">
+                </el-input>
+              </span>
+              <span>
+                <el-button
+                  type="text"
+                  size="mini"
+                  icon="el-icon-edit"
+                  @click="inputFocus(data)">
+                </el-button>
+                <el-button
+                  type="text"
+                  icon="el-icon-circle-plus-outline"
+                  circle
+                  @click="() => append(data)">
+                </el-button>
+                <el-button
+                  type="text"
+                  icon="el-icon-remove-outline"
+                  @click="() => remove(node, data)">
+                </el-button>
+                </span>
+              </span>
+          </el-tree>
+      </el-card>
 
-      <div class="entity-description-template ">
-        <div class="entity-description-title">
+      <el-card class="box-card">
+        <div class="uc-entity-title2">描述模板管理</div>
+        <el-button
+            type="text"
+            @click="() => editDesp()" style="float:right">
+            编辑
+        </el-button>
+        <div class="entity-description-template ">
             <el-tabs v-model="activeName" @tab-click="handleTabClick">
               <el-tab-pane 
                 :key="item.name"
                 v-for="item in tabs"
                 :label="item.label" :name="item.name">
-                <!-- <span slot="label">人物</span> -->
                 {{item.content}}
               </el-tab-pane>
             </el-tabs>
             <div class="classification-content">
             </div>
         </div>
-      </div>
-      </div>
+      </el-card>
 
-      <div class="uc-entity-title2">
-        <div class="entity-catalogue-middle">
-          <div class="entity-catalogue-l">目录模板管理</div>
-          <div class="entity-catalogue-r"><el-button type="text">编辑</el-button></div>
+      <el-card class="box-card">
+        <div class="uc-entity-title2">
+          <div class="entity-catalogue-middle">
+            <div class="entity-catalogue-l">目录模板管理</div>
+            <div class="entity-catalogue-r"><el-button type="text">编辑</el-button></div>
+          </div>
         </div>
-      </div>
-      <div style="margin-top: 50px;">
-        <el-input placeholder="请输入内容" v-model="input3" class="input-with-icon">
-          <el-button slot="append" icon="el-icon-search"></el-button>
-        </el-input>
-      </div>
+        <div style="margin: 50px 0 10px 0; width: 500px">
+          <el-input placeholder="请输入内容" v-model="input3" class="input-with-icon">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </div>
 
-      <div class="entity-description-template ">
-        <div class="entity-description-title">
+        <div class="entity-description-template ">
             <el-tabs v-model="activeName2" @tab-click="handleTabClick2">
               <el-tab-pane 
                 :key="item.name"
@@ -91,11 +93,8 @@
               <entityCatalogueTab :catalogue="activeName2"></entityCatalogueTab>
             </div>
         </div>
-      </div>
-
-
-
-
+      </el-card>
+      
       </div>
     </div>
   </div>
@@ -119,36 +118,46 @@ export default {
     const data = [{
         id: 1,
         label: '一级 1',
+        isEdit: false,
         children: [{
           id: 4,
           label: '二级 1-1',
+          isEdit: false,
           children: [{
             id: 9,
-            label: '三级 1-1-1'
+            label: '三级 1-1-1',
+            isEdit: false,
           }, {
             id: 10,
-            label: '三级 1-1-2'
+            label: '三级 1-1-2',
+            isEdit: false,
           }]
         }]
       }, {
         id: 2,
         label: '一级 2',
+        isEdit: false,
         children: [{
           id: 5,
-          label: '二级 2-1'
+          label: '二级 2-1',
+          isEdit: false,
         }, {
           id: 6,
-          label: '二级 2-2'
+          label: '二级 2-2',
+          isEdit: false,
         }]
       }, {
         id: 3,
         label: '一级 3',
+        isEdit: false,
         children: [{
           id: 7,
-          label: '二级 3-1'
+          label: '二级 3-1',
+          isEdit: false,
         }, {
           id: 8,
-          label: '二级 3-2'
+          label: '二级 3-2',
+          isEdit: false,
         }]
       }];
 
@@ -179,11 +188,12 @@ export default {
         // data: JSON.parse(JSON.stringify(data))
         activeName: "人物",
         activeName2: "人物",
+        filterText: '',
         tabs:[
           {
             label: "人物",
             name: "人物",
-            content:"sagsgd"
+            content:"方磊"
           },
           {
             label: "电影",
@@ -236,6 +246,11 @@ export default {
         return moment(value).format('YYYY-MM-DD HH:mm:ss')
       }
   },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val);
+    }
+  },
   methods: {
     init() {
       this.$axios
@@ -260,17 +275,29 @@ export default {
           }
         });
     },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
+    inputFocus(data){
+      data.isEdit = true
+      this.$nextTick(() => {
+        this.$refs['slotTreeInput' + data.id].$refs.input.focus()
+      })
+    },
 
-    edit(data) {
-      const newChild = { id: id++, label: '请输入分类', children: [] };
-      if (!data.children) {
-        this.$set(data, 'children', []);
-      }
-      data.children.push(newChild);
+    edit(Node, data) {
+        console.log(Node, data);
+        if (data.isEdit) {
+          this.$set(data,'isEdit', false)  // 先把isEdit置为false
+          this.$nextTick(() => {
+            this.$refs['slotTreeInput' + data.id].$refs.input.focus()
+          })
+        }
     },
 
     append(data) {
-      const newChild = { id: id++, label: '请输入分类', children: [] };
+      const newChild = { id: id++, label: '请输入分类', isEdit: false, children: [] };
       if (!data.children) {
         this.$set(data, 'children', []);
       }
@@ -278,10 +305,25 @@ export default {
     },
 
     remove(node, data) {
-      const parent = node.parent;
-      const children = parent.data.children || parent.data;
-      const index = children.findIndex(d => d.id === data.id);
-      children.splice(index, 1);
+      this.$confirm('此操作将删除该分类分支, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          const parent = node.parent;
+          const children = parent.data.children || parent.data;
+          const index = children.findIndex(d => d.id === data.id);
+          children.splice(index, 1);
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
     },
 
     editDescp(){
@@ -320,13 +362,15 @@ export default {
   color: #666;
   margin: 0;
   padding: 0 0 0 0;
+  font-size: 20px;
 }
 .uc-entity-title2{
   text-align: left;
   line-height: 80px;
   color: #666;
   margin: 0;
-  padding: 25px 0 0 0;
+  padding: 0 0 0 0;
+  font-size: 20px;
 }
 .passentry-version{
   text-decoration: underline;
@@ -338,14 +382,13 @@ export default {
   margin-top: 25px;
 }
 .entityMan-main {
-  width: 1050px;
   margin: 0 auto;
   min-height: 700px;
   margin-top: 10px;
 }
 .entityMan-main-wrap {
   float: left;
-  width: 710px;
+  width: 100%;
 }
 
 .custom-tree-node {
@@ -357,14 +400,7 @@ export default {
   padding-right: 0px;
 }
 .entity-description-template {
-  margin-top: 25px;
   width: 710px;
-}
-.entity-description-title {
-  height: 28px;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #e2e2e2;
 }
 
 .entity-catalogue-middle {
@@ -385,5 +421,9 @@ export default {
 
 .input-with-icon {
   width: 60%
+}
+.box-card{
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 </style>

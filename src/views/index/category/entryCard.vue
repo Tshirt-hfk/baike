@@ -1,15 +1,14 @@
 <template>
-  <el-card class="box-card" :body-style="{ padding: '10px' }">
-    <div slot="header" class="clearfix">
-      <span>{{name}}</span>
+  <el-card class="box-card" :body-style="{ padding: '15px' }" shadow="hover">
+    <div class="image">
+      <img :src="imageUrl" width="250" height="160" alt="词条图片" />
+    </div>
+    <div style="margin-bottom: 20px" class="clearfix">
+      <span class="name">{{name}}</span>
+      <span class="label">分类标签</span>
       <el-button style="float: right; padding: 3px 0" type="text" @click="toEntryIndex">查看</el-button>
     </div>
-    <div>
-      <div class="image">
-        <img :src="imageUrl" width="180" height="180" alt="词条图片" />
-      </div>
-      <div class="intro text" ref="intro"></div>
-    </div>
+    <div class="intro text" ref="intro"></div>
   </el-card>
 </template>
 
@@ -42,10 +41,16 @@ export default {
 <style scoped>
 .image {
   float: left;
+  width: 250px;
+  height: 160px;
+  margin-top: 5px;
+  border-right: 1px solid #ddd;
+  padding-right: 10px;
 }
 .intro {
-  width: 150px;
-  float: right;
+  width: 750px;
+  float: left;
+  margin-left: 20px;
   word-wrap: break-word;
 }
 .text {
@@ -60,20 +65,20 @@ export default {
   margin-block-end: 0em;
 }
 
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-.clearfix:after {
-  clear: both;
-}
-
 .box-card {
-  width: 370px;
-  height: 255px;
+  width: 1080px;
+  height: 200px;
+  border: 1px solid #ccc;
 }
-.el-card__header {
-  padding: 12px 15px;
+.name{
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 20px;
+}
+.label{
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 15px;
+  color: #4d95dc;
 }
 </style>
