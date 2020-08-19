@@ -1,13 +1,13 @@
 <template>
   <div class="subjects">
-    <div class="subject-header">
+    <el-card class="subject-header">
       <span class="subject-category">{{category}}</span>
       <el-link type="primary" :underline="false" class="subject-op">
         更多
         <i class="el-icon-d-arrow-right"></i>
       </el-link>
-    </div>
-    <div>
+    </el-card>
+    <div class="subject-main">
       <div class="subjectIntro" v-for="subject in subjects" :key="subject.id">
         <subjectIntroCard :id="subject.id" :name="subject.name" :imageUrl="subject.imageUrl" :intro="subject.intro"></subjectIntroCard>
       </div>
@@ -63,26 +63,29 @@ export default {
   width: 1200px;
 }
 .subject-header {
-  margin-top: 10px;
-  margin-left: 20px;
-  margin-right: 24px;
-  border: 1px solid #409eff;
-  border-left: 5px solid #409eff;
-  height: 30px;
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 .subject-category {
-  float: left;
-  margin-left: 10px;
-  margin-top: 3px;
+  margin: 0;
+  padding: 0;
+  border-left: 5px solid #4d95dc;
+  padding-left: 10px;
+  font-size: 15px;
 }
 .subject-op {
   float: right;
   margin-right: 15px;
   margin-top: 4px;
 }
+.subject-main{
+  width: 90%;
+  margin: 0 auto;
+}
 .subjectIntro {
   float: left;
-  margin-left: 20px;
   margin-top: 10px;
 }
 .clear {

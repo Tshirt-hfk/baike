@@ -14,18 +14,6 @@
       <el-table-column label="总词条数" width="150">
         <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
       </el-table-column>
-      <el-table-column label="已发布" width="150">
-        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
-      </el-table-column>
-      <el-table-column label="已认领" width="150">
-        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
-      </el-table-column>
-      <el-table-column label="已提交" width="150">
-        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
-      </el-table-column>
-      <el-table-column label="已通过" width="150">
-        <template slot-scope="scope">{{ scope.row.saveTime | formatDate}}</template>
-      </el-table-column>
       <el-table-column align="right">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" @click="getTaskContent(scope.row.id)">查看</el-button>
@@ -242,7 +230,7 @@ export default {
   line-height: 80px;
   font-size: 34px;
   color: #666;
-  margin: 0;
+  margin: 0 0 40px 0;
   padding: 25px 0 0 0;
 }
 .passentry-version{

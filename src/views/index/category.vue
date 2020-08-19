@@ -1,8 +1,9 @@
 <template>
   <div>
-    <div class="subject-category-header">
-      <span class="subject-category-header-text">{{name}}</span>
-    </div>
+    <el-card class="category-header">
+      <span class="category-header-text">{{name}}</span>
+      <span class="category-header-text-sub">发现世界的美</span>
+    </el-card>
     <div>
         <categoryCard :category="name"></categoryCard>
     </div>
@@ -36,16 +37,19 @@ export default {
 </script>
 
 <style scoped>
-.subject-category-header {
-  margin-top: 10px;
-  border: 1px solid #409eff;
-  border-left: 5px solid #409eff;
-  height: 36px;
+.category-header{
+  margin-top: 20px;
 }
-.subject-category-header-text {
-  float: left;
-  margin-left: 15px;
-  margin-top: 4px;
-  font-size: 20px;
+.category-header-text {
+  margin: 0;
+  padding: 0;
+  border-left: 5px solid #4d95dc;
+  padding-left: 20px;
+  font-size: 25px;
+}
+.category-header-text-sub{
+  color: #8a8a8a;
+  font-size: 18px;
+  margin-left: 25px;
 }
 </style>

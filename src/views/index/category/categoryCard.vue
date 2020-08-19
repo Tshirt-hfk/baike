@@ -1,14 +1,14 @@
 <template>
   <div class="subjects">
-    <div class="subject-header">
-      <span class="subject-category">分类精选</span>
-      <el-link type="primary" :underline="false" class="subject-op">
+    <el-card class="category-entry-header">
+      <span class="category-entry-header-text">分类精选</span>
+      <el-link type="primary" :underline="false" class="category-entry-op">
         更多
         <i class="el-icon-d-arrow-right"></i>
       </el-link>
-    </div>
-    <div>
-      <div class="subjectIntro" v-for="entry in entrys" :key="entry.id">
+    </el-card>
+    <div class="category-entry-main">
+      <div class="category-entry-content" v-for="entry in entrys" :key="entry.id">
         <entryCard
           :id="entry.id"
           :name="entry.name"
@@ -18,6 +18,9 @@
       </div>
       <div class="clear"></div>
     </div>
+    <el-card class="category-entry-header">
+      <span class="category-entry-header-text">更多分类</span>
+    </el-card>
   </div>
 </template>
 
@@ -79,27 +82,30 @@ export default {
 .subjects {
   width: 1200px;
 }
-.subject-header {
-  margin-top: 10px;
-  margin-left: 20px;
-  margin-right: 24px;
-  border: 1px solid #409eff;
-  border-left: 5px solid #409eff;
-  height: 30px;
+.category-entry-header{
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
-.subject-category {
-  float: left;
-  margin-left: 10px;
-  margin-top: 3px;
+.category-entry-header-text {
+  margin: 0;
+  padding: 0;
+  border-left: 5px solid #4d95dc;
+  padding-left: 10px;
+  font-size: 15px;
 }
-.subject-op {
+.category-entry-op {
   float: right;
   margin-right: 15px;
   margin-top: 4px;
 }
-.subjectIntro {
+.category-entry-main{
+  width: 90%;
+  margin: 0 auto;
+}
+.category-entry-content{
   float: left;
-  margin-left: 20px;
   margin-top: 10px;
 }
 .clear {
