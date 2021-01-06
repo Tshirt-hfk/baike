@@ -26,7 +26,8 @@ module.exports = {
         }
       },
       '/data':{
-        target:"http://124.207.169.23:8080",
+        target:"http://106.2.224.58:1019",
+        // target:"http://124.207.169.23:8080",
         // target:"http://localhost:8080",
         pathRewrite:{
           '^/data':''
@@ -36,7 +37,7 @@ module.exports = {
 
     
     // Various Dev Server settings
-    host: '0.0.0.0', // can be overwritten by process.env.HOST
+    host: 'localhost', // can be overwritten by process.env.HOST
     port: 80, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
