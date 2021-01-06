@@ -176,6 +176,29 @@ export default new Router({
       ]
     },
     {
+      path: '/userMainpage',
+      name: 'userMainpage',
+      component: () => import('../views/userMainpage'),
+      redirect: '/userMainpage/myActivity',
+      children: [
+        {
+          path: 'myActivity',
+          name: 'myActivity',
+          component: () => import('../views/userMainpage/myActivity')
+        },
+        {
+          path: 'myEntity',
+          name: 'myEntity',
+          component: () => import('../views/userMainpage/myEntity')
+        },
+        {
+          path: 'mySubject',
+          name: 'mySubject',
+          component: () => import('../views/userMainpage/mySubject')
+        }
+      ]
+    },
+    {
       path: '/subject',
       name: 'subjectIndex',
       component: () => import('../views/subject/subjectIndex')
