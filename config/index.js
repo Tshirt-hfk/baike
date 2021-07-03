@@ -12,15 +12,15 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api':{
-        target:"http://101.200.34.92:8081",
-        // target:"http://localhost:8081",
+        target:"http://101.200.34.92:9081",
+        // target:"http://localhost:9081",
         pathRewrite:{
           '^/api':"/api"
         }
       },
       '/resource':{
-        target:"http://101.200.34.92:8081",
-        // target:"http://localhost:8081",
+        target:"http://101.200.34.92:9081",
+        // target:"http://localhost:9081",
         pathRewrite:{
           '^/resource':'/resource'
         }
@@ -38,7 +38,7 @@ module.exports = {
     
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 80, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 9080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
