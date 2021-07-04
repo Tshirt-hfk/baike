@@ -78,7 +78,7 @@ export default {
   methods: {
     getTasks() {
       this.$axios
-        .post("/api/user/getAssignment", {
+        .post("/api/user/getTask", {
           subjectId: new Number(this.subjectId),
           type: 3
         })
