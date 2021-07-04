@@ -10,7 +10,7 @@
           <div style="padding: 14px;">
             <div class="subject-top">
               <span style="color:#338de6;float:left">{{subject.name}}</span>
-              <el-button style="float:right;" size="mini" @click="see(subject.id)">参加活动</el-button>
+              <el-button style="float:right;" size="mini" @click="see(subject.id)">进入活动</el-button>
             </div>
             <div class="subject-bottom">
               <div v-if="subject.deadTime !== '0'" >
