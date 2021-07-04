@@ -106,28 +106,6 @@ export default {
           // res.data.data.records = 
           if (res.data.data) {
             console.log("Here!: ", res.data)
-            res.data.data.records = [
-              {
-                entryName: "test",
-                field: ["CS"],
-              },
-              {
-                entryName: "test2",
-                field: ["Phy"],
-              },
-              {
-                entryName: "test3",
-                field: ["CS"],
-              },
-              {
-                entryName: "test4",
-                field: ["Phy"],
-              },
-              {
-                entryName: "test5",
-                field: ["Phy"],
-              },
-            ]
             this.applications = res.data.data.records;
             this.tableData = res.data.data.records;
             this.displayData = res.data.data.records.slice(0, 5);
